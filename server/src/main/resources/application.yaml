@@ -7,7 +7,7 @@ spring:
     name: market3
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://vm.server:3306/resp?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://vm.server:3306/amity_mall?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: abcd1234
   servlet:
@@ -32,7 +32,7 @@ minio:
   endpoint: http://vm.server:9000
   accesskey: admin
   secret-key: admin123456
-  bucket: reuse-market3
+  bucket: amity_mall
 
 mybatis-plus:
   global-config:
