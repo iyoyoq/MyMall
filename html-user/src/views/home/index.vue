@@ -6,48 +6,42 @@
         :collapsed="collapsed"
     >
       <div class="logo">
-        <span class="company-name">{{ companyName }}</span>
+        <span class="company-name" v-show="!collapsed">{{ companyName }}</span>
       </div>
       <a-menu
-          :defaultOpenKeys="['1']"
+          :defaultOpenKeys="['0']"
           :defaultSelectedKeys="['0']"
           :style="{ width: '100%' }"
           @menuItemClick="onClickMenuItem"
       >
         <a-menu-item key="0">
-          <template #icon><IconUser /></template>
-          个人中心
+          <template #icon><IconApps /></template>
+          首页
         </a-menu-item>
 
         <a-menu-item key="1">
-          <template #icon><IconApps /></template>
-          商品分类
-        </a-menu-item>
-
-        <a-menu-item key="2">
           <template #icon><IconStar /></template>
           我的收藏
         </a-menu-item>
 
-        <a-menu-item key="3">
+        <a-menu-item key="2">
           <template #icon><ShoppingCartIcon /></template>
           购物车
         </a-menu-item>
 
-        <a-sub-menu key="4">
+        <a-menu-item key="3">
           <template #icon><IconFile /></template>
-          <template #title>
-            <span>订单管理</span>
-          </template>
-          <a-menu-item key="4_1">全部订单</a-menu-item>
-          <a-menu-item key="4_2">待发货</a-menu-item>
-          <a-menu-item key="4_3">待收货</a-menu-item>
-          <a-menu-item key="4_4">已完成</a-menu-item>
-        </a-sub-menu>
+          订单管理
+        </a-menu-item>
 
-        <a-menu-item key="5">
+        <a-menu-item key="4">
           <template #icon><IconLocation /></template>
           地址管理
+        </a-menu-item>
+
+        <a-menu-item key="5">
+          <template #icon><IconUser /></template>
+          个人中心
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -127,6 +121,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .layout-demo :deep(.arco-layout-sider-light) .logo {
@@ -169,5 +164,7 @@ export default defineComponent({
   color: var(--color-text-1);
   font-size: 16px;
   font-weight: bold;
+  white-space: nowrap;
+  transition: opacity 0.2s;
 }
 </style>
