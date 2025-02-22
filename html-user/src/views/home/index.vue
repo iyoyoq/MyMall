@@ -5,7 +5,9 @@
         collapsible
         :collapsed="collapsed"
     >
-      <div class="logo"/>
+      <div class="logo">
+        <span class="company-name">{{ companyName }}</span>
+      </div>
       <a-menu
           :defaultOpenKeys="['1']"
           :defaultSelectedKeys="['0']"
@@ -13,24 +15,29 @@
           @menuItemClick="onClickMenuItem"
       >
         <a-menu-item key="0">
+          <template #icon><IconUser /></template>
           个人中心
         </a-menu-item>
-        
+
         <a-menu-item key="1">
+          <template #icon><IconApps /></template>
           商品分类
         </a-menu-item>
 
         <a-menu-item key="2">
+          <template #icon><IconStar /></template>
           我的收藏
         </a-menu-item>
 
         <a-menu-item key="3">
+          <template #icon><ShoppingCartIcon /></template>
           购物车
         </a-menu-item>
 
         <a-sub-menu key="4">
+          <template #icon><IconFile /></template>
           <template #title>
-            <span>我的订单</span>
+            <span>订单管理</span>
           </template>
           <a-menu-item key="4_1">全部订单</a-menu-item>
           <a-menu-item key="4_2">待发货</a-menu-item>
@@ -39,6 +46,7 @@
         </a-sub-menu>
 
         <a-menu-item key="5">
+          <template #icon><IconLocation /></template>
           地址管理
         </a-menu-item>
       </a-menu>
@@ -68,20 +76,35 @@ import { Message } from '@arco-design/web-vue'
 import {
   IconCaretRight,
   IconCaretLeft,
+  IconUser,
+  IconApps,
+  IconStar,
+  IconFile,
+  IconLocation,
 } from '@arco-design/web-vue/es/icon'
+import ShoppingCartIcon from '@/components/icons/ShoppingCartIcon.vue'
 
 export default defineComponent({
   components: {
     IconCaretRight,
     IconCaretLeft,
+    IconUser,
+    IconApps,
+    IconStar,
+    IconFile,
+    IconLocation,
+    ShoppingCartIcon,
   },
   setup () {
     const collapsed = ref(false)
+    const companyName = ref('骑虎网络技术有限公司')
+
     const onCollapse = () => {
       collapsed.value = !collapsed.value
     }
     return {
       collapsed,
+      companyName,
       onCollapse,
       onClickMenuItem (key) {
         Message.info({ content: `You select ${key}`, showIcon: true })
@@ -101,6 +124,9 @@ export default defineComponent({
   height: 32px;
   margin: 12px 8px;
   background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .layout-demo :deep(.arco-layout-sider-light) .logo {
@@ -137,5 +163,11 @@ export default defineComponent({
   font-size: 16px;
   font-stretch: condensed;
   text-align: center;
+}
+
+.company-name {
+  color: var(--color-text-1);
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>
