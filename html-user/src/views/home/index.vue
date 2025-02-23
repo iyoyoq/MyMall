@@ -108,6 +108,18 @@ export default defineComponent({
 })
 </script>
 <style scoped>
+/* 删除 :root 相关的样式定义 */
+
+.layout-demo :deep(.arco-menu-item.arco-menu-selected) {
+  background-color: var(--color-primary-light-1);
+  color: var(--color-primary-6);
+}
+
+.layout-demo :deep(.arco-menu-item:hover) {
+  background-color: var(--color-primary-light-1);
+  color: var(--color-primary-6);
+}
+
 .layout-demo {
   height: 100vh;
   background: var(--color-fill-2);
