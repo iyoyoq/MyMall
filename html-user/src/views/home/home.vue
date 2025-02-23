@@ -52,14 +52,17 @@
           <IconCaretLeft v-else/>
         </a-button>
       </a-layout-header>
-      <a-layout style="padding: 0 24px;">
-        <a-breadcrumb :style="{ margin: '16px 0' }">
-          <a-breadcrumb-item>Home</a-breadcrumb-item>
-          <a-breadcrumb-item>List</a-breadcrumb-item>
-          <a-breadcrumb-item>App</a-breadcrumb-item>
-        </a-breadcrumb>
-        <a-layout-content>Content</a-layout-content>
-        <a-layout-footer>Footer</a-layout-footer>
+      <a-layout style="padding: 18px 16px;">
+        <!--<a-breadcrumb :style="{ margin: '16px 0' }">-->
+        <!--  &lt;!&ndash; 移除这三行 &ndash;&gt;-->
+        <!--   <a-breadcrumb-item>Home</a-breadcrumb-item> -->
+        <!--   <a-breadcrumb-item>List</a-breadcrumb-item> -->
+        <!--   <a-breadcrumb-item>App</a-breadcrumb-item> -->
+        <!--</a-breadcrumb>-->
+        <a-layout-content>
+          <router-view></router-view>
+        </a-layout-content>
+        <!--<a-layout-footer>Footer</a-layout-footer>-->
       </a-layout>
     </a-layout>
   </a-layout>
@@ -77,6 +80,7 @@ import {
   IconLocation,
 } from '@arco-design/web-vue/es/icon'
 import ShoppingCartIcon from '@/components/icons/ShoppingCartIcon.vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -90,19 +94,31 @@ export default defineComponent({
     ShoppingCartIcon,
   },
   setup () {
+    const router = useRouter()
     const collapsed = ref(false)
     const companyName = ref('骑虎网络技术有限公司')
 
     const onCollapse = () => {
       collapsed.value = !collapsed.value
     }
+
+    const onClickMenuItem = (key) => {
+      const routeMap = {
+        '0': '/',
+        '1': '/favorites',
+        '2': '/cart',
+        '3': '/orders',
+        '4': '/address',
+        '5': '/profile'
+      }
+      router.push(routeMap[key])
+    }
+
     return {
       collapsed,
       companyName,
       onCollapse,
-      onClickMenuItem (key) {
-        Message.info({ content: `You select ${key}`, showIcon: true })
-      },
+      onClickMenuItem,
     }
   },
 })
@@ -123,7 +139,7 @@ export default defineComponent({
 .layout-demo {
   height: 100vh;
   background: var(--color-fill-2);
-  border: 1px solid var(--color-border);
+  border: 0;
 }
 
 .layout-demo :deep(.arco-layout-sider) .logo {

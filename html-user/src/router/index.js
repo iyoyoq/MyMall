@@ -2,27 +2,66 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 export const routes = [
   {
-    path: '',
-    component: () => import('@/views/home/index.vue'),
-    name: 'index',
+    path: '/',
+    component: () => import('@/views/home/home.vue'),
+    name: 'home',
+    redirect: '/products',
+    children: [
+      {
+        path: 'products',
+        component: () => import('@/views/products/products.vue'),
+        name: 'products',
+        meta: { title: '首页' }
+      },
+      {
+        path: 'favorites',
+        component: () => import('@/views/favorites/favorites.vue'),
+        name: 'favorites',
+        meta: { title: '我的收藏' }
+      },
+      {
+        path: 'cart',
+        component: () => import('@/views/cart/cart.vue'),
+        name: 'cart',
+        meta: { title: '购物车' }
+      },
+      {
+        path: 'orders',
+        component: () => import('@/views/orders/orders.vue'),
+        name: 'orders',
+        meta: { title: '订单管理' }
+      },
+      {
+        path: 'address',
+        component: () => import('@/views/address/address.vue'),
+        name: 'address',
+        meta: { title: '地址管理' }
+      },
+      {
+        path: 'profile',
+        component: () => import('@/views/profile/profile.vue'),
+        name: 'profile',
+        meta: { title: '个人中心' }
+      }
+    ]
   },
   /*
 
   {
     path: '/',
-    component: () => import('@/views/layout/index.vue'),
+    component: () => import('@/views/layout/home.vue'),
     redirect: '/dashboard',
     children: [
 
       {
         path: 'dashboard',
-        component: () => import('@/views/dashboard/index.vue'),
+        component: () => import('@/views/dashboard/home.vue'),
         name: 'Dashboard',
         meta: { title: '仪表盘', icon: 'Odometer' },
       },
       {
         path: 'user',
-        component: () => import('@/views/user/index.vue'),
+        component: () => import('@/views/user/home.vue'),
         name: 'User',
         meta: { title: '用户管理', icon: 'User' },
       },
@@ -34,7 +73,7 @@ export const routes = [
         children: [
           {
             path: 'list',
-            component: () => import('@/views/product/index.vue'),
+            component: () => import('@/views/product/home.vue'),
             name: 'ProductList',
             meta: { title: '商品管理', subtitle: '商品列表' },
           },
