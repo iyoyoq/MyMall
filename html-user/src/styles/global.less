@@ -1,0 +1,65 @@
+:root {
+  /* 主色调系列 */
+  --color-primary-1: rgb(255, 236, 236);
+  --color-primary-2: rgb(255, 217, 217);
+  --color-primary-3: rgb(255, 198, 198);
+  --color-primary-4: rgb(255, 179, 179);
+  --color-primary-5: rgb(255, 128, 130);
+  --color-primary-6: rgb(255, 77, 79);  /* 主题色 */
+  --color-primary-7: rgb(219, 65, 67);
+  --color-primary-8: rgb(183, 54, 56);
+  --color-primary-9: rgb(147, 43, 44);
+
+  /* 覆盖组件库的其他相关变量 */
+  --color-primary: var(--color-primary-6);
+  --color-primary-light-1: var(--color-primary-1);
+  --color-primary-light-2: var(--color-primary-2);
+  --color-primary-light-3: var(--color-primary-3);
+  --color-primary-light-4: var(--color-primary-4);
+
+  /* 交互状态 */
+  --color-primary-hover: var(--color-primary-5);
+  --color-primary-active: var(--color-primary-7);
+  --color-primary-disabled: var(--color-primary-2);
+}
+
+/* 覆盖菜单组件的样式 */
+.arco-menu-item.arco-menu-selected {
+  background-color: var(--color-primary-1) !important;
+  color: var(--color-primary-6) !important;
+}
+
+.arco-menu-item:hover {
+  background-color: var(--color-primary-1) !important;
+  color: var(--color-primary-6) !important;
+}
+
+/* 按钮样式覆盖 */
+.arco-btn-primary {
+  background-color: var(--color-primary-6) !important;
+}
+
+.arco-btn-primary:hover {
+  background-color: var(--color-primary-5) !important;
+}
+
+/* 图标样式覆盖 */
+.arco-menu-item.arco-menu-selected .arco-icon {
+  color: var(--color-primary-6) !important;
+}
+
+.arco-menu-item:hover .arco-icon {
+  color: var(--color-primary-6) !important;
+}
+
+/* SVG 图标的特殊处理 */
+.arco-menu-item.arco-menu-selected .arco-icon svg {
+  stroke: var(--color-primary-6) !important;
+  fill: none !important;
+}
+
+.arco-menu-item:hover .arco-icon svg {
+  stroke: var(--color-primary-6) !important;
+  fill: none !important;
+}
+
