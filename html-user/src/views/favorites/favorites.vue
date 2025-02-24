@@ -4,7 +4,7 @@
       <span>
         共<span class="highlight">{{ favoritesList.length }}</span>件商品
       </span>
-      <button class="edit-button" >编辑</button>
+      <a-button size="small" type="primary" style="margin-left: 10px">编辑</a-button>
     </div>
     <div v-if="!favoritesList.length" class="empty-tip">暂无收藏</div>
     <div v-else class="favorites-list">
@@ -68,7 +68,7 @@ export default {
 
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
   margin-bottom: 16px;
 }
@@ -81,18 +81,6 @@ export default {
   color: var(--color-primary) !important;
 }
 
-.edit-button {
-  background-color: var(--color-primary);
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.edit-button:hover {
-  background-color: var(--color-primary-hover);
-}
 
 .empty-tip {
   text-align: center;
