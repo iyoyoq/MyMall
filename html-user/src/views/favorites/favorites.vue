@@ -4,12 +4,40 @@
       <span>
         共<span class="highlight">{{ favoritesList.length }}</span>件商品
       </span>
-      <a-button size="small" type="primary" style="margin-left: 10px">编辑</a-button>
+      <a-button 
+        size="small" 
+        type="primary" 
+        style="margin-left: 10px"
+        @click="toggleEditMode"
+      >
+        {{ isEditMode ? '完成' : '编辑' }}
+      </a-button>
     </div>
     <div v-if="!favoritesList.length" class="empty-tip">暂无收藏</div>
     <div v-else class="favorites-list">
+      <div class="batch-actions" v-if="isEditMode">
+        <a-checkbox 
+          :model-value="isAllSelected" 
+          :indeterminate="isIndeterminate"
+          @change="handleSelectAll"
+        >全选</a-checkbox>
+        <a-button 
+          type="primary" 
+          status="danger" 
+          @click="handleBatchDelete" 
+          :disabled="!selectedItems.length"
+        >
+          取消收藏({{ selectedItems.length }})
+        </a-button>
+      </div>
       <div v-for="item in favoritesList" :key="item.id" class="favorite-item">
         <div class="favorite-content">
+          <a-checkbox
+            v-if="isEditMode"
+            v-model="selectedItems"
+            :value="item.id"
+            class="item-checkbox"
+          />
           <img :src="item.image" alt="商品图片" class="product-image" />
           <div class="product-info">
             <h4>{{ item.title }}</h4>
@@ -26,6 +54,8 @@ export default {
   name: 'Favorites',
   data() {
     return {
+      isEditMode: false,
+      selectedItems: [],
       favoritesList: [
         {
           id: 1,
@@ -54,8 +84,31 @@ export default {
       ]
     }
   },
-  created() {
-    console.log('收藏列表数据:', this.favoritesList)
+  computed: {
+    isAllSelected() {
+      return this.favoritesList.length === this.selectedItems.length
+    },
+    isIndeterminate() {
+      return this.selectedItems.length > 0 && !this.isAllSelected
+    }
+  },
+  methods: {
+    toggleEditMode() {
+      this.isEditMode = !this.isEditMode
+      this.selectedItems = []
+    },
+    handleSelectAll(checked) {
+      this.selectedItems = checked 
+        ? this.favoritesList.map(item => item.id)
+        : []
+    },
+    handleBatchDelete() {
+      // TODO: 调用接口删除选中的收藏项
+      this.favoritesList = this.favoritesList.filter(
+        item => !this.selectedItems.includes(item.id)
+      )
+      this.selectedItems = []
+    }
   }
 }
 </script>
@@ -100,6 +153,17 @@ export default {
 
 .favorite-item:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+}
+
+.batch-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.item-checkbox {
+  margin-right: 16px;
 }
 
 .favorite-content {
