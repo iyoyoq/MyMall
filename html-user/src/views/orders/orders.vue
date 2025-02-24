@@ -1,11 +1,12 @@
 <template>
   <div class="orders-container">
     <div class="header">
-      <h2>订单管理</h2>
+      <h4 style="color: black;">我的订单</h4>
       <a-radio-group
         type="button"
         v-model="activeStatus"
         size="small"
+        style="margin-left: 10px;"
       >
         <a-radio value="all">全部</a-radio>
         <a-radio value="pending">待发货</a-radio>
@@ -337,7 +338,7 @@ export default {
 
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
   margin-bottom: 24px;
 }
