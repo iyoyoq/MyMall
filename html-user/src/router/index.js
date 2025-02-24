@@ -104,6 +104,7 @@ const router = createRouter({
 })
 
 // 路由守卫
+/*
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
   if (to.path === '/login') {
@@ -116,5 +117,7 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
+
+ */
 
 export default router

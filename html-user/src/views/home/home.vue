@@ -16,7 +16,7 @@
       >
         <a-menu-item key="0">
           <template #icon><IconApps /></template>
-          首页
+          商品首页
         </a-menu-item>
 
         <a-menu-item key="1">
@@ -156,6 +156,7 @@ export default defineComponent({
   background: var(--color-fill-2);
 }
 
+
 .layout-demo :deep(.arco-layout-header) {
   height: 64px;
   line-height: 64px;
@@ -179,9 +180,6 @@ export default defineComponent({
 
 .layout-demo :deep(.arco-layout-footer),
 .layout-demo :deep(.arco-layout-content) {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   color: var(--color-white);
   font-size: 16px;
   font-stretch: condensed;
