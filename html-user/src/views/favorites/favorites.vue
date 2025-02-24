@@ -14,7 +14,7 @@
       </a-button>
     </div>
     <div v-if="!favoritesList.length" class="empty-tip">暂无收藏</div>
-    <div v-else class="favorites-list">
+    <div v-else style="overflow-x: auto; /* 添加水平滚动 */">
       <div class="batch-actions" v-if="isEditMode">
         <a-checkbox
           :model-value="isAllSelected"

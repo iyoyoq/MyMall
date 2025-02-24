@@ -14,7 +14,7 @@
       </a-button>
     </div>
     <div v-if="!cartItems.length" class="empty-tip">购物车是空的</div>
-    <div v-else class="cart-list">
+    <div v-else style="overflow-x: auto; /* 添加水平滚动 */">
       <div class="batch-actions" v-if="isEditMode">
         <a-checkbox
           :model-value="isAllSelected"
@@ -46,15 +46,17 @@
             <div class="quantity-control">
               <span class="stock-info">库存: {{ item.stock }}</span>
               <a-input-number
+                style="width: 150px;"
+                mode = "button"
                 v-model="item.quantity"
                 :min="1"
-                :max="999"
+                :max="1000000"
                 size="small"
                 @change="(value) => handleQuantityChange(item, value)"
               />
             </div>
           </div>
-          <a-button v-if="!isEditMode" type="text" status="danger" @click="removeItem(item)">
+          <a-button style="margin-left: 10px;" v-if="!isEditMode" type="text" status="danger" @click="removeItem(item)">
             删除
           </a-button>
         </div>
@@ -166,6 +168,8 @@ export default {
   margin-bottom: 16px;
 }
 
+
+
 .header span {
   color: #333;
 }
@@ -249,6 +253,7 @@ export default {
 .stock-info {
   color: #999;
   font-size: 14px;
+  width: 80px;
 }
 
 .cart-footer {
@@ -280,4 +285,6 @@ export default {
   font-weight: bold;
   color: var(--color-primary-6);
 }
+
+
 </style>
