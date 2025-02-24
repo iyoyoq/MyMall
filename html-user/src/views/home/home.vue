@@ -9,8 +9,7 @@
         <span class="company-name" v-show="!collapsed">{{ companyName }}</span>
       </div>
       <a-menu
-          :defaultOpenKeys="['0']"
-          :defaultSelectedKeys="['0']"
+          :selectedKeys="[activeKey]"
           :style="{ width: '100%' }"
           @menuItemClick="onClickMenuItem"
       >
@@ -68,8 +67,8 @@
   </a-layout>
 </template>
 <script>
-import { defineComponent, ref } from 'vue'
-import { Message } from '@arco-design/web-vue'
+import { defineComponent, ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import {
   IconCaretRight,
   IconCaretLeft,
@@ -80,7 +79,6 @@ import {
   IconLocation,
 } from '@arco-design/web-vue/es/icon'
 import ShoppingCartIcon from '@/components/icons/ShoppingCartIcon.vue'
-import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -95,8 +93,34 @@ export default defineComponent({
   },
   setup () {
     const router = useRouter()
+    const route = useRoute()
     const collapsed = ref(false)
     const companyName = ref('骑虎网络技术有限公司')
+    const activeKey = ref('0')
+
+    // 路径和菜单键值的映射
+    const pathKeyMap = {
+      '/': '0',
+      '/favorites': '1',
+      '/cart': '2',
+      '/orders': '3',
+      '/address': '4',
+      '/profile': '5'
+    }
+
+    // 根据路径设置活动菜单项
+    const setActiveKey = (path) => {
+      activeKey.value = pathKeyMap[path] || '0'
+    }
+
+    // 监听路由变化
+    watch(
+      () => route.path,
+      (newPath) => {
+        setActiveKey(newPath)
+      },
+      { immediate: true }
+    )
 
     const onCollapse = () => {
       collapsed.value = !collapsed.value
@@ -117,6 +141,7 @@ export default defineComponent({
     return {
       collapsed,
       companyName,
+      activeKey,
       onCollapse,
       onClickMenuItem,
     }

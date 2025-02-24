@@ -4,9 +4,9 @@
       <span>
         共<span class="highlight">{{ favoritesList.length }}</span>件商品
       </span>
-      <a-button 
-        size="small" 
-        type="primary" 
+      <a-button
+        size="small"
+        type="primary"
         style="margin-left: 10px"
         @click="toggleEditMode"
       >
@@ -16,16 +16,17 @@
     <div v-if="!favoritesList.length" class="empty-tip">暂无收藏</div>
     <div v-else class="favorites-list">
       <div class="batch-actions" v-if="isEditMode">
-        <a-checkbox 
-          :model-value="isAllSelected" 
+        <a-checkbox
+          :model-value="isAllSelected"
           :indeterminate="isIndeterminate"
           @change="handleSelectAll"
         >全选</a-checkbox>
-        <a-button 
-          type="primary" 
-          status="danger" 
-          @click="handleBatchDelete" 
+        <a-button
+          type="primary"
+          status="danger"
+          @click="handleBatchDelete"
           :disabled="!selectedItems.length"
+          size="small"
         >
           取消收藏({{ selectedItems.length }})
         </a-button>
@@ -98,7 +99,7 @@ export default {
       this.selectedItems = []
     },
     handleSelectAll(checked) {
-      this.selectedItems = checked 
+      this.selectedItems = checked
         ? this.favoritesList.map(item => item.id)
         : []
     },
