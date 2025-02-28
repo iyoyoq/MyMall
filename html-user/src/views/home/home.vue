@@ -2,11 +2,11 @@
   <div>
     <a-layout>
       <a-layout-header style="padding: 0 20px; ">
-        <div style="padding: 0 20px; display: flex; align-items: center;  justify-content: center; width: 100%">
+        <div style="padding: 0 20px; display: flex; align-items: center;  justify-content: center; ">
           <div class="company-logo">
             <div class="company-name">{{ companyName }}</div>
           </div>
-          <div style="width: 750px">
+          <div style="width: 720px">
             <a-menu mode="horizontal" :default-selected-keys="[activeKey]">
               <a-menu-item key="0" @click="onClickMenuItem('0')">商城首页</a-menu-item>
               <a-menu-item key="1" @click="onClickMenuItem('1')">我的收藏</a-menu-item>
@@ -18,7 +18,7 @@
           </div>
         </div>
       </a-layout-header>
-      <a-layout-content>
+      <a-layout-content style="min-height: 100vh; display: flex; justify-content: center">
         <router-view></router-view>
       </a-layout-content>
     </a-layout>
