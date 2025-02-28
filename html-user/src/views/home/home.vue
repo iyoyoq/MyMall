@@ -1,26 +1,26 @@
 <template>
   <div>
-      <a-layout>
-      <a-layout-header style="padding: 0 20px; display: flex; align-items: center; ">
-        <div class="company-logo">
-          <div class="company-name">{{ companyName }}</div>
-        </div>
-        <div style="width: 100%">
-          <a-menu mode="horizontal" :default-selected-keys="[activeKey]">
-            <a-menu-item key="0" @click="onClickMenuItem('0')">商城首页</a-menu-item>
-            <a-menu-item key="1" @click="onClickMenuItem('1')">我的收藏</a-menu-item>
-            <a-menu-item key="2" @click="onClickMenuItem('2')">购物车</a-menu-item>
-            <a-menu-item key="3" @click="onClickMenuItem('3')">订单管理</a-menu-item>
-            <a-menu-item key="4" @click="onClickMenuItem('4')">地址管理</a-menu-item>
-            <a-menu-item key="5" @click="onClickMenuItem('5')">个人中心</a-menu-item>
-          </a-menu>
+    <a-layout>
+      <a-layout-header style="padding: 0 20px; ">
+        <div style="padding: 0 20px; display: flex; align-items: center;  justify-content: center; width: 100%">
+          <div class="company-logo">
+            <div class="company-name">{{ companyName }}</div>
+          </div>
+          <div style="width: 750px">
+            <a-menu mode="horizontal" :default-selected-keys="[activeKey]">
+              <a-menu-item key="0" @click="onClickMenuItem('0')">商城首页</a-menu-item>
+              <a-menu-item key="1" @click="onClickMenuItem('1')">我的收藏</a-menu-item>
+              <a-menu-item key="2" @click="onClickMenuItem('2')">购物车</a-menu-item>
+              <a-menu-item key="3" @click="onClickMenuItem('3')">订单管理</a-menu-item>
+              <a-menu-item key="4" @click="onClickMenuItem('4')">地址管理</a-menu-item>
+              <a-menu-item key="5" @click="onClickMenuItem('5')">个人中心</a-menu-item>
+            </a-menu>
+          </div>
         </div>
       </a-layout-header>
-      <a-layout style="padding: 18px 16px;">
-        <a-layout-content>
-          <router-view></router-view>
-        </a-layout-content>
-      </a-layout>
+      <a-layout-content>
+        <router-view></router-view>
+      </a-layout-content>
     </a-layout>
   </div>
 </template>
@@ -30,7 +30,7 @@ import { defineComponent, ref, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 export default defineComponent({
-  setup() {
+  setup () {
     const router = useRouter()
     const route = useRoute()
     const companyName = ref('骑虎网络技术有限公司')
@@ -43,7 +43,7 @@ export default defineComponent({
       '/cart': '2',
       '/orders': '3',
       '/address': '4',
-      '/profile': '5'
+      '/profile': '5',
     }
 
     // 菜单键值和路由路径的映射
@@ -53,7 +53,7 @@ export default defineComponent({
       '2': '/cart',
       '3': '/orders',
       '4': '/address',
-      '5': '/profile'
+      '5': '/profile',
     }
 
     // 根据当前路由设置活动菜单项
