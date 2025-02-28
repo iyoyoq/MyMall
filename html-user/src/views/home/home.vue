@@ -4,7 +4,7 @@
       <a-layout-header style="padding: 0 20px; ">
         <div style="padding: 0 20px; display: flex; align-items: center;  justify-content: center; ">
           <div class="company-logo">
-            <div class="company-name">{{ companyName }}</div>
+            <a :href="companyLink" class="company-name" @click.prevent="onClickMenuItem('0')">{{ companyName }}</a>
           </div>
           <div style="width: 720px">
             <a-menu mode="horizontal" :default-selected-keys="[activeKey]">
@@ -26,60 +26,54 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-
-export default defineComponent({
-  setup () {
-    const router = useRouter()
-    const route = useRoute()
-    const companyName = ref('骑虎网络技术有限公司')
-    const activeKey = ref('0')
-
-    // 路由路径和菜单键值的映射
-    const pathKeyMap = {
-      '/products': '0',
-      '/favorites': '1',
-      '/cart': '2',
-      '/orders': '3',
-      '/address': '4',
-      '/profile': '5',
-    }
-
-    // 菜单键值和路由路径的映射
-    const keyPathMap = {
-      '0': '/products',
-      '1': '/favorites',
-      '2': '/cart',
-      '3': '/orders',
-      '4': '/address',
-      '5': '/profile',
-    }
-
-    // 根据当前路由设置活动菜单项
-    const setActiveKeyFromRoute = () => {
-      activeKey.value = pathKeyMap[route.path] || '0'
-    }
-
-    // 监听路由变化
-    watch(() => route.path, setActiveKeyFromRoute)
-
-    // 组件挂载时设置初始活动菜单项
-    onMounted(() => {
-      setActiveKeyFromRoute()
-    })
-
-    const onClickMenuItem = (key) => {
-      router.push(keyPathMap[key])
-    }
-
+export default {
+  data() {
     return {
-      companyName,
-      activeKey,
-      onClickMenuItem,
+      companyLink: 'https://www.baidu.com',  // 公司链接
+      companyName: '骑虎网络技术有限公司',
+      activeKey: '0',
+      // 路由路径和菜单键值的映射
+      pathKeyMap: {
+        '/products': '0',
+        '/favorites': '1',
+        '/cart': '2',
+        '/orders': '3',
+        '/address': '4',
+        '/profile': '5',
+      },
+      // 菜单键值和路由路径的映射
+      keyPathMap: {
+        '0': '/products',
+        '1': '/favorites',
+        '2': '/cart',
+        '3': '/orders',
+        '4': '/address',
+        '5': '/profile',
+      }
     }
   },
-})
+
+  methods: {
+    setActiveKeyFromRoute() {
+      this.activeKey = this.pathKeyMap[this.$route.path] || '0'
+    },
+
+    onClickMenuItem(key) {
+      this.$router.push(this.keyPathMap[key])
+    }
+  },
+
+  watch: {
+    '$route.path': {
+      handler: 'setActiveKeyFromRoute',
+      immediate: true
+    }
+  },
+
+  mounted() {
+    this.setActiveKeyFromRoute()
+  }
+}
 </script>
 
 <style scoped>
@@ -98,6 +92,7 @@ export default defineComponent({
   padding: 8px 14px;
   border-radius: 4px;
   transition: background-color 0.3s ease;
+  text-decoration: none;
 }
 
 .company-name:hover {
