@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       companyLink: 'https://www.baidu.com',  // 公司链接
-      companyName: '骑虎网络技术有限公司',
+      companyName: 'AAA在线商城',
       activeKey: '0',
       // 路由路径和菜单键值的映射
       pathKeyMap: {
