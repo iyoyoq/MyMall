@@ -1,7 +1,7 @@
 package com.server.controller.user;
 
+import com.server.business.auth.service.UserService;
 import com.server.model.R;
-import com.server.business.auth.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     /**
      * 手机短信验证码登录
