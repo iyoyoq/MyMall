@@ -1,4 +1,4 @@
-package com.server.config;
+package com.server.config.request;
 
 import com.server.util.RequestContext;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
  * @Author: yjy
  * @Date: 2024/12/8 20:08
  */
-public class LoginCheckInterceptor implements HandlerInterceptor {
+public class UserCheckInterceptor implements HandlerInterceptor {
 
 
     @Override

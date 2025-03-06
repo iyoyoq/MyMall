@@ -1,9 +1,7 @@
-package com.server.controller;
+package com.server.controller.user;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
 import com.server.model.R;
-import com.server.model.dto.UserLoginDto;
-import com.server.service.UserService;
+import com.server.business.auth.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,16 +15,16 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     /**
      * 手机短信验证码登录
      */
-    @PostMapping("/user/codeLogin")
-    public R<SaTokenInfo> login(@RequestBody UserLoginDto dto) {
-        SaTokenInfo loginToken = userService.login(dto);
-        return R.ok(loginToken);
-    }
+    // @PostMapping("/user/codeLogin")
+    // public R<SaTokenInfo> login(@RequestBody UserLoginDto dto) {
+    //     SaTokenInfo loginToken = userService.login(dto);
+    //     return R.ok(loginToken);
+    // }
 
     /**
      * 获取手机验证码

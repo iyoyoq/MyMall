@@ -1,4 +1,4 @@
-package com.server.config;
+package com.server.config.mp;
 
 
 import com.baomidou.mybatisplus.annotation.DbType;
@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Configuration;
  * @Date: 2024/12/21 10:23
  */
 @Configuration
-@MapperScan("com.reuse.market3.mapper")
-public class MybatisPlusConfig {
+// @MapperScan("com.reuse.market3.mapper")
+public class MyBatisPlusConfig {
 
     /**
      * 添加分页插件

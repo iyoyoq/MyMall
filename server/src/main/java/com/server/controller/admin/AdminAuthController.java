@@ -5,7 +5,6 @@ import com.server.entity.Admin;
 import com.server.exception.BusinessException;
 import com.server.model.R;
 import com.server.service.AdminService;
-import com.server.util.StpAdminUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +29,7 @@ public class AdminAuthController {
         if (dbo == null || !dbo.getPassword().equals(admin.getPassword())) {
             throw new BusinessException("用户名或密码错误！");
         }
-        StpAdminUtil.login(dbo.getId());
+        // StpAdminUtil.login(dbo.getId());
         return R.ok();
     }
 

@@ -1,6 +1,5 @@
-package com.server.controller;
+package com.server.controller.user;
 
-import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.server.entity.ProductType;
 import com.server.model.R;
 import com.server.service.ProductTypeService;
@@ -18,7 +17,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/product/type")
-@SaCheckLogin
 public class ProductTypeController {
     @Autowired
     private ProductTypeService productTypeService;

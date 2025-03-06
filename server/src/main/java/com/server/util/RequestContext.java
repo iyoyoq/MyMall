@@ -1,6 +1,5 @@
 package com.server.util;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.server.exception.BusinessException;
 import com.server.model.ResultCodeEnum;
 
@@ -24,7 +23,7 @@ public class RequestContext {
 
     public static void setUserId() {
         try {
-            threadLocal.set(Long.valueOf((String) StpUtil.getLoginId()));
+            // threadLocal.set(Long.valueOf((String) StpUtil.getLoginId()));
         } catch (Exception e) {
             threadLocal.remove();
             throw new BusinessException(ResultCodeEnum.AuthError);
@@ -46,7 +45,7 @@ public class RequestContext {
 
     public static void setAdminId() {
         try {
-            threadLocal.set(Long.valueOf((String) StpAdminUtil.getLoginId()));
+            // threadLocal.set(Long.valueOf((String) StpAdminUtil.getLoginId()));
         } catch (Exception e) {
             threadLocal.remove();
             throw new BusinessException(ResultCodeEnum.AuthError);

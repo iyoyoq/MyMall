@@ -10,8 +10,6 @@ import lombok.Data;
 @Data
 public class UserLoginDto {
     private String phone;
-    private String province;
-    private String city;
-    private String password;
+    // private String password;
     private String code;
 }

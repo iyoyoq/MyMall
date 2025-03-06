@@ -1,4 +1,4 @@
-package com.server.config;
+package com.server.config.request;
 
 import com.server.util.RequestContext;
 import jakarta.servlet.http.HttpServletRequest;

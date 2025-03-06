@@ -1,4 +1,4 @@
-package com.server.controller;
+package com.server.controller.user;
 
 import com.server.entity.Comment;
 import com.server.model.R;

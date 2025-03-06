@@ -1,4 +1,4 @@
-package com.server.controller;
+package com.server.controller.user;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.entity.ProductInfo;

@@ -1,9 +1,11 @@
-package com.server.entity;
+package com.server.business.auth.domain;
 
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * 用户表(User)表实体类
@@ -27,16 +29,12 @@ public class User {
     private String password;
     // 状态 0禁用 1启用
     private Integer status;
-    // 创建时间
-    @TableField(fill = FieldFill.UPDATE)
-    private Long updateTime;
     // 更新时间
+    @TableField(fill = FieldFill.UPDATE)
+    private LocalDateTime updateTime;
+    //  创建时间
     @TableField(fill = FieldFill.INSERT)
-    private Long createTime;
-    // 定位省
-    private String province;
-    // 定位市
-    private String city;
+    private LocalDateTime createTime;
     // 平台编号
     private String number;
     // 待审核昵称
@@ -45,9 +43,8 @@ public class User {
     private String checkIntro;
     // 待审核头像
     private String checkAvatar;
-    // 审核状态 0待审核 7审核失败 9审核成功
+    // 审核状态 1待审核 2审核失败 3审核成功
     private Integer checkStatus;
-
 
 
 }

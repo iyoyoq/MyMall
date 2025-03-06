@@ -1,4 +1,4 @@
-package com.server.controller;
+package com.server.controller.user;
 
 import cn.hutool.core.util.StrUtil;
 import com.server.constant.MinioProp;
