@@ -1,6 +1,7 @@
 package com.server.business.auth.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -16,6 +17,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
@@ -36,14 +38,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public void sendLoginCode(String phone) {
-        redisTemplate.opsForValue().set(RedisPrefix.phone_msg_code + phone, "123456", 120, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(RedisPrefix.PHONE_MSG_CODE + phone, "123456", 120, TimeUnit.SECONDS);
     }
 
     @Override
     public UserLoginVO login(UserLoginDto request) {
         String userCode = request.getCode();
         String phone = request.getPhone();
-        String redisCode = redisTemplate.opsForValue().get(RedisPrefix.phone_msg_code + phone);
+        String redisCode = redisTemplate.opsForValue().get(RedisPrefix.PHONE_MSG_CODE + phone);
         if (StrUtil.isEmpty(redisCode)) throw new BusinessException("未发送验证码");
         if (!redisCode.equals(userCode)) throw new BusinessException("验证码错误");
         // 1.查询用户是否存在
@@ -52,7 +54,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (null == user) {
             user = new User();
             String numbers = RandomUtil.randomNumbers(9);
-            user.setNumber(numbers);
+            user.setCode(numbers);
             user.setPhone(Long.valueOf(request.getPhone()));
             user.setAvatar("https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png");
             user.setNickName("用户" + numbers);
@@ -70,10 +72,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             if (!update) throw new BusinessException("用户更新失败");
         }
         // 制作 token
-        String token = RandomUtil.randomString(45);
-        String key = RedisPrefix.user_token + user.getId();   // 即使是新用户，mp也会得到userId
+        String token = IdUtil.simpleUUID();  // token
+        String key = RedisPrefix.USER_TOKEN + user.getId();   // 即使是新用户，mp也会得到userId
         redisTemplate.opsForValue().set(key, token, 24, TimeUnit.HOURS);
-        redisTemplate.delete(RedisPrefix.phone_msg_code + request.getPhone());
+        redisTemplate.delete(RedisPrefix.PHONE_MSG_CODE + request.getPhone());
         UserLoginVO vo = BeanUtil.copyProperties(user, UserLoginVO.class);
         vo.setToken(token);
         // 返回token

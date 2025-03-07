@@ -3,6 +3,7 @@ package com.server.business.auth.domain;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
  * @since 2024-12-06 16:05:31
  */
 @Data
+@TableName("auth_user")
 public class User {
     // 用户唯一标识
     private Long id;
@@ -36,7 +38,7 @@ public class User {
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
     // 平台编号
-    private String number;
+    private String code;
     // 待审核昵称
     private String checkNickName;
     // 待审核简介
