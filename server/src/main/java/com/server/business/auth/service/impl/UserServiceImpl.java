@@ -5,7 +5,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.server.business.auth.mapper.UserMapper;
-import com.server.business.auth.domain.vo.UserLoginVo;
+import com.server.business.auth.domain.vo.UserLoginVO;
 import com.server.business.auth.domain.User;
 import com.server.business.auth.service.IUserService;
 import com.server.config.redis.RedisPrefix;
@@ -40,7 +40,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public UserLoginVo login(UserLoginDto request) {
+    public UserLoginVO login(UserLoginDto request) {
         String userCode = request.getCode();
         String phone = request.getPhone();
         String redisCode = redisTemplate.opsForValue().get(RedisPrefix.phone_msg_code + phone);
@@ -74,7 +74,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String key = RedisPrefix.user_token + user.getId();   // 即使是新用户，mp也会得到userId
         redisTemplate.opsForValue().set(key, token, 24, TimeUnit.HOURS);
         redisTemplate.delete(RedisPrefix.phone_msg_code + request.getPhone());
-        UserLoginVo vo = BeanUtil.copyProperties(user, UserLoginVo.class);
+        UserLoginVO vo = BeanUtil.copyProperties(user, UserLoginVO.class);
         vo.setToken(token);
         // 返回token
         return vo;

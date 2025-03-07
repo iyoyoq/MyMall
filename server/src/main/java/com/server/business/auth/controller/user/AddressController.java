@@ -1,8 +1,10 @@
 package com.server.business.auth.controller.user;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.auth.domain.Address;
+import com.server.business.auth.domain.dto.AddressCreateDTO;
 import com.server.business.auth.service.IAddressService;
 import com.server.pojo.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +52,9 @@ public class AddressController {
      * 增
      */
     @PostMapping("/save")
-    public R create(@RequestBody Address address) {
-        boolean ok = addressService.save(address);
+    public R create(@RequestBody AddressCreateDTO address) {
+        Address db = BeanUtil.copyProperties(address, Address.class);
+        boolean ok = addressService.save(db);
         return R.judge(ok, "保存失败");
     }
 

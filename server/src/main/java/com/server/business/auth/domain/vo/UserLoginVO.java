@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * @Date: 2025/3/1 19:25
  */
 @Data
-public class UserLoginVo {
+public class UserLoginVO {
     private String token;
 
     // 用户唯一标识

@@ -38,7 +38,7 @@ mybatis-plus:
   global-config:
     db-config:
       # 这两项配置可以让实体类中不用写表名注解和 id生成注解，会自动找到 名为id 的属性
-      table-prefix: b_  # 表前缀  business 业务的意思
+      table-prefix:   # 表前缀  business 业务的意思
       id-type:  ASSIGN_ID  # id生成策略
   configuration:
     map-underscore-to-camel-case: true # 驼峰命名
