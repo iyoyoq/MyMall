@@ -18,6 +18,14 @@ export function sendLoginCodeApi (phone) {
   })
 }
 
+export function codeLoginApi (data) {
+  return request({
+    url: '/auth/user/login/sendLoginCode',
+    method: 'get',
+    data: data
+  })
+}
+
 
 
 
