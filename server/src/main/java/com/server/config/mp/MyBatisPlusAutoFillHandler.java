@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -21,12 +23,12 @@ public class MyBatisPlusAutoFillHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         // log.info("开始插入填充...");
-        this.strictInsertFill(metaObject, "createTime", Long.class, new Date().getTime());
+        this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         // log.info("开始更新填充...");
-        this.strictUpdateFill(metaObject, "updateTime", Long.class, new Date().getTime());
+        this.strictUpdateFill(metaObject, "updateTime",  LocalDateTime.class, LocalDateTime.now());
     }
 }

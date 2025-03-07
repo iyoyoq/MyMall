@@ -1,4 +1,4 @@
-package com.server.model;
+package com.server.pojo;
 
 /**
  * 需要前端处理的写在这，否则统一用 SystemError(10001), //系统异常

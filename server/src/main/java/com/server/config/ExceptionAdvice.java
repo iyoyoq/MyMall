@@ -2,8 +2,8 @@ package com.server.config;
 
 
 import com.server.exception.BusinessException;
-import com.server.model.R;
-import com.server.model.ResultCodeEnum;
+import com.server.pojo.R;
+import com.server.pojo.ResultCodeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;

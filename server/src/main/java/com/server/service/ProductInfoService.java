@@ -3,8 +3,8 @@ package com.server.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.server.entity.ProductInfo;
-import com.server.model.dto.ProductInfoCreateDto;
-import com.server.model.dto.ProductInfoQueryConditionDto;
+import com.server.pojo.dto.ProductInfoCreateDto;
+import com.server.pojo.dto.ProductInfoQueryConditionDto;
 
 /**
  * 物品表(M3ProductInfo)表服务接口

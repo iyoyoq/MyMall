@@ -3,7 +3,7 @@ package com.server.controller.user;
 import cn.hutool.core.util.StrUtil;
 import com.server.constant.MinioProp;
 import com.server.exception.BusinessException;
-import com.server.model.R;
+import com.server.pojo.R;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import org.slf4j.Logger;

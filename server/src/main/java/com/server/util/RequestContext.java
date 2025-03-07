@@ -1,7 +1,7 @@
 package com.server.util;
 
 import com.server.exception.BusinessException;
-import com.server.model.ResultCodeEnum;
+import com.server.pojo.ResultCodeEnum;
 
 /**
  * @Description: 请求上下文

@@ -1,6 +1,7 @@
-package com.server.model;
+package com.server.pojo;
 
 
+import static com.server.pojo.ResultCodeEnum.BusinessError;
 /**
  * 统一响应结果
  */
@@ -23,6 +24,14 @@ public class R<T> {
 
     public static <T> R<T> ok(T result) {
         return new R<>(ResultCodeEnum.Success.getCode(), "", result);
+    }
+
+    public static R<String> error(String msg) {
+        return new R<>(BusinessError.getCode(), msg, "");
+    }
+
+    public static R<String> judge(boolean success, String errMsg) {
+        return success ? R.ok() : R.error(errMsg);
     }
 
 

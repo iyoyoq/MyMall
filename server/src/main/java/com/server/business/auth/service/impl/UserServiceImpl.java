@@ -10,7 +10,7 @@ import com.server.business.auth.domain.User;
 import com.server.business.auth.service.IUserService;
 import com.server.config.redis.RedisPrefix;
 import com.server.exception.BusinessException;
-import com.server.model.dto.UserLoginDto;
+import com.server.pojo.dto.UserLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;

@@ -3,7 +3,7 @@ package com.server.controller.admin;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.server.entity.Admin;
 import com.server.exception.BusinessException;
-import com.server.model.R;
+import com.server.pojo.R;
 import com.server.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

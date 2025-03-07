@@ -1,9 +1,9 @@
-package com.server.model.dto;
+package com.server.pojo.dto;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.server.entity.ProductInfo;
-import com.server.model.PageCondition;
+import com.server.pojo.PageCondition;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 

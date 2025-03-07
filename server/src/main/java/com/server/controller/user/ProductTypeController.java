@@ -1,7 +1,7 @@
 package com.server.controller.user;
 
 import com.server.entity.ProductType;
-import com.server.model.R;
+import com.server.pojo.R;
 import com.server.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

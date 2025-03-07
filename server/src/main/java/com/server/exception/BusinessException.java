@@ -1,7 +1,7 @@
 package com.server.exception;
 
 
-import com.server.model.ResultCodeEnum;
+import com.server.pojo.ResultCodeEnum;
 
 /**
  * 业务异常
