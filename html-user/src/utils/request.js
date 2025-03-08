@@ -40,6 +40,7 @@ const instance = axios.create({
 instance.interceptors.response.use(
   (res) => {
     const code = res.data.code
+    const msg = res.data.msg
     // 3. 处理业务失败
     //  4.摘取核心响应数据
     if (code === undefined || code === null) {
@@ -49,17 +50,17 @@ instance.interceptors.response.use(
       case 1:
         return res
       case 10003: {
+        Message.success('身份无效,请重新登录')
         router.push('/login')
-        console.log('身份无效,请重新登录')
         return
       }
       case 10002: {
         // 业务异常
-        console.log(res.data.msg)
+        Message.error(msg)
         return Promise.reject(res.data)
       }
       default: {
-        console.log('服务异常')
+        Message.error('服务异常')
         return Promise.reject(res.data)
       }
     }

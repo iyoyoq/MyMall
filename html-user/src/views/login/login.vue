@@ -4,23 +4,23 @@
       <h2>用户登录</h2>
       <a-form :model="formData" @submit="handleLogin">
         <a-form-item
-          label="手机号"
-          field="phone"
-          :rules="[{ required: true, message: '请输入手机号' }]"
+            label="手机号"
+            field="phone"
+            :rules="[{ required: true, message: '请输入手机号' }]"
         >
-          <a-input v-model="formData.phone" placeholder="请输入手机号" />
+          <a-input v-model="formData.phone" placeholder="请输入手机号"/>
         </a-form-item>
 
         <a-form-item
-          label="验证码"
-          field="code"
-          :rules="[{ required: true, message: '请输入验证码' }]"
+            label="验证码"
+            field="code"
+            :rules="[{ required: true, message: '请输入验证码' }]"
         >
           <div class="code-input">
-            <a-input v-model="formData.code" placeholder="请输入验证码" />
+            <a-input v-model="formData.code" placeholder="请输入验证码"/>
             <a-button
-              :disabled="countdown > 0"
-              @click="getCode"
+                :disabled="countdown > 0"
+                @click="getCode"
             >
               {{ countdown > 0 ? `${countdown}秒后重试` : '获取验证码' }}
             </a-button>
@@ -45,11 +45,11 @@ export default {
     return {
       formData: {
         phone: '',
-        code: ''
+        code: '',
       },
       countdown: 0,
       phoneCodeTimeSeconds: 120,
-      timer: null
+      timer: null,
     }
   },
   methods: {
@@ -58,13 +58,9 @@ export default {
         Message.error('请先输入手机号')
         return
       }
-      try {
-        await sendLoginCodeApi(this.formData.phone)
-        Message.success('验证码发送成功')
-        this.startCountdown()
-      } catch (error) {
-        Message.error('验证码发送失败')
-      }
+      await sendLoginCodeApi(this.formData.phone)
+      Message.success('验证码发送成功')
+      this.startCountdown()
     },
 
     startCountdown () {
@@ -79,20 +75,18 @@ export default {
     },
 
     async handleLogin () {
-      try {
-        const res = await codeLoginApi(this.formData)
-        Message.success('登录成功')
-        this.$router.push('/products')
-      } catch (error) {
-        Message.error('登录失败')
-      }
-    }
+      const res = await codeLoginApi(this.formData)
+      const token = res.data.result.token
+      Message.success('登录成功')
+      this.$router.push('/')
+
+    },
   },
   beforeUnmount () {
     if (this.timer) {
       clearInterval(this.timer)
     }
-  }
+  },
 }
 </script>
 
