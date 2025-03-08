@@ -1,25 +1,27 @@
 import axios from 'axios'
 import router from '@/router'
-import JSONBig  from 'json-bigint'
+import JSONBig from 'json-bigint'
+import { Message } from '@arco-design/web-vue'
 
 const baseURL = 'http://localhost:45000/api'
 const instance = axios.create({
   // 1.基础地址，超时时间 /ms
   baseURL,
   timeout: 10000,
-  withCredentials: true,
+  // withCredentials: true,
   // 处理 bigint
-  transformResponse: [function (data) {
-    try {
-      // 如果转换成功则返回转换的数据结果
-      return JSONBig.parse(data)
-    } catch (err) {
-      // 如果转换失败，则包装为统一数据格式并返回
-      return {
-        data
+  transformResponse: [
+    function (data) {
+      try {
+        // 如果转换成功则返回转换的数据结果
+        return JSONBig.parse(data)
+      } catch (err) {
+        // 如果转换失败，则包装为统一数据格式并返回
+        return {
+          data,
+        }
       }
-    }
-  }]
+    }],
 })
 
 // 请求拦截器
@@ -37,21 +39,30 @@ const instance = axios.create({
 // 响应拦截器
 instance.interceptors.response.use(
   (res) => {
+    const code = res.data.code
     // 3. 处理业务失败
     //  4.摘取核心响应数据
-    if (res.data.code === 1) {
-      return res
-    } else if (res.data.code === 10003) { //身份无效
-      router.push('/login')
-      console.log('身份无效,请重新登录')
-      return
-    } else if (res.data.code === 10002) { //普通业务异常
-      // 业务异常
-      console.log(res.data.msg)
-      return Promise.reject(res.data)
+    if (code === undefined || code === null) {
+      Message.error('响应格式异常')
     }
-    console.log('服务异常')
-    return Promise.reject(res.data)
+    switch (code) {
+      case 1:
+        return res
+      case 10003: {
+        router.push('/login')
+        console.log('身份无效,请重新登录')
+        return
+      }
+      case 10002: {
+        // 业务异常
+        console.log(res.data.msg)
+        return Promise.reject(res.data)
+      }
+      default: {
+        console.log('服务异常')
+        return Promise.reject(res.data)
+      }
+    }
   },
   (err) => {
     // console.log(err)
@@ -66,7 +77,6 @@ instance.interceptors.response.use(
     // }
     // 错误默认情况
     // ElMessage.error(err.response.data.message || '服务异常')
-    showError('服务异常')
     router.push('/login')
     return Promise.reject(err)
   })

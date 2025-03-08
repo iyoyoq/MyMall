@@ -10,18 +10,18 @@ export function demoApi () {
   })
 }
 
-export function sendLoginCodeApi (phone) {
+export async function sendLoginCodeApi (phone) {
   return request({
     url: '/auth/user/login/sendLoginCode',
     method: 'get',
-    params: phone,
+    params: {phone:phone},
   })
 }
 
 export function codeLoginApi (data) {
   return request({
-    url: '/auth/user/login/sendLoginCode',
-    method: 'get',
+    url: '/auth/user/login/codeLogin',
+    method: 'post',
     data: data
   })
 }
