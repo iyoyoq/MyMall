@@ -62,8 +62,13 @@ instance.interceptors.response.use(
         Message.error(msg)
         return Promise.reject(res.data)
       }
+      case 10001: {  //未处理的系统异常 RuntimeException or Exception
+        // 业务异常
+        Message.error("服务器异常")
+        return Promise.reject(res.data)
+      }
       default: {
-        Message.error('服务异常')
+        Message.error('服务器异常')
         return Promise.reject(res.data)
       }
     }
