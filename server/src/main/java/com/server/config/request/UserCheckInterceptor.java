@@ -35,8 +35,6 @@ public class UserCheckInterceptor implements HandlerInterceptor {
         // if (request.getMethod().equals("OPTIONS")) {
         //     return true;
         // }
-        String method = request.getMethod();
-        String contextPath = request.getRequestURI();
         boolean ok = false;
         String authorization = request.getHeader("Authorization");
         if (authorization != null && authorization.startsWith("Bearer ")) {
@@ -45,7 +43,7 @@ public class UserCheckInterceptor implements HandlerInterceptor {
             ok = requestContext.setCurrentUserByToken(token);
         }
         if (!ok) {
-            throw  new BusinessException(ResultCodeEnum.AuthError);
+            throw new BusinessException(ResultCodeEnum.AuthError);
         }
         // 通过验证
         return ok;

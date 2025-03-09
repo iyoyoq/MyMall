@@ -17,7 +17,7 @@ public class BusinessException extends RuntimeException {
     }
 
     public BusinessException(ResultCodeEnum r) {
-        super(String.format("请求错误码：%d, 枚举类名：%s", r.getCode(), r.name()));
+        super(String.format("响应错误码：%d, 枚举类名：%s", r.getCode(), r.name()));
         codeEnum = r;
     }
 
