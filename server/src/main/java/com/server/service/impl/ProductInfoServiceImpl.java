@@ -30,7 +30,7 @@ public class ProductInfoServiceImpl extends ServiceImpl<ProductInfoMapper, Produ
         dbo.setImage(dto.getImageAsJson());
         dbo.setPrice((long) (dto.getPrice() * 100));
         dbo.setOriginalPrice((long) (dto.getOriginalPrice() * 100));
-        dbo.setUserId(RequestContext.getUserId());
+        // dbo.setUserId(RequestContext.getUserId());
         dbo.setLikeCount(0);
         dbo.setStatus(1); // 待审核
         save(dbo);

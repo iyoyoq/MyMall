@@ -3,7 +3,9 @@ import router from '@/router'
 import JSONBig from 'json-bigint'
 import { Message } from '@arco-design/web-vue'
 
-const baseURL = 'http://localhost:45000/api'
+const baseURL = 'http://localhost:45000/api' // 后端api
+const localStorageTokenName = 'amity-mall-token' // 存到localStorage 里面的 TokenName
+
 const instance = axios.create({
   // 1.基础地址，超时时间 /ms
   baseURL,
@@ -25,16 +27,17 @@ const instance = axios.create({
 })
 
 // 请求拦截器
-// instance.interceptors.request.use(
-//   (config) => {
-//     // 2.携带 token
-//     const userStore = useUserStore()
-//     if (userStore.token) {
-//     }
-//     return config
-//   },
-//   (err) => Promise.reject(err),
-// )
+instance.interceptors.request.use(
+  (config) => {
+    // 2.携带 token
+    const token = localStorage.getItem(localStorageTokenName)
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  (err) => Promise.reject(err),
+)
 
 // 响应拦截器
 instance.interceptors.response.use(
@@ -50,7 +53,7 @@ instance.interceptors.response.use(
       case 1:
         return res
       case 10003: {
-        Message.success('身份无效,请重新登录')
+        Message.error('身份无效,请重新登录')
         router.push('/login')
         return
       }
@@ -85,6 +88,6 @@ instance.interceptors.response.use(
 
 export default instance
 
-export { baseURL }
+export { baseURL,localStorageTokenName }
 
 

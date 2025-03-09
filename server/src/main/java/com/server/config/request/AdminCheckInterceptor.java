@@ -20,7 +20,7 @@ public class AdminCheckInterceptor  implements HandlerInterceptor {
             // 本项目使用 Cookie 认证，浏览器预检请求OPTIONS不会携带 Cookie, 先放行
             return true;
         }
-        RequestContext.setAdminId();
+        // RequestContext.setAdminId();
 
         // 通过验证
         return true;
@@ -31,6 +31,6 @@ public class AdminCheckInterceptor  implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
         // 如果不删除ThreadLocal中的信息,会有内存泄露的风险
-        RequestContext.removeAdminId();
+        // RequestContext.removeAdminId();
     }
 }

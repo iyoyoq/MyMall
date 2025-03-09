@@ -1,4 +1,4 @@
-package com.server.config;
+package com.server.config.response;
 
 
 import com.server.exception.BusinessException;

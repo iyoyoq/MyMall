@@ -5,6 +5,8 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.business.auth.mapper.UserMapper;
 import com.server.business.auth.domain.vo.UserLoginVO;
 import com.server.business.auth.domain.User;
@@ -26,6 +28,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     // @Override
     // public User getUserInfo(Long userId) {
@@ -73,13 +78,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         // 制作 token
         String token = IdUtil.simpleUUID();  // token
-        String key = RedisPrefix.USER_TOKEN + user.getId();   // 即使是新用户，mp也会得到userId
-        redisTemplate.opsForValue().set(key, token, 24, TimeUnit.HOURS);
+        String k = RedisPrefix.USER_TOKEN + token;   // 即使是新用户，mp也会得到userId
+        String v = null;
+        try {
+            v = objectMapper.writeValueAsString(user);
+        } catch (JsonProcessingException e) {
+            log.error("用户序列化失败", e);
+            throw new RuntimeException(e);
+        }
+        redisTemplate.opsForValue().set(k, v, 24, TimeUnit.HOURS);
         redisTemplate.delete(RedisPrefix.PHONE_MSG_CODE + request.getPhone());
         UserLoginVO vo = BeanUtil.copyProperties(user, UserLoginVO.class);
         vo.setToken(token);
         // 返回token
         return vo;
+    }
+
+    @Override
+    public User getUserByToken(String token) {
+        String s = redisTemplate.opsForValue().get(RedisPrefix.USER_TOKEN + token);
+        try {
+            return objectMapper.readValue(s, User.class);
+        } catch (JsonProcessingException e) {
+            log.error("用户反序列化失败", e);
+        }
+        return null;
     }
 
 

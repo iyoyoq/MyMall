@@ -12,4 +12,6 @@ public interface IUserService extends IService<User> {
     void sendLoginCode(String phone);
 
     UserLoginVO login(UserLoginDto dto);
+
+    User getUserByToken(String token);
 }

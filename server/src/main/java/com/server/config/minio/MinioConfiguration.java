@@ -1,4 +1,4 @@
-package com.server.config;
+package com.server.config.minio;
 
 import com.server.constant.MinioProp;
 import io.minio.MinioClient;

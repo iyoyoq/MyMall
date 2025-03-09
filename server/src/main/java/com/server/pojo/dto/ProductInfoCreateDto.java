@@ -1,9 +1,9 @@
 package com.server.pojo.dto;
 
+import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.exception.BusinessException;
-import com.server.util.ObjectMapperHolder;
 import lombok.Data;
 
 import java.util.Collections;
@@ -37,7 +37,7 @@ public class ProductInfoCreateDto {
 
     // 将 image 属性转换为 JSON 格式的字符串
     public String getImageAsJson() {
-        ObjectMapper objectMapper = ObjectMapperHolder.getObjectMapper();
+        ObjectMapper objectMapper = SpringUtil.getBean(ObjectMapper.class);
         try {
             List<String> result = image == null ? Collections.emptyList() : image;
             return objectMapper.writeValueAsString(result);

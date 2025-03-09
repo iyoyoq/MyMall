@@ -38,6 +38,7 @@
 <script>
 import { sendLoginCodeApi, codeLoginApi } from '@/api/login.js'
 import { Message } from '@arco-design/web-vue'
+import { localStorageTokenName } from '@/utils/request.js'
 
 export default {
   name: 'login',
@@ -77,9 +78,9 @@ export default {
     async handleLogin () {
       const res = await codeLoginApi(this.formData)
       const token = res.data.result.token
+      localStorage.setItem(localStorageTokenName, token)
       Message.success('登录成功')
       this.$router.push('/')
-
     },
   },
   beforeUnmount () {
