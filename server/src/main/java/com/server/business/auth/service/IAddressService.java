@@ -9,7 +9,7 @@ import com.server.business.auth.domain.Address;
  * @author localyjy
  * @since 2025-03-06 16:36:55
  */
-public interface IAddressService extends IService<Address> {
+public interface IAddressService {
 
 }
 

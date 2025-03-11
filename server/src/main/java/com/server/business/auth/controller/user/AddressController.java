@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.dto.AddressCreateDTO;
+import com.server.business.auth.mapper.AddressMapper;
 import com.server.business.auth.service.IAddressService;
 import com.server.pojo.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 
 
 /**
@@ -21,20 +21,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth/user/address")
 public class AddressController {
 
+
     @Autowired
-    private IAddressService addressService;
+    private AddressMapper addressMapper;
 
     /**
      * 分页查询
      */
     @PostMapping("/list")
     public R list(
-            Integer current,
-            Integer size,
+            @RequestParam("pageNum") Integer pageNum,
+            @RequestParam("pageSize") Integer pageSize,
             @RequestBody Address address) {
-        Page<Address> page = new Page<>(current, size);
-        QueryWrapper<Address> wrapper = new QueryWrapper<>(address);
-        Page<Address> result = addressService.page(page, wrapper);
+        Page<Address> result = addressMapper.selectPage(new Page<>(pageNum, pageSize),  new QueryWrapper<>(address));
         return R.ok(result);
     }
 
@@ -43,7 +42,7 @@ public class AddressController {
      */
     @GetMapping("/detail")
     public R detail(Long id) {
-        Address address = addressService.getById(id);
+        Address address = addressMapper.selectById(id);
         return R.ok(address);
     }
 
@@ -54,8 +53,8 @@ public class AddressController {
     @PostMapping("/save")
     public R create(@RequestBody AddressCreateDTO address) {
         Address db = BeanUtil.copyProperties(address, Address.class);
-        boolean ok = addressService.save(db);
-        return R.judge(ok, "保存失败");
+        int ok = addressMapper.insert(db);
+        return R.judge(ok > 0, "保存失败");
     }
 
     /**
@@ -66,8 +65,8 @@ public class AddressController {
         Address address = new Address();
         address.setId(id);
         address.setStatus(-1);
-        boolean b = addressService.updateById(address);
-        return R.judge(b,"删除失败");
+        int b = addressMapper.updateById(address);
+        return R.judge(b > 0, "删除失败");
     }
 
     /**
@@ -75,8 +74,8 @@ public class AddressController {
      */
     @PutMapping("/update")
     public R update(Address address) {
-        boolean b = addressService.updateById(address);
-        return R.judge(b,"");
+        int b = addressMapper.updateById(address);
+        return R.judge(b > 0, "");
     }
 
 
