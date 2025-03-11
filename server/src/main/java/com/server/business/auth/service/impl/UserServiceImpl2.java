@@ -5,11 +5,10 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.server.business.auth.domain.vo.UserLoginVO;
 import com.server.business.auth.domain.User;
+import com.server.business.auth.domain.vo.UserLoginVO;
 import com.server.business.auth.mapper.UserMapper;
 import com.server.business.auth.service.IUserService;
 import com.server.config.redis.RedisPrefix;
@@ -27,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl2 implements IUserService {
 
     @Autowired
     private StringRedisTemplate redisTemplate;

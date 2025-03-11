@@ -20,10 +20,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth/user/address")
 public class AddressController {
-
-
     @Autowired
-    private AddressMapper addressMapper;
+    private IAddressService addressService;
+
 
     /**
      * 分页查询
@@ -33,7 +32,7 @@ public class AddressController {
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestBody Address address) {
-        Page<Address> result = addressMapper.selectPage(new Page<>(pageNum, pageSize),  new QueryWrapper<>(address));
+        Page<Address> result = addressService.selectPage(pageNum, pageSize, address);
         return R.ok(result);
     }
 
@@ -42,7 +41,7 @@ public class AddressController {
      */
     @GetMapping("/detail")
     public R detail(Long id) {
-        Address address = addressMapper.selectById(id);
+        Address address = addressService.selectById(id);
         return R.ok(address);
     }
 
@@ -51,9 +50,8 @@ public class AddressController {
      * 增
      */
     @PostMapping("/save")
-    public R create(@RequestBody AddressCreateDTO address) {
-        Address db = BeanUtil.copyProperties(address, Address.class);
-        int ok = addressMapper.insert(db);
+    public R create(@RequestBody AddressCreateDTO dto) {
+        int ok = addressService.insert(dto);
         return R.judge(ok > 0, "保存失败");
     }
 
@@ -62,11 +60,8 @@ public class AddressController {
      */
     @DeleteMapping("/remove")
     public R remove(Long id) {
-        Address address = new Address();
-        address.setId(id);
-        address.setStatus(-1);
-        int b = addressMapper.updateById(address);
-        return R.judge(b > 0, "删除失败");
+        int result = addressService.removeById(id);
+        return R.judge(result > 0, "删除失败");
     }
 
     /**
@@ -74,7 +69,7 @@ public class AddressController {
      */
     @PutMapping("/update")
     public R update(Address address) {
-        int b = addressMapper.updateById(address);
+        int b = addressService.updateById(address);
         return R.judge(b > 0, "");
     }
 

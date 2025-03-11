@@ -1,7 +1,14 @@
 package com.server.business.auth.service.impl;
 
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.server.business.auth.domain.Address;
+import com.server.business.auth.domain.dto.AddressCreateDTO;
+import com.server.business.auth.mapper.AddressMapper;
 import com.server.business.auth.service.IAddressService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,6 +19,40 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AddressServiceImpl implements IAddressService {
+
+    @Autowired
+    private AddressMapper addressMapper;
+
+    @Override
+    public Page<Address> selectPage(Integer pageNum, Integer pageSize, Address address) {
+        QueryWrapper<Address> wrapper = new QueryWrapper<>(address);
+        return addressMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+    }
+
+    @Override
+    public Address selectById(Long id) {
+        return addressMapper.selectById(id);
+    }
+
+    @Override
+    public int insert(AddressCreateDTO dto) {
+        Address db = BeanUtil.copyProperties(dto, Address.class);
+        return addressMapper.insert(db);
+    }
+
+    @Override
+    public int removeById(Long id) {
+        Address address = new Address();
+        address.setId(id);
+        address.setStatus(-1);
+        return addressMapper.updateById(address);
+    }
+
+    @Override
+    public int updateById(Address address) {
+        return addressMapper.updateById(address);
+    }
+
 
 }
 

@@ -1,11 +1,12 @@
 package com.server.business.auth.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+
+import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.User;
 import com.server.business.auth.domain.vo.UserLoginVO;
 import com.server.pojo.dto.UserLoginDto;
 
-public interface IUserService extends IService<User> {
+public interface IUserService  {
 
 
 
@@ -14,4 +15,6 @@ public interface IUserService extends IService<User> {
     UserLoginVO login(UserLoginDto dto);
 
     User getUserByToken(String token);
+
+
 }
