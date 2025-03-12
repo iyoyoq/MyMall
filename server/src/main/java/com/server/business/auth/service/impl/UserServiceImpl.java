@@ -18,6 +18,7 @@ import com.server.pojo.dto.UserLoginDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -101,6 +102,11 @@ public class UserServiceImpl implements IUserService {
             log.error("用户反序列化失败", e);
         }
         return null;
+    }
+
+    @Override
+    public User selectById(Long id) {
+        return userMapper.selectById(id);
     }
 
 
