@@ -1,11 +1,8 @@
 package com.server.business.auth.controller.user;
 
-import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.dto.AddressCreateDTO;
-import com.server.business.auth.mapper.AddressMapper;
 import com.server.business.auth.service.IAddressService;
 import com.server.pojo.R;
 import org.springframework.beans.factory.annotation.Autowired;

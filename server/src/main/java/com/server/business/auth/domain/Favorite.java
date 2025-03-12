@@ -1,7 +1,8 @@
 package com.server.business.auth.domain;
 
-import java.util.Date;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * 用户收藏表(Favorite)表实体类

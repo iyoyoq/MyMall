@@ -1,15 +1,14 @@
 package com.server.business.auth.controller.user;
 
 
-import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.User;
 import com.server.business.auth.service.IUserService;
 import com.server.pojo.R;
 import com.server.util.RequestContext;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Description: 用户信息

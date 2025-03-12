@@ -1,10 +1,9 @@
 package com.server.business.auth.domain;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * 用户地址表(Address)表实体类

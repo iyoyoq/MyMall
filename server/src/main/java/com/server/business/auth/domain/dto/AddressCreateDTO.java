@@ -2,8 +2,6 @@ package com.server.business.auth.domain.dto;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 /**
  * @Description: TODO
  * @Author: yjy
