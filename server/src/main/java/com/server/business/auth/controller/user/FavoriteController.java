@@ -1,9 +1,7 @@
 package com.server.business.auth.controller.user;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.Favorite;
-import com.server.business.auth.domain.dto.AddressCreateDTO;
 import com.server.business.auth.domain.dto.FavoriteCreateDTO;
 import com.server.business.auth.service.IFavoriteService;
 import com.server.pojo.R;

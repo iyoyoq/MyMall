@@ -68,11 +68,11 @@
             <optional>true</optional>
         </dependency>
 
-        <!--jackson-->
+        <!--jackson 日期序列化-->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.15.2</version> <!-- 根据实际情况选择合适的版本 -->
+            <!--<version>2.15.2</version> &lt;!&ndash; 根据实际情况选择合适的版本 &ndash;&gt;-->
         </dependency>
 
 
@@ -80,7 +80,31 @@
 
     <build>
         <plugins>
-
+            <!--这段springboot 初始化脚本生成的pom插件得删除，不然lombok跑不动，真是服了-->
+            <!--<plugin>-->
+            <!--    <groupId>org.apache.maven.plugins</groupId>-->
+            <!--    <artifactId>maven-compiler-plugin</artifactId>-->
+            <!--    <configuration>-->
+            <!--        <annotationProcessorPaths>-->
+            <!--            <path>-->
+            <!--                <groupId>org.projectlombok</groupId>-->
+            <!--                <artifactId>lombok</artifactId>-->
+            <!--            </path>-->
+            <!--        </annotationProcessorPaths>-->
+            <!--    </configuration>-->
+            <!--</plugin>-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
