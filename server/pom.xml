@@ -65,7 +65,9 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <!--<version>1.18.36</version>-->
             <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
 
         <!--jackson 日期序列化-->
@@ -81,18 +83,19 @@
     <build>
         <plugins>
             <!--这段springboot 初始化脚本生成的pom插件得删除，不然lombok跑不动，真是服了-->
-            <!--<plugin>-->
-            <!--    <groupId>org.apache.maven.plugins</groupId>-->
-            <!--    <artifactId>maven-compiler-plugin</artifactId>-->
-            <!--    <configuration>-->
-            <!--        <annotationProcessorPaths>-->
-            <!--            <path>-->
-            <!--                <groupId>org.projectlombok</groupId>-->
-            <!--                <artifactId>lombok</artifactId>-->
-            <!--            </path>-->
-            <!--        </annotationProcessorPaths>-->
-            <!--    </configuration>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <!--<version>1.18.36</version>-->
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

@@ -2,9 +2,11 @@ package com.server.business.auth.service.impl;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.auth.domain.Address;
+import com.server.business.auth.domain.User;
 import com.server.business.auth.domain.dto.AddressCreateDTO;
 import com.server.business.auth.mapper.AddressMapper;
 import com.server.business.auth.service.IAddressService;
@@ -26,6 +28,8 @@ public class AddressServiceImpl implements IAddressService {
     @Override
     public Page<Address> selectPage(Integer pageNum, Integer pageSize, Address address) {
         QueryWrapper<Address> wrapper = new QueryWrapper<>(address);
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(User::getNickName, "老王");
         return addressMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
     }
 
