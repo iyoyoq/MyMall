@@ -19,6 +19,8 @@
     "@varlet/import-resolver": "^3.9.1",
     "@vitejs/plugin-vue": "^5.2.1",
     "less": "^4.2.2",
+    "sass": "^1.85.1",
+    "sass-loader": "^16.0.5",
     "unplugin-auto-import": "^19.1.1",
     "unplugin-vue-components": "^28.4.1",
     "vite": "6.0.9"

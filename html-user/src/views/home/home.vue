@@ -10,7 +10,7 @@
       >{{ companyName }}
       </var-link>
       <div style="width:700px;">
-        <var-tabs v-model:active="active">
+        <var-tabs v-model:active="active" @change="changeTabs">
           <var-tab>商品列表</var-tab>
           <var-tab>我的收藏</var-tab>
           <var-tab>购物车</var-tab>
@@ -21,26 +21,36 @@
       </div>
       <var-switch v-model="drag" @change="changeTheme"/>
     </div>
-    <router-view></router-view>
+   <div style="width: 1200px;display: flex;justify-content: center;">
+     <router-view></router-view>
+   </div>
   </div>
 </template>
 
 <script>
 import { ref, watch } from 'vue'
 import { setDarkTheme, setLightTheme } from '@/main.js'
+import router from '@/router'  // 添加这行导入
 
 export default {
   setup () {
-    const active = ref(0)
+    // 获取当前路径对应的选项卡下标
+    const currentPath = router.currentRoute.value.path
+    const pathKeyMap = {
+      '/products': '0',
+      '/favorites': '1',
+      '/cart': '2',
+      '/orders': '3',
+      '/address': '4',
+      '/profile': '5',
+    }
+
+    const initialActive = Number(pathKeyMap[currentPath] || '0')
+
+    console.log(pathKeyMap[currentPath])
+    const active = ref(initialActive)
 
     const drag = ref(false)
-    // watch(drag, (val) => {
-    //   if (val) {
-    //     setLightTheme()
-    //   } else {
-    //     setDarkTheme()
-    //   }
-    // })
     return {
       active,
       drag,
@@ -80,11 +90,25 @@ export default {
         setDarkTheme()
       }
     },
+    changeTabs(){
+      const path = this.keyPathMap[this.active.toString()]
+       router.push(path)  // 使用导入的 router
+    },
+    updateActiveTab() {
+      const currentPath = router.currentRoute.value.path
+      const activeIndex = this.pathKeyMap[currentPath]
+      this.active = Number(activeIndex)
+    }
   },
 
-  watch: {},
-
   mounted () {
+    this.updateActiveTab()
+  },
+
+  watch: {
+    '$route'(to) {
+      this.updateActiveTab()
+    }
   },
 }
 </script>

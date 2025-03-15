@@ -35,7 +35,7 @@ export const MyGlobalTheme1 =
       "--color-danger-container": "hsla(var(--hsl-danger-container), 1)",
       "--hsl-on-danger-container": "358, 100%, 13%",
       "--color-on-danger-container": "hsla(var(--hsl-on-danger-container), 1)",
-      "--hsl-body": "300, 100%, 99%",
+      "--hsl-body": "0, 0%, 100%",
       "--color-body": "hsla(var(--hsl-body), 1)",
       "--hsl-text": "9, 12%, 11%",
       "--color-text": "hsla(var(--hsl-text), 1)",
