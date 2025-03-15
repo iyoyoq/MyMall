@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @Description: 用户信息
+ * @Description: 用户信息  接口地址规范 -> 模块名/user或admin/表名/self或other
  * @Author: yjy
  * @Date: 2025/3/11 21:13
  */
@@ -26,7 +26,7 @@ public class UserController {
     /**
      * 单条查询
      */
-    @GetMapping("/detail")
+    @GetMapping("/other/detail")
     public R detail(Long id) {
         User user = userService.selectById(id);
         return R.ok(user);
@@ -35,7 +35,7 @@ public class UserController {
     /**
      * 自己的 User 信息
      */
-    @GetMapping("/detail/self")
+    @GetMapping("/self/detail")
     public R detail() {
         User user = requestContext.getUser();
         return R.ok(user);

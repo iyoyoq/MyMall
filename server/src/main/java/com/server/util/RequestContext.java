@@ -18,9 +18,12 @@ public class RequestContext {
     @Autowired
     private IUserService userService;
 
-    private ThreadLocal<User> threadLocal = new ThreadLocal<>();
+    private final ThreadLocal<User> threadLocal = new ThreadLocal<>();
 
-
+    /**
+     * 获取当前登录用户
+     * @return User
+     */
     public User getUser() {
         return threadLocal.get();
     }
