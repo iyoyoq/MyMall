@@ -3,6 +3,7 @@ import router from './router'
 import App from './App.vue'
 import { StyleProvider, Themes } from '@varlet/ui'
 import { MyGlobalTheme1, MyGlobalTheme2 } from '@/styles/global_theme.js'
+import '@/styles/global.css'  // 添加这一行，导入全局样式
 
 const app = createApp(App)
 
@@ -12,9 +13,18 @@ app.mount('#app')
 
 // 主题设置
 // StyleProvider( MyGlobalTheme1.light)
-const setLightTheme = () => StyleProvider(MyGlobalTheme1.light)
-const setDarkTheme = () => StyleProvider(Themes.dark)
-setLightTheme()
+const setLightTheme = () => {
+  StyleProvider(MyGlobalTheme1.light)
+  document.documentElement.setAttribute('theme', 'light')
+}
+
+const setDarkTheme = () => {
+  StyleProvider(Themes.dark)
+  document.documentElement.setAttribute('theme', 'dark')
+}
+
+setLightTheme()  // 默认使用亮色主题
+
 export {
   setLightTheme,
   setDarkTheme,
