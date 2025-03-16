@@ -9,21 +9,25 @@
           style="padding-right: 20px;"
       >{{ companyName }}
       </var-link>
-      <div style="width:700px;">
-        <var-tabs v-model:active="active" @change="changeTabs">
-          <var-tab>商品列表</var-tab>
-          <var-tab>我的收藏</var-tab>
-          <var-tab>购物车</var-tab>
-          <var-tab>我的订单</var-tab>
-          <var-tab>收货地址</var-tab>
-          <var-tab>个人中心</var-tab>
-        </var-tabs>
+      <div style="width:700px;" class="nav-container">
+        <var-link
+          v-for="(path, index) in keyPathMap"
+          :key="index"
+          :class="['nav-item', { active: currentPath === path }]"
+          @click="handleClick(path)"
+          :href="`#${path}`"
+          underline="none"
+        >
+          {{ navItems[index] }}
+        </var-link>
       </div>
       <var-switch v-model="drag" @change="changeTheme"/>
     </div>
-   <div style="width: 1200px;display: flex;justify-content: center;">
-     <router-view></router-view>
-   </div>
+    <div style="display: flex;justify-content: center;min-height: 100vh">
+      <div style="width: 1200px">
+        <router-view></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -33,44 +37,25 @@ import { setDarkTheme, setLightTheme } from '@/main.js'
 import router from '@/router'  // 添加这行导入
 
 export default {
-  setup () {
-    // 获取当前路径对应的选项卡下标
-    const currentPath = router.currentRoute.value.path
-    const pathKeyMap = {
-      '/products': '0',
-      '/favorites': '1',
-      '/cart': '2',
-      '/orders': '3',
-      '/address': '4',
-      '/profile': '5',
-    }
-
-    const initialActive = Number(pathKeyMap[currentPath] || '0')
-
-    console.log(pathKeyMap[currentPath])
-    const active = ref(initialActive)
-
+  setup() {
     const drag = ref(false)
+    const currentPath = ref(router.currentRoute.value.path)
+
+    watch(() => router.currentRoute.value.path, (newPath) => {
+      currentPath.value = newPath
+    })
+
     return {
-      active,
       drag,
+      currentPath
     }
   },
-  data () {
+
+  data() {
     return {
-      companyLink: 'https://www.baidu.com',  // 公司链接
+      companyLink: 'https://www.baidu.com',
       companyName: 'MyMall 在线商城',
-      activeKey: '0',
-      // 路由路径和菜单键值的映射
-      pathKeyMap: {
-        '/products': '0',
-        '/favorites': '1',
-        '/cart': '2',
-        '/orders': '3',
-        '/address': '4',
-        '/profile': '5',
-      },
-      // 菜单键值和路由路径的映射
+      navItems: ['商品列表', '我的收藏', '购物车', '我的订单', '收货地址', '个人中心'],
       keyPathMap: {
         '0': '/products',
         '1': '/favorites',
@@ -78,42 +63,42 @@ export default {
         '3': '/orders',
         '4': '/address',
         '5': '/profile',
-      },
+      }
     }
   },
 
   methods: {
-    changeTheme(){
-      if(this.drag){
+    changeTheme() {
+      if(this.drag) {
         setLightTheme()
-      }else {
+      } else {
         setDarkTheme()
       }
     },
-    changeTabs(){
-      const path = this.keyPathMap[this.active.toString()]
-       router.push(path)  // 使用导入的 router
-    },
-    updateActiveTab() {
-      const currentPath = router.currentRoute.value.path
-      const activeIndex = this.pathKeyMap[currentPath]
-      this.active = Number(activeIndex)
+    handleClick(path) {
+      router.push(path)
     }
-  },
-
-  mounted () {
-    this.updateActiveTab()
-  },
-
-  watch: {
-    '$route'(to) {
-      this.updateActiveTab()
-    }
-  },
+  }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.nav-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
 
+  .nav-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    color: var(--color-text);
+    transition: all 0.3s;
 
+    &:hover,
+    &.active {
+      color: var(--color-primary);
+    }
+  }
+}
 </style>
