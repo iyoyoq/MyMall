@@ -8,4 +8,9 @@ body {
     color-scheme: var(--color-scheme);
 }
 
+/* 暗色模式样式 */
+:root[theme='dark'] {
+    color-scheme: dark;
+}
+
 
