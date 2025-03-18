@@ -22,7 +22,7 @@
         </var-link>
       </div>
       <var-switch v-model="drag" @change="changeTheme"/>
-      <var-switch v-model="showLoginDialog" @change="showLoginDialog = !showLoginDialog"/>
+      <var-button type="primary" @click="showLoginDialog = !showLoginDialog" size="mini">登录</var-button>
     </div>
 
     <div style="display: flex;justify-content: center;min-height: 100vh">
