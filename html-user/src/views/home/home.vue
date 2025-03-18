@@ -22,35 +22,65 @@
         </var-link>
       </div>
       <var-switch v-model="drag" @change="changeTheme"/>
+      <var-switch v-model="showLoginDialog" @change="showLoginDialog = !showLoginDialog"/>
     </div>
+
     <div style="display: flex;justify-content: center;min-height: 100vh">
       <div style="width: 1200px">
         <router-view></router-view>
       </div>
     </div>
+
+    <!-- 添加登录弹窗 -->
+    <var-popup v-model:show="showLoginDialog" position="center">
+      <login-form @login-success="handleLoginSuccess"/>
+    </var-popup>
   </div>
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { setDarkTheme, setLightTheme } from '@/main.js'
-import router from '@/router'  // 添加这行导入
+import router from '@/router'
+import LoginForm from '@/views/login/login.vue'
+import emitter, { GlobalEvents } from '@/utils/globalEvent'
 
 export default {
+  components: {
+    LoginForm
+  },
+
   setup() {
     const drag = ref(false)
     const currentPath = ref(router.currentRoute.value.path)
+    const showLoginDialog = ref(false)
 
+    // 监听路由变化
     watch(() => router.currentRoute.value.path, (newPath) => {
       currentPath.value = newPath
     })
 
+    // 监听登录事件
+    const showLoginHandler = () => {
+      showLoginDialog.value = true
+    }
+
+    onMounted(() => {
+      emitter.on(GlobalEvents.SHOW_LOGIN, showLoginHandler)
+    })
+
+    onUnmounted(() => {
+      emitter.off(GlobalEvents.SHOW_LOGIN, showLoginHandler)
+    })
+
     return {
       drag,
-      currentPath
+      currentPath,
+      showLoginDialog
     }
   },
 
+  // 删除原来的 created 钩子
   data() {
     return {
       companyLink: 'https://www.baidu.com',
@@ -69,14 +99,27 @@ export default {
 
   methods: {
     changeTheme() {
+      this.showLoginDialog =  !this.showLoginDialog
       if(this.drag) {
         setLightTheme()
       } else {
         setDarkTheme()
       }
     },
+
     handleClick(path) {
+      if (!localStorage.getItem('token') && path !== '/products') {
+        this.showLoginDialog = true
+        return
+      }
       router.push(path)
+    },
+
+    handleLoginSuccess() {
+      this.showLoginDialog = false
+      // 登录成功后，可以重新尝试跳转到之前想要访问的页面
+      const targetPath = router.currentRoute.value.redirectedFrom?.fullPath || '/products'
+      router.push(targetPath)
     }
   }
 }
