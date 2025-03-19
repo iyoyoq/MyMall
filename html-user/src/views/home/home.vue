@@ -40,6 +40,8 @@
       </div>
     </div>
 
+    <var-snackbar v-model:type="pageMsg.type" v-model:show="pageMsg.show">{{pageMsg.content}}</var-snackbar>
+
     <!-- 添加登录弹窗 -->
     <var-popup v-model:show="showLoginDialog" position="center">
       <login-form @login-success="handleLoginSuccess"/>
@@ -52,7 +54,7 @@ import { ref, watch } from 'vue'
 import { setDarkTheme, setLightTheme } from '@/main.js'
 import router from '@/router'
 import LoginForm from '@/views/login/login.vue'
-import { login_status } from '@/utils/global_status.js'
+import { g_s } from '@/utils/global_status.js'
 
 export default {
   components: {
@@ -73,7 +75,8 @@ export default {
     return {
       moon,
       currentPath,
-      showLoginDialog
+      showLoginDialog,
+      pageMsg: g_s._global_msg_ref
     }
   },
 
@@ -96,6 +99,7 @@ export default {
 
   methods: {
     changeTheme() {
+      g_s.global_msg.success('可以的')
       if(this.moon) {
         setLightTheme()
       } else {
