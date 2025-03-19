@@ -63,9 +63,9 @@ export default {
 .profile-container {
   display: flex;
   padding: 16px;
-  justify-content: center;
   .profile-card {
     width: 800px;
+    margin: 0 auto;
     .user-info {
       padding: 20px;
       display: flex;
