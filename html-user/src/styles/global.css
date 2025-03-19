@@ -5,7 +5,7 @@ body {
     transition: background-color 0.25s, color 0.25s;
     color: var(--color-text);
     background-color: var(--color-body);
-    color-scheme: var(--color-scheme);
+    /*color-scheme: var(--color-scheme);*/
 }
 
 /* 暗色模式样式 */

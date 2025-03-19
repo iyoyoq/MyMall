@@ -5,7 +5,7 @@
         <div class="login-title">登录</div>
       </template>
 
-      <var-form ref="loginForm" :rules="rules">
+      <var-form ref="loginForm" :rules="rules" style="width: 360px">
         <var-input
           v-model="phone"
           placeholder="请输入手机号"
@@ -113,7 +113,6 @@ export default {
 
 <style scoped>
 .login-container {
-  height: 350px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -124,6 +123,7 @@ export default {
 }
 
 .login-title {
+  padding: 40px 0 0 0;
   text-align: center;
   font-size: 24px;
   color: var(--color-primary);

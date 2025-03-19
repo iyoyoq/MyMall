@@ -21,7 +21,16 @@
           {{ navItems[index] }}
         </var-link>
       </div>
-      <var-switch v-model="drag" @change="changeTheme"/>
+      <div class="theme-switch">
+        <var-button
+          round
+          text
+          class="theme-button"
+          @click="changeTheme"
+        >
+          <var-icon :name="moon ? 'weather-night':'white-balance-sunny'  " />
+        </var-button>
+      </div>
       <var-button type="primary" @click="showLoginDialog = !showLoginDialog" size="mini">登录</var-button>
     </div>
 
@@ -39,11 +48,11 @@
 </template>
 
 <script>
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch } from 'vue'
 import { setDarkTheme, setLightTheme } from '@/main.js'
 import router from '@/router'
 import LoginForm from '@/views/login/login.vue'
-import emitter, { GlobalEvents } from '@/utils/globalEvent'
+import { login_status } from '@/utils/global_status.js'
 
 export default {
   components: {
@@ -51,7 +60,7 @@ export default {
   },
 
   setup() {
-    const drag = ref(false)
+    const moon = ref(false)
     const currentPath = ref(router.currentRoute.value.path)
     const showLoginDialog = ref(false)
 
@@ -60,21 +69,9 @@ export default {
       currentPath.value = newPath
     })
 
-    // 监听登录事件
-    const showLoginHandler = () => {
-      showLoginDialog.value = true
-    }
-
-    onMounted(() => {
-      emitter.on(GlobalEvents.SHOW_LOGIN, showLoginHandler)
-    })
-
-    onUnmounted(() => {
-      emitter.off(GlobalEvents.SHOW_LOGIN, showLoginHandler)
-    })
 
     return {
-      drag,
+      moon,
       currentPath,
       showLoginDialog
     }
@@ -99,19 +96,19 @@ export default {
 
   methods: {
     changeTheme() {
-      this.showLoginDialog =  !this.showLoginDialog
-      if(this.drag) {
+      if(this.moon) {
         setLightTheme()
       } else {
         setDarkTheme()
       }
+      this.moon = ! this.moon
     },
 
     handleClick(path) {
-      if (!localStorage.getItem('token') && path !== '/products') {
-        this.showLoginDialog = true
-        return
-      }
+      // if (path !== '/products' && login_status.value === false) {
+      //   this.showLoginDialog = true
+      //   return
+      // }
       router.push(path)
     },
 
@@ -141,6 +138,28 @@ export default {
     &:hover,
     &.active {
       color: var(--color-primary);
+    }
+  }
+}
+
+.theme-switch {
+  margin: 0 10px;
+
+  .theme-button {
+    padding: 8px;
+    transition: all 0.3s;
+
+    :deep(.var-icon) {
+      font-size: 20px;
+      color: var(--color-text);
+    }
+
+    &:hover {
+      background: var(--color-primary-light);
+
+      :deep(.var-icon) {
+        color: var(--color-primary);
+      }
     }
   }
 }

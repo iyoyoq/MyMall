@@ -70,16 +70,6 @@ router.beforeEach((to, from, next) => {
 
  */
 
-// 修改路由守卫
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
-  if (!token && to.name !== 'products') {
-    // 没有token且不是首页，触发登录事件
-    window.app.config.globalProperties.$showLogin = true
-    next('/products')
-  } else {
-    next()
-  }
-})
+
 
 export default router
