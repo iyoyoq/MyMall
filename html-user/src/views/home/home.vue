@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="display: flex; justify-content: center;align-items: center;">
+      <div style="display: flex; justify-content: center;align-items: center;">
       <var-link
           type="primary"
           :href="companyLink"
@@ -76,7 +76,7 @@ export default {
       moon,
       currentPath,
       showLoginDialog,
-      pageMsg: g_s._global_msg_ref
+      pageMsg: g_s._global_msg
     }
   },
 
@@ -99,7 +99,7 @@ export default {
 
   methods: {
     changeTheme() {
-      g_s.global_msg.success('可以的')
+      g_s.msg.success('可以的')
       if(this.moon) {
         setLightTheme()
       } else {
