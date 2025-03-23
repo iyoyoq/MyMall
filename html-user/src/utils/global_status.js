@@ -7,10 +7,9 @@ const createGlobalState = () => {
     content: '',
     show: false
   })
+  // 添加登录弹窗控制
+  const loginDialog = ref(false)
 
-  const setLoginStatus = (status) => {
-    isLogin.value = status
-  }
 
   const showMessage = (type, content) => {
     global_msg.value = {
@@ -23,7 +22,7 @@ const createGlobalState = () => {
   return {
     isLogin: isLogin,
     _global_msg: global_msg,
-    setLoginStatus,
+    loginDialog,
     msg: {
       success: (msg) => showMessage('success', msg),
       warning: (msg) => showMessage('warning', msg),

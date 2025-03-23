@@ -1,6 +1,7 @@
 import axios from 'axios'
 import router from '@/router'
 import JSONBig from 'json-bigint'
+import { g_s } from '@/utils/global_status.js'
 
 const baseURL = 'http://localhost:45000/api' // 后端api
 const localStorageTokenName = 'amity-mall-token' // 存到localStorage 里面的 TokenName
@@ -53,25 +54,22 @@ instance.interceptors.response.use(
       case 1:
         return res
       case 10003: {
-        // Message.error('身份无效,请重新登录')
-        alert('身份无效,请重新登录')
+        g_s.msg.error('身份无效,请重新登录')
         router.push('/login')
         return
       }
       case 10002: {
         // 业务异常
-        // Message.error(msg)
-        alert(msg)
+        g_s.msg.error(msg)
         return Promise.reject(res.data)
       }
       case 10001: {  //未处理的系统异常 RuntimeException or Exception
-        // Message.error("服务器异常")
-        alert('服务器异常')
+        g_s.msg.error('服务器处理异常')
         return Promise.reject(res.data)
       }
       default: {
-        // Message.error('服务器异常')
-        alert('服务器异常')
+        // Message.error('')
+        g_s.msg.error('服务器异常')
         return Promise.reject(res.data)
       }
     }

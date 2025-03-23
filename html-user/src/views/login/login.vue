@@ -5,10 +5,11 @@
         <div class="login-title">登录</div>
       </template>
 
-      <var-form ref="loginForm" style="width: 360px">
+      <var-form ref="loginForm" style="width: 360px" >
         <var-input
             v-model="phone"
             placeholder="请输入手机号"
+            :validate-trigger="['onBlur']"
             :rules="v => /^1[3-9]\d{9}$/.test(v) || '请输入正确的手机号'"
             type="number"
         />
@@ -32,10 +33,12 @@
         <var-button
             block
             type="primary"
-            class="login-btn"
+            class="submit-btn"
             @click="handleLogin"
+            native-type="submit"
+
         >
-          登录
+        登录
         </var-button>
       </var-form>
     </var-card>
@@ -45,7 +48,9 @@
 </template>
 
 <script>
+import { watch } from 'vue'
 import { sendLoginCodeApi, codeLoginApi } from '@/api/login'
+import { g_s } from '@/utils/global_status.js'
 
 export default {
   name: 'login',
@@ -55,53 +60,76 @@ export default {
       phone: '',
       code: '',
       countdown: 0,
+      timer: null,
+      submitting: false
     }
   },
 
+  created() {
+    // 监听登录弹窗状态
+    //  这边直接外面控制销毁构建
+    // watch(() => g_s.loginDialog.value, (newVal) => {
+    //   if (!newVal) {
+    //     // 弹窗关闭时清空表单
+    //     this.phone = ''
+    //     this.code = ''
+    //     this.countdown = 0
+    //     this.clearTimer()
+    //   }
+    // })
+  },
+
   methods: {
-    async sendCode () {
-      try {
-        // 表单验证
-        const success = await this.$refs.loginForm.validate()
-        if (!success) return
-
-        // 发送验证码
-        await sendLoginCodeApi(this.phone)
-
-        // 开始倒计时
-        this.countdown = 120
-        const timer = setInterval(() => {
-          this.countdown--
-          if (this.countdown <= 0) {
-            clearInterval(timer)
-          }
-        }, 1000)
-        // 验证码已发送
-      } catch (error) {
-        this.$toast.error('发送验证码失败')
+    clearTimer() {
+      if (this.timer) {
+        clearInterval(this.timer)
+        this.timer = null
       }
+    },
+
+    async sendCode () {
+      // 表单验证
+      const success = await this.$refs.loginForm.validate()
+      if (!success) return
+
+      // 发送验证码
+      await sendLoginCodeApi(this.phone)
+      g_s.msg.success('验证码发送成功')
+
+      // 开始倒计时
+      this.countdown = 60
+      this.timer = setInterval(() => {
+        this.countdown--
+        if (this.countdown <= 0) {
+          this.clearTimer()
+        }
+      }, 1000)
+      // 验证码已发送
+
     },
 
     async handleLogin () {
-      try {
-        // 表单验证
-        const success = await this.$refs.loginForm.validate()
-        if (!success) return
+      // 表单验证
+      const success = await this.$refs.loginForm.validate()
+      if (!success) return
 
-        // 登录请求
-        const res = await codeLoginApi({
-          phone: this.phone,
-          code: this.code,
-        })
-        msg_success('登录成功')
-        // 这里可以存储token等登录信息
-        // 跳转到首页
-        this.$router.push('/')
-      } catch (error) {
-        this.$toast.error('登录失败')
-      }
+      // 登录请求
+      const res = await codeLoginApi({
+        phone: this.phone,
+        code: this.code,
+      })
+      g_s.msg.success('登录成功')
+      // this.countdown = 0
+      // 这里可以存储token等登录信息
+      // 关闭登录弹窗
+      g_s.loginDialog.value = false
     },
   },
+
+  // 添加组件销毁时的处理
+  beforeUnmount() {
+    this.clearTimer()
+  }
 }
 </script>
 

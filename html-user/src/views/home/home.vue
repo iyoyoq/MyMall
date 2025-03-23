@@ -31,7 +31,7 @@
           <var-icon :name="moon ? 'weather-night':'white-balance-sunny'  " />
         </var-button>
       </div>
-      <var-button type="primary" @click="showLoginDialog = !showLoginDialog" size="mini">登录</var-button>
+      <var-button type="primary" @click="loginDialog = true" size="mini">登录</var-button>
     </div>
 
     <div style="display: flex;justify-content: center;min-height: 100vh">
@@ -43,8 +43,8 @@
     <var-snackbar v-model:type="pageMsg.type" v-model:show="pageMsg.show">{{pageMsg.content}}</var-snackbar>
 
     <!-- 添加登录弹窗 -->
-    <var-popup v-model:show="showLoginDialog" position="center">
-      <login-form @login-success="handleLoginSuccess"/>
+    <var-popup v-model:show="loginDialog" position="center">
+      <login-form :key="loginDialog" @login-success="handleLoginSuccess"/>
     </var-popup>
   </div>
 </template>
@@ -64,7 +64,6 @@ export default {
   setup() {
     const moon = ref(false)
     const currentPath = ref(router.currentRoute.value.path)
-    const showLoginDialog = ref(false)
 
     // 监听路由变化
     watch(() => router.currentRoute.value.path, (newPath) => {
@@ -75,8 +74,8 @@ export default {
     return {
       moon,
       currentPath,
-      showLoginDialog,
-      pageMsg: g_s._global_msg
+      pageMsg: g_s._global_msg,
+      loginDialog: g_s.loginDialog  // 使用全局状态
     }
   },
 
@@ -99,7 +98,6 @@ export default {
 
   methods: {
     changeTheme() {
-      g_s.msg.success('可以的')
       if(this.moon) {
         setLightTheme()
       } else {
@@ -117,10 +115,9 @@ export default {
     },
 
     handleLoginSuccess() {
-      this.showLoginDialog = false
       // 登录成功后，可以重新尝试跳转到之前想要访问的页面
-      const targetPath = router.currentRoute.value.redirectedFrom?.fullPath || '/products'
-      router.push(targetPath)
+      // const targetPath = router.currentRoute.value.redirectedFrom?.fullPath || '/products'
+      // router.push(targetPath)
     }
   }
 }
