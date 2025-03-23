@@ -1,3 +1,43 @@
-# amity -mall 
+# MyMall
 
-友好商城-在线商城系统
+MyMall-在线商城系统
+
+### 介绍
+
+##### 前台
+
+用户端
+
+node 版本 v20.18.3
+
+vue 3 + js + [varlet组件库](https://varletjs.org/#/zh-CN/quickstart)  + scss等
+
+##### 后台
+
+java 版本 17
+
+springboot 3
+
+mybatis plus
+
+mysql 8.0
+
+redis 5.0
+
+##### 项目目录
+
+html-admin 前台-管理员端
+
+html-user 前台-用户端
+
+server 后台
+
+### 演示
+
+##### 用户端前台
+
+![image-20250323140026636](./assets/image-20250323140026636.png)
+
+支持暗黑模式
+
+![image-20250323140121335](./assets/image-20250323140121335.png)
