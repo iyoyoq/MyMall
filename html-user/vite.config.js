@@ -1,20 +1,23 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import components from 'unplugin-vue-components/vite'
-import autoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import AutoImport from 'unplugin-auto-import/vite'
 import { VarletImportResolver } from '@varlet/import-resolver'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
-    components({
-      resolvers: [VarletImportResolver()]
+    Components({
+      resolvers: [VarletImportResolver(), ElementPlusResolver()],
     }),
-    autoImport({
-      resolvers: [VarletImportResolver({ autoImport: true })]
-    })
+    AutoImport({
+      resolvers: [
+        VarletImportResolver({ autoImport: true }),
+        ElementPlusResolver()],
+    }),
   ],
   resolve: {
     alias: {
@@ -34,7 +37,7 @@ export default defineConfig({
     open: true, // 设置服务启动时是否自动打开浏览器
     cors: true, // 允许跨域
     hmr: {
-      overlay: false // 禁用服务器错误遮罩层
-    }
-  }
+      overlay: false, // 禁用服务器错误遮罩层
+    },
+  },
 })

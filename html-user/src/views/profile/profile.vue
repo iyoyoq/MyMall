@@ -2,7 +2,12 @@
   <div class="profile-container">
     <var-card class="profile-card">
       <div class="user-info">
-        <var-avatar :src="userInfo.avatar" hoverable class="user-avatar" size="60">
+        <el-image-viewer
+            v-if="showAvatarPreview"
+            :url-list="[userInfo.avatar]"
+            @close="showAvatarPreview = false"
+        />
+        <var-avatar @click="handleAvatar" :src="userInfo.avatar" hoverable class="user-avatar" size="60">
           <var-icon v-show="!userInfo.avatar" name="account-circle"/>
         </var-avatar>
         <div class="user-meta">
@@ -49,6 +54,7 @@ export default {
         avatar: '',
         id: '',
       },
+      showAvatarPreview: false
     }
   },
 
@@ -59,9 +65,13 @@ export default {
   },
 
   methods: {
+    handleAvatar(){
+      this.showAvatarPreview = true
+    },
     handleLogout () {
       localStorage.clear()
       this.$router.replace('/products')
+      g_s.isLogin.value =false
       g_s.loginDialog.value = true
     },
     handleEdit () {

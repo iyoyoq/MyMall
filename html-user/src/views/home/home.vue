@@ -31,7 +31,7 @@
           <var-icon :name="moon ? 'weather-night':'white-balance-sunny'  " />
         </var-button>
       </div>
-      <var-button type="primary" @click="loginDialog = true" size="mini">登录</var-button>
+      <var-button v-if="!isLogin" type="primary" @click="loginDialog = true" size="mini">登录</var-button>
     </div>
 
     <div style="display: flex;justify-content: center;min-height: 100vh">
@@ -70,7 +70,6 @@ export default {
       currentPath.value = newPath
     })
 
-
     return {
       moon,
       currentPath,
@@ -82,6 +81,7 @@ export default {
   // 删除原来的 created 钩子
   data() {
     return {
+      isLogin: g_s.isLogin,
       companyLink: 'https://www.baidu.com',
       companyName: 'MyMall 在线商城',
       navItems: ['商品列表', '我的收藏', '购物车', '我的订单', '收货地址', '个人中心'],
