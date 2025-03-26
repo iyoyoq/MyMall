@@ -1,51 +1,53 @@
 <template>
-  <div>
+  <div style="display: flex; ">
+    <div style="width: 1200px; margin: 0 auto;">
       <div style="display: flex; justify-content: center;align-items: center;">
-      <var-link
-          type="primary"
-          :href="companyLink"
-          target="_blank"
-          underline="none"
-          style="padding-right: 20px;"
-      >{{ companyName }}
-      </var-link>
-      <div style="width:700px;" class="nav-container">
         <var-link
-          v-for="(path, index) in keyPathMap"
-          :key="index"
-          :class="['nav-item', { active: currentPath === path }]"
-          @click="handleClick(path)"
-          :href="`#${path}`"
-          underline="none"
-        >
-          {{ navItems[index] }}
+            type="primary"
+            :href="companyLink"
+            target="_blank"
+            underline="none"
+            style="padding-right: 20px;"
+        >{{ companyName }}
         </var-link>
+        <div style="width:700px;" class="nav-container">
+          <var-link
+              v-for="(path, index) in keyPathMap"
+              :key="index"
+              :class="['nav-item', { active: currentPath === path }]"
+              @click="handleClick(path)"
+              :href="`#${path}`"
+              underline="none"
+          >
+            {{ navItems[index] }}
+          </var-link>
+        </div>
+        <div class="theme-switch">
+          <var-button
+              round
+              text
+              class="theme-button"
+              @click="changeTheme"
+          >
+            <var-icon :name="moon ? 'weather-night':'white-balance-sunny'  "/>
+          </var-button>
+        </div>
+        <var-button v-if="!isLogin" type="primary" @click="loginDialog = true" size="mini">登录</var-button>
       </div>
-      <div class="theme-switch">
-        <var-button
-          round
-          text
-          class="theme-button"
-          @click="changeTheme"
-        >
-          <var-icon :name="moon ? 'weather-night':'white-balance-sunny'  " />
-        </var-button>
+
+      <div style="display: flex;justify-content: center;min-height: 100vh">
+        <div style="width: 1200px">
+          <router-view></router-view>
+        </div>
       </div>
-      <var-button v-if="!isLogin" type="primary" @click="loginDialog = true" size="mini">登录</var-button>
+
+      <var-snackbar v-model:type="pageMsg.type" v-model:show="pageMsg.show">{{ pageMsg.content }}</var-snackbar>
+
+      <!-- 添加登录弹窗 -->
+      <var-popup v-model:show="loginDialog" position="center">
+        <login-form :key="loginDialog"/>
+      </var-popup>
     </div>
-
-    <div style="display: flex;justify-content: center;min-height: 100vh">
-      <div style="width: 1200px">
-        <router-view></router-view>
-      </div>
-    </div>
-
-    <var-snackbar v-model:type="pageMsg.type" v-model:show="pageMsg.show">{{pageMsg.content}}</var-snackbar>
-
-    <!-- 添加登录弹窗 -->
-    <var-popup v-model:show="loginDialog" position="center">
-      <login-form :key="loginDialog"/>
-    </var-popup>
   </div>
 </template>
 
@@ -58,10 +60,10 @@ import { g_s } from '@/utils/global_status.js'
 
 export default {
   components: {
-    LoginForm
+    LoginForm,
   },
 
-  setup() {
+  setup () {
     const moon = ref(false)
     const currentPath = ref(router.currentRoute.value.path)
 
@@ -74,12 +76,12 @@ export default {
       moon,
       currentPath,
       pageMsg: g_s._global_msg,
-      loginDialog: g_s.loginDialog  // 使用全局状态
+      loginDialog: g_s.loginDialog,  // 使用全局状态
     }
   },
 
   // 删除原来的 created 钩子
-  data() {
+  data () {
     return {
       isLogin: g_s.isLogin,
       companyLink: 'https://www.baidu.com',
@@ -92,21 +94,21 @@ export default {
         '3': '/orders',
         '4': '/address',
         '5': '/profile',
-      }
+      },
     }
   },
 
   methods: {
-    changeTheme() {
-      if(this.moon) {
+    changeTheme () {
+      if (this.moon) {
         setLightTheme()
       } else {
         setDarkTheme()
       }
-      this.moon = ! this.moon
+      this.moon = !this.moon
     },
 
-    handleClick(path) {
+    handleClick (path) {
       // if (path !== '/products' && login_status.value === false) {
       //   this.showLoginDialog = true
       //   return
@@ -115,11 +117,11 @@ export default {
     },
 
     // handleLoginSuccess() {
-      // 登录成功后，可以重新尝试跳转到之前想要访问的页面
-      // const targetPath = router.currentRoute.value.redirectedFrom?.fullPath || '/products'
-      // router.push(targetPath)
+    // 登录成功后，可以重新尝试跳转到之前想要访问的页面
+    // const targetPath = router.currentRoute.value.redirectedFrom?.fullPath || '/products'
+    // router.push(targetPath)
     // }
-  }
+  },
 }
 </script>
 
