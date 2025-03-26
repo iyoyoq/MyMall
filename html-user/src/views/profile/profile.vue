@@ -2,25 +2,25 @@
   <div class="profile-container">
     <var-card class="profile-card">
       <div class="user-info">
-        <var-avatar :src="avatar" class="user-avatar" size="60">
-          <var-icon v-if="!avatar" name="account-circle"/>
+        <var-avatar :src="userInfo.avatar" hoverable class="user-avatar" size="60">
+          <var-icon v-show="!userInfo.avatar" name="account-circle"/>
         </var-avatar>
         <div class="user-meta">
           <div class="meta-item">
             <span class="label">昵称：</span>
-            <span>{{ nickname || `用户${phone.slice(-4)}` }}</span>
+            <span>{{ userInfo.nickName }}</span>
           </div>
           <div class="meta-item">
             <span class="label">手机：</span>
-            <span>{{ phone }}</span>
+            <span>{{ userInfo.phone }}</span>
           </div>
           <div class="meta-item">
             <span class="label">简介：</span>
-            <span>{{ intro || '暂无简介' }}</span>
+            <span>{{ userInfo.intro || '暂无简介' }}</span>
           </div>
           <div class="meta-item">
             <span class="label">编号：</span>
-            <span>{{ code || '未设置' }}</span>
+            <span>{{ userInfo.code || '未设置' }}</span>
           </div>
         </div>
       </div>
@@ -34,28 +34,40 @@
 </template>
 
 <script>
+import { g_s } from '@/utils/global_status.js'
+import { getSelfDetailApi } from '@/api/auth_user.js'
+
 export default {
   name: 'profile',
 
-  data() {
+  data () {
     return {
-      phone: localStorage.getItem('phone') || '',
-      nickname: localStorage.getItem('nickname') || '',
-      intro: localStorage.getItem('intro') || '',
-      avatar: localStorage.getItem('avatar') || '',
-      code: localStorage.getItem('code') || ''
+      userInfo: {
+        phone: '',
+        nickname: '',
+        intro: '',
+        avatar: '',
+        id: '',
+      },
     }
   },
 
+  created () {
+    getSelfDetailApi().then(res => {
+      this.userInfo = res.data.result
+    })
+  },
+
   methods: {
-    handleLogout() {
+    handleLogout () {
       localStorage.clear()
       this.$router.replace('/products')
+      g_s.loginDialog.value = true
     },
-    handleEdit(){
-
-    }
-  }
+    handleEdit () {
+      // TODO: 实现编辑功能
+    },
+  },
 }
 </script>
 
@@ -63,9 +75,11 @@ export default {
 .profile-container {
   display: flex;
   padding: 16px;
+
   .profile-card {
     width: 800px;
     margin: 0 auto;
+
     .user-info {
       padding: 20px;
       display: flex;
@@ -77,6 +91,7 @@ export default {
 
       .user-meta {
         flex: 1;
+
         .meta-item {
           margin-bottom: 8px;
           font-size: 14px;
@@ -92,7 +107,7 @@ export default {
       margin: 20px;
       display: flex;
 
-      .btn{
+      .btn {
         width: 200px;
       }
     }

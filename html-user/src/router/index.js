@@ -43,8 +43,16 @@ export const routes = [
         name: 'profile',
         meta: { title: '个人中心' },
       },
+      {
+        path: '/refresh',
+        component: () => import('@/views/home/refresh.vue'),
+        name: 'refresh',
+      }
     ],
+
   },
+
+
   // 移除登录路由
 ]
 

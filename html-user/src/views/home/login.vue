@@ -36,7 +36,6 @@
             class="submit-btn"
             @click="handleLogin"
             native-type="submit"
-
         >
         登录
         </var-button>
@@ -48,9 +47,9 @@
 </template>
 
 <script>
-import { watch } from 'vue'
-import { sendLoginCodeApi, codeLoginApi } from '@/api/login'
+import { sendLoginCodeApi, codeLoginApi } from '@/api/auth_user.js'
 import { g_s } from '@/utils/global_status.js'
+import my_help  from '@/utils/my_help.js'
 
 export default {
   name: 'login',
@@ -118,11 +117,12 @@ export default {
         phone: this.phone,
         code: this.code,
       })
+      g_s.setLoginSuccessResult(res.data)
       g_s.msg.success('登录成功')
-      // this.countdown = 0
-      // 这里可以存储token等登录信息
+      g_s.isLogin.value = true
       // 关闭登录弹窗
       g_s.loginDialog.value = false
+      my_help.refresh()
     },
   },
 

@@ -4,7 +4,7 @@ import JSONBig from 'json-bigint'
 import { g_s } from '@/utils/global_status.js'
 
 const baseURL = 'http://localhost:45000/api' // 后端api
-const localStorageTokenName = 'amity-mall-token' // 存到localStorage 里面的 TokenName
+const localStorageTokenName = 'MyMall-token' // 存到localStorage 里面的 TokenName
 
 const instance = axios.create({
   // 1.基础地址，超时时间 /ms
@@ -55,7 +55,7 @@ instance.interceptors.response.use(
         return res
       case 10003: {
         g_s.msg.error('身份无效,请重新登录')
-        router.push('/login')
+        g_s.loginDialog.value = true
         return
       }
       case 10002: {

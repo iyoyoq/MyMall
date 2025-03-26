@@ -44,7 +44,7 @@
 
     <!-- 添加登录弹窗 -->
     <var-popup v-model:show="loginDialog" position="center">
-      <login-form :key="loginDialog" @login-success="handleLoginSuccess"/>
+      <login-form :key="loginDialog"/>
     </var-popup>
   </div>
 </template>
@@ -53,7 +53,7 @@
 import { ref, watch } from 'vue'
 import { setDarkTheme, setLightTheme } from '@/main.js'
 import router from '@/router'
-import LoginForm from '@/views/login/login.vue'
+import LoginForm from '@/views/home/login.vue'
 import { g_s } from '@/utils/global_status.js'
 
 export default {
@@ -114,11 +114,11 @@ export default {
       router.push(path)
     },
 
-    handleLoginSuccess() {
+    // handleLoginSuccess() {
       // 登录成功后，可以重新尝试跳转到之前想要访问的页面
       // const targetPath = router.currentRoute.value.redirectedFrom?.fullPath || '/products'
       // router.push(targetPath)
-    }
+    // }
   }
 }
 </script>
