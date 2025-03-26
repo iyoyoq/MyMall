@@ -73,7 +73,7 @@ public class UserServiceImpl implements IUserService {
             if (update < 1) throw new BusinessException("用户更新失败");
         }
         // 制作 token
-        String token = IdUtil.simpleUUID();  // token
+        String token = IdUtil.simpleUUID() + RandomUtil.randomStringLowerWithoutStr(16,"");  // token
         String k = RedisPrefix.USER_TOKEN + token;   // 即使是新用户，mp也会得到userId
         String v = null;
         try {

@@ -34,7 +34,7 @@ public class UserLoginVO {
     // @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
     // 平台编号
-    private String number;
+    private String code;
     // 待审核昵称
     private String checkNickName;
     // 待审核简介

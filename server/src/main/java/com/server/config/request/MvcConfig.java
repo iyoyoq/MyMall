@@ -20,7 +20,7 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                // .allowedOrigins("http://localhost:5173,http://localhost:5174")
+                .allowedOrigins("http://localhost:5174")
                 .allowedOrigins("*") // 报错 allowCredentials 冲突
                 .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
                 // .allowCredentials(true)

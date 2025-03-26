@@ -31,10 +31,10 @@ public class UserCheckInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        // Cookie 认证的项目，浏览器预检请求OPTIONS不会携带 Cookie, 先放行
-        // if (request.getMethod().equals("OPTIONS")) {
-        //     return true;
-        // }
+        // OPTIONS先放行
+        if (request.getMethod().equals("OPTIONS")) {
+            return true;
+        }
         boolean ok = false;
         String authorization = request.getHeader("Authorization");
         if (authorization != null && authorization.startsWith("Bearer ")) {
