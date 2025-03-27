@@ -1,10 +1,13 @@
 import axios from 'axios'
-import router from '@/router'
 import JSONBig from 'json-bigint'
 import { g_s } from '@/utils/global_status.js'
+import {
+  localStorageTokenName as constant_localStorageTokenName,
+  baseURL as constant_baseURL,
+} from '@/utils/constant.js'
 
-const baseURL = 'http://localhost:45000/api' // 后端api
-const localStorageTokenName = 'MyMall-token' // 存到localStorage 里面的 TokenName
+const baseURL = constant_baseURL // 后端api
+export const localStorageTokenName = constant_localStorageTokenName // 存到localStorage 里面的 TokenName
 
 const instance = axios.create({
   // 1.基础地址，超时时间 /ms
@@ -94,6 +97,7 @@ instance.interceptors.response.use(
 
 export default instance
 
-export { baseURL, localStorageTokenName }
+export { baseURL }
+
 
 

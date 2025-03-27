@@ -36,7 +36,13 @@ export function codeLoginApi (data) {
   })
 }
 
-
+export function updateUserInfoApi(data){
+  return request({
+    url: `${base}/user/self/update`,
+    method: 'put',
+    data: data
+  })
+}
 
 
 
