@@ -49,7 +49,7 @@ export default {
     return {
       userInfo: {
         phone: '',
-        nickname: '',
+        nickName: '',
         intro: '',
         avatar: '',
         id: '',
