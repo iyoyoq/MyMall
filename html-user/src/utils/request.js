@@ -64,12 +64,12 @@ instance.interceptors.response.use(
         return Promise.reject(res.data)
       }
       case 10001: {  //未处理的系统异常 RuntimeException or Exception
-        g_s.msg.error('服务器处理异常')
+        g_s.msg.error('系统繁忙 10001')
         return Promise.reject(res.data)
       }
       default: {
         // Message.error('')
-        g_s.msg.error('服务器异常')
+        g_s.msg.error('系统繁忙 10000')
         return Promise.reject(res.data)
       }
     }
@@ -87,7 +87,7 @@ instance.interceptors.response.use(
     // }
     // 错误默认情况
     // ElMessage.error(err.response.data.message || '服务异常')
-    router.push('/login')
+    g_s.msg.error('系统繁忙')
     return Promise.reject(err)
   })
 // const request = instance
