@@ -1,9 +1,9 @@
-package com.server.business.auth.controller.user;
+package com.server.business.product.controller.user;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.server.business.auth.domain.Favorite;
-import com.server.business.auth.domain.dto.FavoriteCreateDTO;
-import com.server.business.auth.service.IFavoriteService;
+import com.server.business.product.domain.Favorite;
+import com.server.business.product.domain.dto.FavoriteCreateDTO;
+import com.server.business.product.service.IFavoriteService;
 import com.server.pojo.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * @Date: 2025/3/12 22:52
  */
 @RestController
-@RequestMapping("/auth/user/favorite")
+@RequestMapping("/product/user/favorite")
 public class FavoriteController {
     @Autowired
     private IFavoriteService favoriteService;

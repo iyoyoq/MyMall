@@ -42,12 +42,14 @@ mybatis-plus:
       id-type:  ASSIGN_ID  # id生成策略
   configuration:
     map-underscore-to-camel-case: true # 驼峰命名
-    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+#    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
   # 设置 mapper 文件夹下的 Mapper.java 文件输出日志
   group:
-    DEBUG: "com.baomidou, com.server.mapper"
+#    DEBUG: "com.baomidou, com.server.business"
+    DEBUG: "com.server.business"
   level:
     DEBUG: debug
     OFF: off

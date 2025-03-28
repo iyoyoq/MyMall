@@ -1,15 +1,13 @@
-package com.server.business.auth.service.impl;
+package com.server.business.product.service.impl;
 
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.server.business.auth.domain.Address;
-import com.server.business.auth.domain.Favorite;
-import com.server.business.auth.domain.dto.FavoriteCreateDTO;
-import com.server.business.auth.mapper.AddressMapper;
-import com.server.business.auth.mapper.FavoriteMapper;
-import com.server.business.auth.service.IFavoriteService;
+import com.server.business.product.domain.Favorite;
+import com.server.business.product.domain.dto.FavoriteCreateDTO;
+import com.server.business.product.mapper.FavoriteMapper;
+import com.server.business.product.service.IFavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

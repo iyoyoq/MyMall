@@ -1,7 +1,7 @@
-package com.server.business.auth.mapper;
+package com.server.business.product.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.server.business.auth.domain.Favorite;
+import com.server.business.product.domain.Favorite;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

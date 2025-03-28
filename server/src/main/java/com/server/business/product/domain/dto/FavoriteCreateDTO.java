@@ -1,4 +1,4 @@
-package com.server.business.auth.domain.dto;
+package com.server.business.product.domain.dto;
 
 /**
  * @Description: 用户新增 DTO
