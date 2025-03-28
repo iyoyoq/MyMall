@@ -106,5 +106,10 @@ public class UserServiceImpl implements IUserService {
         return userMapper.selectById(id);
     }
 
+    @Override
+    public int updateById(User user) {
+        return userMapper.updateById(user);
+    }
+
 
 }

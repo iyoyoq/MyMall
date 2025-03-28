@@ -1,12 +1,14 @@
 package com.server.business.auth.controller.user;
 
 
+import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.User;
 import com.server.business.auth.service.IUserService;
 import com.server.pojo.R;
 import com.server.util.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,6 +41,15 @@ public class UserController {
     public R detail() {
         User user = requestContext.getUser();
         return R.ok(user);
+    }
+
+    /**
+     * 改自己的 User 信息
+     */
+    @PutMapping("/self/update")
+    public R update(User user) {
+        int b = userService.updateById(user);
+        return R.judge(b > 0, "");
     }
 
 }

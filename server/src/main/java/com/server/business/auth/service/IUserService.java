@@ -17,4 +17,6 @@ public interface IUserService  {
 
 
     User selectById(Long id);
+
+    int updateById(User user);
 }
