@@ -1,4 +1,4 @@
-package com.server.config.mp;
+package com.server.config.mybatisplus;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
@@ -6,9 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * @Description: MyBatisPlus 自动填充：https://baomidou.com/guides/auto-fill-field/#%E5%8E%9F%E7%90%86%E6%A6%82%E8%BF%B0

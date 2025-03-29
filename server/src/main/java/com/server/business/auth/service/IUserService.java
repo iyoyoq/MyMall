@@ -2,12 +2,10 @@ package com.server.business.auth.service;
 
 
 import com.server.business.auth.domain.User;
+import com.server.business.auth.domain.dto.UserLoginDto;
 import com.server.business.auth.domain.vo.UserLoginVO;
-import com.server.pojo.dto.UserLoginDto;
 
 public interface IUserService  {
-
-
 
     void sendLoginCode(String phone);
 
@@ -18,5 +16,10 @@ public interface IUserService  {
 
     User selectById(Long id);
 
-    int updateById(User user);
+    /**
+     * 修改自己个人资料
+     * @param user user
+     * @return 影响行数
+     */
+    int updateSelfById(User user);
 }

@@ -1,10 +1,14 @@
 package com.server.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.business.auth.domain.User;
-import com.server.business.auth.service.IUserService;
+import com.server.business.auth.domain.vo.UserLoginVO;
+import com.server.config.redis.RedisPrefix;
 import com.server.exception.BusinessException;
 import com.server.pojo.ResultCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,34 +20,49 @@ import org.springframework.stereotype.Component;
 public class RequestContext {
 
     @Autowired
-    private IUserService userService;
+    private StringRedisTemplate redisTemplate;
 
-    private final ThreadLocal<User> threadLocal = new ThreadLocal<>();
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private final ThreadLocal<UserLoginVO> userInfo = new ThreadLocal<>();
+
 
     /**
      * 获取当前登录用户
+     *
      * @return User
      */
-    public User getUser() {
-        return threadLocal.get();
+    public UserLoginVO getUser() {
+        return userInfo.get();
+    }
+
+    public UserLoginVO getUserByToken(String token) {
+        String s = redisTemplate.opsForValue().get(RedisPrefix.USER_TOKEN + token);
+        try {
+            return objectMapper.readValue(s, UserLoginVO.class);
+        } catch (Exception e) {
+            throw new BusinessException(ResultCodeEnum.AuthError);
+        }
     }
 
     public boolean setCurrentUserByToken(String token) {
+        UserLoginVO u = getUserByToken(token);
+        if (u == null) {
+            return false;
+        }
         try {
-            User u = userService.getUserByToken(token);
-            if (u == null) {
-                return false;
-            }
-            threadLocal.set(u);
+            userInfo.set(u);
         } catch (Exception e) {
-            threadLocal.remove();
+            userInfo.remove();
             throw new BusinessException(ResultCodeEnum.AuthError);
         }
         return true;
     }
 
+
     public void removeCurrentUser() {
-        threadLocal.remove();
+        userInfo.remove();
     }
 
 

@@ -1,4 +1,4 @@
-package com.server.pojo.dto;
+package com.server.business.auth.domain.dto;
 
 import lombok.Data;
 

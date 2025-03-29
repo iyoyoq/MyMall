@@ -8,6 +8,14 @@ body {
     /*color-scheme: var(--color-scheme);*/
 }
 
+@media (min-width: 1200px) {
+    body {
+        /* 仅在宽度 >= 1200px 时生效 */
+        /*calc(100vw - 100%) 视口-元素宽度就是滚动条宽度~ 滚动条出现页面不跳动*/
+        padding: 0 0 0 calc(100vw - 100%);
+    }
+}
+
 /* 暗色模式样式 */
 :root[theme='dark'] {
     color-scheme: dark;

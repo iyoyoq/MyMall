@@ -35,18 +35,19 @@ public class UserCheckInterceptor implements HandlerInterceptor {
         if (request.getMethod().equals("OPTIONS")) {
             return true;
         }
-        boolean ok = false;
+
         String authorization = request.getHeader("Authorization");
-        if (authorization != null && authorization.startsWith("Bearer ")) {
-            // 提取 Bearer 后面的内容
-            String token = authorization.substring("Bearer ".length()).trim();
-            ok = requestContext.setCurrentUserByToken(token);
+        if (!(authorization != null && authorization.startsWith("Bearer "))) {
+            throw new BusinessException(ResultCodeEnum.AuthError);
         }
-        if (!ok) {
+
+        // 提取 Bearer 后面的内容
+        String token = authorization.substring("Bearer ".length()).trim();
+        if (!requestContext.setCurrentUserByToken(token)) {
             throw new BusinessException(ResultCodeEnum.AuthError);
         }
         // 通过验证
-        return ok;
+        return true;
     }
 
 

@@ -50,8 +50,8 @@ instance.interceptors.response.use(
     // 3. 处理业务失败
     //  4.摘取核心响应数据
     if (code === undefined || code === null) {
-      // Message.error('响应格式异常')
-      alert('响应格式异常')
+      g_s.msg.error('系统繁忙')
+      // alert('响应格式异常')
     }
     switch (code) {
       case 1:

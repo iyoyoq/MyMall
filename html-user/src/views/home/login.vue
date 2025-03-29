@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { sendLoginCodeApi, codeLoginApi } from '@/api/auth_user.js'
+import { sendLoginCodeApi, codeLoginApi } from '@/api/auth.js'
 import { g_s } from '@/utils/global_status.js'
 import my_help  from '@/utils/my_help.js'
 

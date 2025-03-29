@@ -41,6 +41,7 @@
         </div>
       </div>
 
+      <!--msg 消息提示框-->
       <var-snackbar v-model:type="pageMsg.type" v-model:show="pageMsg.show">{{ pageMsg.content }}</var-snackbar>
 
       <!-- 添加登录弹窗 -->

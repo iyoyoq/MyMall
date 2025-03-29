@@ -1,9 +1,9 @@
 package com.server.business.auth.controller.user;
 
+import com.server.business.auth.domain.dto.UserLoginDto;
 import com.server.business.auth.domain.vo.UserLoginVO;
 import com.server.business.auth.service.IUserService;
 import com.server.pojo.R;
-import com.server.pojo.dto.UserLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

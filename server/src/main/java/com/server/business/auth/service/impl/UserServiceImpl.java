@@ -8,12 +8,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.business.auth.domain.User;
+import com.server.business.auth.domain.dto.UserLoginDto;
 import com.server.business.auth.domain.vo.UserLoginVO;
 import com.server.business.auth.mapper.UserMapper;
 import com.server.business.auth.service.IUserService;
 import com.server.config.redis.RedisPrefix;
 import com.server.exception.BusinessException;
-import com.server.pojo.dto.UserLoginDto;
+import com.server.util.RequestContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -35,6 +36,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private RequestContext requestContext;
 
 
     @Override
@@ -73,18 +77,18 @@ public class UserServiceImpl implements IUserService {
             if (update < 1) throw new BusinessException("用户更新失败");
         }
         // 制作 token
-        String token = IdUtil.simpleUUID() + RandomUtil.randomStringLowerWithoutStr(16,"");  // token
+        String token = IdUtil.simpleUUID() + RandomUtil.randomStringLowerWithoutStr(16, "");  // token
+        UserLoginVO vo = new UserLoginVO(token, user.getId());
+        // 存入 redis
         String k = RedisPrefix.USER_TOKEN + token;   // 即使是新用户，mp也会得到userId
         String v = null;
         try {
-            v = objectMapper.writeValueAsString(user);
+            v = objectMapper.writeValueAsString(vo);
         } catch (JsonProcessingException e) {
-            log.error("用户序列化失败", e);
-            throw new RuntimeException(e);
+            throw new RuntimeException("用户序列化失败", e);
         }
         redisTemplate.opsForValue().set(k, v, 24, TimeUnit.HOURS);
         redisTemplate.delete(RedisPrefix.PHONE_MSG_CODE + request.getPhone());
-        UserLoginVO vo = BeanUtil.copyProperties(user, UserLoginVO.class);
         vo.setToken(token);
         // 返回token
         return vo;
@@ -96,9 +100,8 @@ public class UserServiceImpl implements IUserService {
         try {
             return objectMapper.readValue(s, User.class);
         } catch (JsonProcessingException e) {
-            log.error("用户反序列化失败", e);
+            throw new BusinessException("凭证过期");
         }
-        return null;
     }
 
     @Override
@@ -107,7 +110,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public int updateById(User user) {
+    public int updateSelfById(User user) {
+        user.setId(requestContext.getUser().getId()); // 防止修改别人的
         return userMapper.updateById(user);
     }
 
