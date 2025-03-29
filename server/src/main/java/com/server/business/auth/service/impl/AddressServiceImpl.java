@@ -27,10 +27,9 @@ public class AddressServiceImpl implements IAddressService {
 
     @Override
     public Page<Address> selectPage(Integer pageNum, Integer pageSize, Address address) {
-        QueryWrapper<Address> wrapper = new QueryWrapper<>(address);
-        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(User::getNickName, "老王");
-        return addressMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+        LambdaQueryWrapper<Address> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Address::getUserId, address.getUserId());
+        return addressMapper.selectPage(new Page<>(pageNum, pageSize), lambdaQueryWrapper);
     }
 
     @Override
