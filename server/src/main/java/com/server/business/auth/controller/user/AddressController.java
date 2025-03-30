@@ -24,9 +24,8 @@ public class AddressController {
     @Autowired
     private RequestContext requestContext;
 
-
     /**
-     * 分页查询：查自己的地址
+     * 查自己的地址: 不分页, 最多查一百条就行
      */
     @PostMapping("/list")
     public R list(
@@ -34,7 +33,7 @@ public class AddressController {
             @RequestParam("pageSize") Integer pageSize,
             @RequestBody Address address) {
         address.setUserId(requestContext.getUser().getId());
-        Page<Address> result = addressService.selectPage(pageNum, pageSize, address);
+        Page<Address> result = addressService.selectPage(1, 100, address);
         return R.ok(result);
     }
 

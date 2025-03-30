@@ -57,28 +57,25 @@
 
     <!-- 添加编辑弹窗 -->
     <var-popup v-model:show="showEditDialog" position="center">
-      <var-card class="edit-card">
+      <var-card style="width: 400px">
         <template #title>
-          <div class="edit-title">编辑资料</div>
+          <div style="padding: 20px 20px 0 16px; text-align: center">编辑资料</div>
         </template>
-
         <var-form ref="editForm">
           <var-input
+              autocomplete="nickName"
               v-model="editForm.nickName"
-              placeholder="请输入昵称"
-              label="昵称"
+              placeholder="昵称"
           />
-
           <var-input
+              style="margin-top: 20px"
+              autocomplete="intro"
               v-model="editForm.intro"
-              placeholder="请输入个人简介"
-              label="简介"
-              type="textarea"
-              :rows="3"
+              placeholder="个人简介"
+              textarea
+              :rows="4"
           />
-
-
-          <div class="edit-btns">
+          <div style="margin: 20px 0 0 0">
             <var-button
                 type="primary"
                 block

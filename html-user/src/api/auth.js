@@ -1,5 +1,4 @@
 import request from '@/utils/request.js'
-
 const base = '/auth/user'
 
 // 示例
@@ -40,6 +39,26 @@ export function updateUserInfoApi(data){
   return request({
     url: `${base}/user/self/update`,
     method: 'put',
+    data: data
+  })
+}
+
+export function addressPageApi(data){
+  return request({
+    url: `${base}/address/list`,
+    method: 'post',
+    params: {
+      pageNum: data.pageNum,
+      pageSize: data.pageSize
+    },
+    data: data
+  })
+}
+
+export function addressAddApi(data){
+  return request({
+    url: `${base}/address/save`,
+    method: 'post',
     data: data
   })
 }

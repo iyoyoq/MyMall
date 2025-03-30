@@ -8,6 +8,7 @@
       <var-form ref="loginForm" style="width: 360px" >
         <var-input
             v-model="phone"
+            autocomplete="phone"
             placeholder="请输入手机号"
             :validate-trigger="['onBlur']"
             :rules="v => /^1[3-9]\d{9}$/.test(v) || '请输入正确的手机号'"
@@ -16,6 +17,7 @@
 
         <div class="code-container">
           <var-input
+              autocomplete="code"
               v-model="code"
               placeholder="请输入验证码"
               class="code-input"
