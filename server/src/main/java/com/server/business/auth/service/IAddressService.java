@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.dto.AddressCreateDTO;
 
+import java.util.List;
+
 /**
  * 用户地址表(Address)表服务接口
  *
@@ -14,11 +16,9 @@ public interface IAddressService {
 
     Page<Address> selectPage(Integer pageNum, Integer pageSize, Address address);
 
-    Address selectById(Long id);
-
     int insert(AddressCreateDTO db);
 
-    int removeById(Long id);
+    int removeById(List<Long> id);
 
     int updateById(Address address);
 }

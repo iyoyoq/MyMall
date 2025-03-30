@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.dto.AddressCreateDTO;
 import com.server.business.auth.service.IAddressService;
+import com.server.exception.BusinessException;
 import com.server.pojo.R;
 import com.server.util.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 /**
@@ -37,14 +40,6 @@ public class AddressController {
         return R.ok(result);
     }
 
-    /**
-     * 单条查询
-     */
-    @GetMapping("/detail")
-    public R detail(Long id) {
-        Address address = addressService.selectById(id);
-        return R.ok(address);
-    }
 
 
     /**
@@ -60,8 +55,8 @@ public class AddressController {
      * 删
      */
     @DeleteMapping("/remove")
-    public R remove(Long id) {
-        int result = addressService.removeById(id);
+    public R remove(@RequestBody List<Long> idList) {
+        int result = addressService.removeById(idList);
         return R.judge(result > 0, "删除失败");
     }
 
@@ -69,9 +64,9 @@ public class AddressController {
      * 改
      */
     @PutMapping("/update")
-    public R update(Address address) {
+    public R update(@RequestBody Address address) {
         int b = addressService.updateById(address);
-        return R.judge(b > 0, "");
+        return R.judge(b > 0,   "");
     }
 
 

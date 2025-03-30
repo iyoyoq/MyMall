@@ -10,8 +10,12 @@ import com.server.business.auth.domain.User;
 import com.server.business.auth.domain.dto.AddressCreateDTO;
 import com.server.business.auth.mapper.AddressMapper;
 import com.server.business.auth.service.IAddressService;
+import com.server.exception.BusinessException;
+import com.server.util.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 用户地址表(Address)表服务实现类
@@ -25,34 +29,41 @@ public class AddressServiceImpl implements IAddressService {
     @Autowired
     private AddressMapper addressMapper;
 
+    @Autowired
+    private RequestContext requestContext;
+
     @Override
     public Page<Address> selectPage(Integer pageNum, Integer pageSize, Address address) {
         LambdaQueryWrapper<Address> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Address::getUserId, address.getUserId());
+        lambdaQueryWrapper.eq(Address::getStatus, 1);  //未删除的地址
         return addressMapper.selectPage(new Page<>(pageNum, pageSize), lambdaQueryWrapper);
     }
 
-    @Override
-    public Address selectById(Long id) {
-        return addressMapper.selectById(id);
-    }
+
 
     @Override
     public int insert(AddressCreateDTO dto) {
+        dto.setUserId(requestContext.getUser().getId());
         Address db = BeanUtil.copyProperties(dto, Address.class);
         return addressMapper.insert(db);
     }
 
     @Override
-    public int removeById(Long id) {
+    public int removeById(List<Long> id) {
         Address address = new Address();
-        address.setId(id);
         address.setStatus(-1);
-        return addressMapper.updateById(address);
+        LambdaQueryWrapper<Address> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Address::getUserId, requestContext.getUser().getId());
+        wrapper.in(Address::getId, id);
+        return addressMapper.update(address, wrapper);
     }
 
     @Override
     public int updateById(Address address) {
+        if (!requestContext.getUser().getId().equals(address.getUserId())) {
+            throw new BusinessException("请求错误");
+        }
         return addressMapper.updateById(address);
     }
 
