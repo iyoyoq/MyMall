@@ -4,6 +4,7 @@ package com.server.config.mybatisplus;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * @Date: 2024/12/21 10:23
  */
 @Configuration
-// @MapperScan("com.reuse.market3.mapper")
+// @MapperScan("com.server.business")
 public class MyBatisPlusConfig {
 
     /**

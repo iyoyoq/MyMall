@@ -5,6 +5,7 @@ import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.dto.AddressCreateDTO;
 import com.server.business.auth.service.IAddressService;
 import com.server.pojo.R;
+import com.server.util.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,15 +21,19 @@ public class AddressController {
     @Autowired
     private IAddressService addressService;
 
+    @Autowired
+    private RequestContext requestContext;
+
 
     /**
-     * 分页查询
+     * 分页查询：查自己的地址
      */
     @PostMapping("/list")
     public R list(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestBody Address address) {
+        address.setUserId(requestContext.getUser().getId());
         Page<Address> result = addressService.selectPage(pageNum, pageSize, address);
         return R.ok(result);
     }
