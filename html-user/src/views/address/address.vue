@@ -18,7 +18,7 @@
               <span style="color: #666; margin-right: 12px;">{{ item.receiverPhone }}</span>
               <div v-if="item.isDefault === 1" style="display: inline-block; color: #2979ff;">默认</div>
             </div>
-            <div style="color: #333; line-height: 1.5;">
+            <div style=" line-height: 1.5;">
               {{ item.province }}{{ item.city }}{{ item.district }}{{ item.detailAddress }}
             </div>
           </div>
@@ -31,25 +31,25 @@
     </div>
 
     <!-- 表单弹窗 -->
-    <var-popup v-model:show="showEditDialog" position="center" >
+    <var-popup v-model:show="showEditDialog" position="center">
       <var-card style="width: 800px" :key="new Date()">
         <template #title>
           <div style="padding: 20px 20px 0 16px; text-align: center">
             <span v-if="editFormType === 1">添加收货地址</span>
-            <span v-if="editFormType === 2">修改收货地址</span>
+            <span v-if="editFormType === 2">编辑收货地址</span>
           </div>
         </template>
         <var-form ref="editForm">
           <var-input
               style="width: 200px"
-              autocomplete="receiver_name"
-              v-model="editForm.receiver_name"
+              autocomplete="receiverName"
+              v-model="editForm.receiverName"
               placeholder="姓名"
           />
           <var-input
               style="width: 200px"
-              autocomplete="receiver_phone"
-              v-model="editForm.receiver_phone"
+              autocomplete="receiverPhone"
+              v-model="editForm.receiverPhone"
               placeholder="手机号"
               :validate-trigger="['onBlur']"
               :rules="v => /^1[3-9]\d{9}$/.test(v) || '请输入正确的手机号'"
@@ -59,49 +59,49 @@
           <div style="padding: 10px 0 0 0">收货地址</div>
           <div style="display:flex; justify-content: space-between">
             <div style="width: 200px">
-              <!--省市区级联选择框-->
+              <!--省-->
               <var-select placeholder="省级" v-model="editForm.province" @change="handleProvinceChange">
                 <var-option v-for="province in areaData" :key="province.text" :label="province.text"
                             :value="province.text"/>
               </var-select>
             </div>
             <div style="width: 200px">
-              <!--省市区级联选择框-->
-              <var-select 
-                placeholder="地市级" 
-                v-model="editForm.city" 
-                @change="handleCityChange" 
-                :disabled="!editForm.province"
+              <!--市-->
+              <var-select
+                  placeholder="地市级"
+                  v-model="editForm.city"
+                  @change="handleCityChange"
+                  :disabled="!editForm.province"
               >
-                <var-option 
-                  v-for="city in getCities(editForm.province)" 
-                  :key="city.text" 
-                  :label="city.text" 
-                  :value="city.text" 
+                <var-option
+                    v-for="city in getCities(editForm.province)"
+                    :key="city.text"
+                    :label="city.text"
+                    :value="city.text"
                 />
               </var-select>
             </div>
             <div style="width: 200px">
-              <!--省市区级联选择框-->
-              <var-select 
-                placeholder="县区级" 
-                v-model="editForm.district" 
-                :disabled="!editForm.city"
+              <!--区-->
+              <var-select
+                  placeholder="县区级"
+                  v-model="editForm.district"
+                  :disabled="!editForm.city"
               >
-                <var-option 
-                  v-for="district in getDistricts(editForm.province, editForm.city)" 
-                  :key="district.text" 
-                  :label="district.text" 
-                  :value="district.text" 
+                <var-option
+                    v-for="district in getDistricts(editForm.province, editForm.city)"
+                    :key="district.text"
+                    :label="district.text"
+                    :value="district.text"
                 />
               </var-select>
             </div>
           </div>
 
           <var-input
-              autocomplete="detail_address"
-              v-model="editForm.detail_address"
-              placeholder="详细地址"
+              autocomplete="detailAddress"
+              v-model="editForm.detailAddress"
+              placeholder="详细地址（如：xx街道xx号）"
               textarea
               :rows="2"
           />
@@ -125,8 +125,10 @@
 
 <script>
 
-import { addressPageApi } from '@/api/auth.js'
+import { addressAddApi, addressEditApi, addressPageApi, addressRemoveApi } from '@/api/auth.js'
 import areaJson from '@varlet/ui/json/area.json'
+import my_help from '@/utils/my_help.js'
+import { g_s } from '@/utils/global_status.js'
 
 export default {
   name: 'address',
@@ -135,19 +137,20 @@ export default {
     function resetForm () {
       this.editForm = {
         id: '',
-        user_id: '',
-        receiver_name: '',
-        receiver_phone: '',
+        userId: '',
+        receiverName: '',
+        receiverPhone: '',
         province: '',
         city: '',
         district: '',
-        detail_address: '',
-        is_default: '',
+        detailAddress: '',
+        isDefault: '',
         status: '',
       }
     }
+
     return {
-      resetForm
+      resetForm,
     }
   },
   data () {
@@ -187,8 +190,14 @@ export default {
       return []
     },
     // 表单提交
-    handleSubmitEdit () {
-
+    async handleSubmitEdit () {
+      this.editBtnSubmitting = true
+      if (this.editFormType === 1) {
+        await addressAddApi(this.editForm)
+      } else if (this.editFormType === 2) {
+        await addressEditApi(this.editForm)
+      }
+      my_help.refresh()
     },
     // 获取地址列表
     async getAddressList () {
@@ -205,18 +214,28 @@ export default {
 
     // 编辑地址
     handleEdit (address) {
+      this.editFormType = 2
       this.showEditDialog = true
       this.editForm = { ...address } // 将选中的地址信息填入表单
+      console.log(this.editForm)
     },
 
     // 删除地址
-    handleDelete (id) {
-      // TODO: 调用删除API
-      console.log('删除地址：', id)
+    async handleDelete (id) {
+      // https://varletjs.org/#/zh-CN/dialog
+      Dialog('确认删除？').then((r) => {
+        if (r === 'confirm') {
+          addressRemoveApi([id]).then(() => {
+            Snackbar.success('删除成功')
+            my_help.refresh()
+          })
+        }
+      })
     },
 
     // 新增地址
     handleAdd () {
+      this.editFormType = 1
       this.showEditDialog = true
       this.resetForm() // 重置表单内容
     },

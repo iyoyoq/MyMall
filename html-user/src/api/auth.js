@@ -63,5 +63,23 @@ export function addressAddApi(data){
   })
 }
 
+export function addressEditApi(data){
+  return request({
+    url: `${base}/address/update`,
+    method: 'put',
+    data: data
+  })
+}
+
+export function addressRemoveApi(idList){
+  return request({
+    url: `${base}/address/remove`,
+    method: 'delete',
+    data: idList
+  })
+}
+
+
+
 
 
