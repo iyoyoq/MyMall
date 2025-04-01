@@ -11,6 +11,7 @@ import com.server.business.auth.domain.dto.AddressCreateDTO;
 import com.server.business.auth.mapper.AddressMapper;
 import com.server.business.auth.service.IAddressService;
 import com.server.exception.BusinessException;
+import com.server.pojo.RPage;
 import com.server.util.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,11 +34,11 @@ public class AddressServiceImpl implements IAddressService {
     private RequestContext requestContext;
 
     @Override
-    public Page<Address> selectPage(Integer pageNum, Integer pageSize, Address address) {
+    public RPage<Address> selectPage(Integer pageNum, Integer pageSize, Address address) {
         LambdaQueryWrapper<Address> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Address::getUserId, address.getUserId());
         lambdaQueryWrapper.eq(Address::getStatus, 1);  //未删除的地址
-        return addressMapper.selectPage(new Page<>(pageNum, pageSize), lambdaQueryWrapper);
+        return new RPage<>(addressMapper.selectPage(new Page<>(pageNum, pageSize), lambdaQueryWrapper));
     }
 
 

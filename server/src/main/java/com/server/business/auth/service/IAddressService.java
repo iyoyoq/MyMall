@@ -1,8 +1,8 @@
 package com.server.business.auth.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.dto.AddressCreateDTO;
+import com.server.pojo.RPage;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface IAddressService {
 
-    Page<Address> selectPage(Integer pageNum, Integer pageSize, Address address);
+    RPage<Address> selectPage(Integer pageNum, Integer pageSize, Address address);
 
     int insert(AddressCreateDTO db);
 

@@ -1,11 +1,10 @@
 package com.server.business.auth.controller.user;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.dto.AddressCreateDTO;
 import com.server.business.auth.service.IAddressService;
-import com.server.exception.BusinessException;
 import com.server.pojo.R;
+import com.server.pojo.RPage;
 import com.server.util.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +35,7 @@ public class AddressController {
             @RequestParam("pageSize") Integer pageSize,
             @RequestBody Address address) {
         address.setUserId(requestContext.getUser().getId());
-        Page<Address> result = addressService.selectPage(1, 100, address);
+        RPage<Address> result = addressService.selectPage(1, 100, address);
         return R.ok(result);
     }
 
