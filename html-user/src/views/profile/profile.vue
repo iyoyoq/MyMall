@@ -32,19 +32,19 @@
         <div class="user-meta">
           <div class="meta-item">
             <span class="label">昵称：</span>
-            <span>{{ userInfo.nickName}}</span>
+            <span>{{ userInfo.nickName }}</span>
           </div>
           <div class="meta-item">
             <span class="label">手机：</span>
-            <span>{{ userInfo.phone}}</span>
+            <span>{{ userInfo.phone }}</span>
           </div>
-          <div class="meta-item">
-            <span class="label">简介：</span>
-            <span>{{ userInfo.intro}}</span>
+          <div class="meta-item" style="display:flex;">
+            <div style="top: 0" class="label">简介：</div>
+            <div style="max-width: 500px">{{ userInfo.intro }}</div>
           </div>
           <div class="meta-item">
             <span class="label">编号：</span>
-            <span>{{ userInfo.code}}</span>
+            <span>{{ userInfo.code }}</span>
           </div>
         </div>
       </div>
@@ -120,12 +120,14 @@ export default {
   },
 
   created () {
-    getSelfDetailApi().then(res => {
-      this.userInfo = res.data.result
-    })
+    this.getUserInfo()
   },
 
   methods: {
+    async getUserInfo () {
+      const res = await getSelfDetailApi()
+      this.userInfo = res.data.result
+    },
     handleAvatar () {
       this.showAvatarPreview = true
     },
@@ -152,7 +154,8 @@ export default {
       await updateUserInfoApi(submitData)
       g_s.msg.success('更新成功')
       this.showEditDialog = false
-      my_help.refresh()
+      await this.getUserInfo()
+      this.editUserInfoSubmitting = false
     },
     triggerFileInput () {
       this.$refs.fileInput.click()
@@ -163,11 +166,10 @@ export default {
       if (file) {
         const res = await fileUploadApi(file)
         const webUrl = res.data.result
-        console.log(webUrl)
         await updateUserInfoApi({
           avatar: webUrl,
         })
-        my_help.refresh()
+        await this.getUserInfo()
         g_s.msg.success('头像更换成功')
       }
       // 清空 input 的值，这样同一个文件可以重复选择
