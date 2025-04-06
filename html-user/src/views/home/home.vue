@@ -1,6 +1,6 @@
 <template>
   <div style="display: flex; ">
-    <div style="width: 1200px; margin: 0 auto;">
+    <div style="width: 1000px; margin: 0 auto;">
       <div style="display: flex; justify-content: center;align-items: center;">
         <var-link
             type="primary"
