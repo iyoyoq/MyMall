@@ -27,7 +27,7 @@ public class ProductController {
     /**
      * 获取商品详情
      */
-    @GetMapping("/list")
+    @PostMapping("/list")
     public R list(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,

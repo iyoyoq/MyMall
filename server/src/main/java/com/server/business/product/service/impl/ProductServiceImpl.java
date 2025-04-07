@@ -26,7 +26,7 @@ public class ProductServiceImpl implements IProductService {
     public RPage<Product> selectPage(Integer pageNum, Integer pageSize, ProductListQueryDTO dto) {
         LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.isNotBlank(dto.getName()), Product::getName, dto.getName());
-        wrapper.eq(Product::getCategoryId, dto.getCategoryId());
+        wrapper.eq(dto.getCategoryId() != null, Product::getCategoryId, dto.getCategoryId());
         wrapper.eq(Product::getStatus, 1); // 已上架
         Page<Product> productPage = productMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
         RPage<Product> result = new RPage<>(productPage);

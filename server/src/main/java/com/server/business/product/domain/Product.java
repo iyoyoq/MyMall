@@ -1,6 +1,8 @@
 package com.server.business.product.domain;
 
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
@@ -10,6 +12,7 @@ import lombok.Data;
  * @since 2025-04-06 20:46:35
  */
 @Data
+@TableName("product_product")
 public class Product {
     // 商品ID
     private Long id;
