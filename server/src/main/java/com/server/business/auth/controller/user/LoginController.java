@@ -1,6 +1,6 @@
 package com.server.business.auth.controller.user;
 
-import com.server.business.auth.domain.dto.UserLoginDto;
+import com.server.business.auth.domain.dto.UserLoginDTO;
 import com.server.business.auth.domain.vo.UserLoginVO;
 import com.server.business.auth.service.IUserService;
 import com.server.pojo.R;
@@ -24,7 +24,7 @@ public class LoginController {
      * 手机短信验证码登录
      */
     @PostMapping("/codeLogin")
-    public R<UserLoginVO> login(@RequestBody UserLoginDto dto) {
+    public R<UserLoginVO> login(@RequestBody UserLoginDTO dto) {
         UserLoginVO vo = userService.login(dto);
         return R.ok(vo);
     }

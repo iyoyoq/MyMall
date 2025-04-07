@@ -1,6 +1,5 @@
 package com.server.business.auth.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
@@ -8,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.business.auth.domain.User;
-import com.server.business.auth.domain.dto.UserLoginDto;
+import com.server.business.auth.domain.dto.UserLoginDTO;
 import com.server.business.auth.domain.vo.UserLoginVO;
 import com.server.business.auth.mapper.UserMapper;
 import com.server.business.auth.service.IUserService;
@@ -47,7 +46,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserLoginVO login(UserLoginDto request) {
+    public UserLoginVO login(UserLoginDTO request) {
         String userCode = request.getCode();
         String phone = request.getPhone();
         String redisCode = redisTemplate.opsForValue().get(RedisPrefix.PHONE_MSG_CODE + phone);

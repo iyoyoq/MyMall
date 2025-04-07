@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/product/user/favorite")
-public class FavoriteController {
+public class ProductFavoriteController {
     @Autowired
     private IFavoriteService favoriteService;
 
