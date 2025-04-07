@@ -45,7 +45,7 @@
       <!-- 分页 -->
       <div class="foot">
         <var-pagination
-            v-model:current="currentPage"
+            v-model:current="pageNum"
             :total="total"
             :size="pageSize"
             :show-size-changer="false"
@@ -58,8 +58,14 @@
 </template>
 
 <script>
+import { pageApi } from '@/api/product.js'
+
 export default {
   name: 'Products',
+
+  created () {
+    this.fetchList()
+  },
 
   data () {
     const generateProducts = () => {
@@ -81,7 +87,7 @@ export default {
     return {
       searchKeyword: '',
       activeCategory: 0,
-      currentPage: 1,
+      pageNum: 1,
       total: 100,
       pageSize: 25,
       products: allProducts,
@@ -93,10 +99,22 @@ export default {
         { id: 4, name: '服装鞋包' },
         { id: 5, name: '食品生鲜' },
       ],
+      dto: {
+        name: '',  //商品名称
+        categoryId: ''  //分类id
+      }
     }
   },
 
   methods: {
+     async fetchList(){
+      const resp = await pageApi({
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        dto: this.dto
+      })
+      this.displayedProducts = resp.data.result.records
+    },
     handleSearch () {
       console.log('搜索关键词:', this.searchKeyword)
       // TODO: 这里可以调用接口进行搜索
