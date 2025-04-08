@@ -1,8 +1,6 @@
 <template>
 <div>
     dashboard仪表盘
-
-
 </div>
 </template>
 <script>
