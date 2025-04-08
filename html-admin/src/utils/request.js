@@ -1,6 +1,5 @@
 import axios from 'axios'
 import router from '@/router'
-import { showError } from '@/utils/message.js'
 import JSONBig  from 'json-bigint'
 
 const baseURL = 'http://localhost:45000/api'
@@ -44,14 +43,11 @@ instance.interceptors.response.use(
       return res
     } else if (res.data.code === 10003) { //身份无效
       router.push('/login')
-      showError('身份无效,请重新登录')
       return
     } else if (res.data.code === 10002) { //普通业务异常
       // 业务异常
-      showError(res.data.msg || '服务异常')
       return Promise.reject(res.data)
     }
-    showError('服务异常')
     return Promise.reject(res.data)
   },
   (err) => {
@@ -67,7 +63,6 @@ instance.interceptors.response.use(
     // }
     // 错误默认情况
     // ElMessage.error(err.response.data.message || '服务异常')
-    showError('服务异常')
     router.push('/login')
     return Promise.reject(err)
   })
