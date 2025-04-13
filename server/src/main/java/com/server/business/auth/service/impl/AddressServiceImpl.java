@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.User;
-import com.server.business.auth.domain.dto.AddressCreateDTO;
+import com.server.business.auth.domain.dto.AddressCreateDto;
 import com.server.business.auth.mapper.AddressMapper;
 import com.server.business.auth.service.IAddressService;
 import com.server.exception.BusinessException;
@@ -44,7 +44,7 @@ public class AddressServiceImpl implements IAddressService {
 
 
     @Override
-    public int insert(AddressCreateDTO dto) {
+    public int insert(AddressCreateDto dto) {
         dto.setUserId(requestContext.getUser().getId());
         Address db = BeanUtil.copyProperties(dto, Address.class);
         return addressMapper.insert(db);

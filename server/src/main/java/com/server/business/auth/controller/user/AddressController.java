@@ -1,7 +1,7 @@
 package com.server.business.auth.controller.user;
 
 import com.server.business.auth.domain.Address;
-import com.server.business.auth.domain.dto.AddressCreateDTO;
+import com.server.business.auth.domain.dto.AddressCreateDto;
 import com.server.business.auth.service.IAddressService;
 import com.server.pojo.R;
 import com.server.pojo.RPage;
@@ -45,7 +45,7 @@ public class AddressController {
      * 增
      */
     @PostMapping("/save")
-    public R create(@RequestBody AddressCreateDTO dto) {
+    public R create(@RequestBody AddressCreateDto dto) {
         int ok = addressService.insert(dto);
         return R.judge(ok > 0, "保存失败");
     }

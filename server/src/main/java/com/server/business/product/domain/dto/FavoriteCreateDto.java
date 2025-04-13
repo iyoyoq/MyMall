@@ -6,5 +6,5 @@ package com.server.business.product.domain.dto;
  * @Date: 2025/3/12 22:55
  */
 
-public class FavoriteCreateDTO {
+public class FavoriteCreateDto {
 }

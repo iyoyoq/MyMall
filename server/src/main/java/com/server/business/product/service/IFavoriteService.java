@@ -3,7 +3,7 @@ package com.server.business.product.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.product.domain.Favorite;
-import com.server.business.product.domain.dto.FavoriteCreateDTO;
+import com.server.business.product.domain.dto.FavoriteCreateDto;
 
 /**
  * 用户收藏表(Favorite)表服务接口
@@ -17,7 +17,7 @@ public interface IFavoriteService {
 
     Favorite selectById(Long id);
 
-    int insert(FavoriteCreateDTO dto);
+    int insert(FavoriteCreateDto dto);
 
     int removeById(Long id);
 

@@ -1,7 +1,7 @@
 package com.server.business.auth.service;
 
 import com.server.business.auth.domain.Address;
-import com.server.business.auth.domain.dto.AddressCreateDTO;
+import com.server.business.auth.domain.dto.AddressCreateDto;
 import com.server.pojo.RPage;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public interface IAddressService {
 
     RPage<Address> selectPage(Integer pageNum, Integer pageSize, Address address);
 
-    int insert(AddressCreateDTO db);
+    int insert(AddressCreateDto db);
 
     int removeById(List<Long> id);
 

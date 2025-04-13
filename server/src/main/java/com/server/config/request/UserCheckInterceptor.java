@@ -22,39 +22,37 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Slf4j
 public class UserCheckInterceptor implements HandlerInterceptor {
 
-    @Autowired
-    private RequestContext requestContext;
-
-    /**
-     * 本项目从 headers.Authorization = `Bearer ${token}` 中拿到的凭证
-     */
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
-        // OPTIONS先放行
-        if (request.getMethod().equals("OPTIONS")) {
-            return true;
-        }
-
-        String authorization = request.getHeader("Authorization");
-        if (!(authorization != null && authorization.startsWith("Bearer "))) {
-            throw new BusinessException(ResultCodeEnum.AuthError);
-        }
-
-        // 提取 Bearer 后面的内容
-        String token = authorization.substring("Bearer ".length()).trim();
-        if (!requestContext.setCurrentUserByToken(token)) {
-            throw new BusinessException(ResultCodeEnum.AuthError);
-        }
-        // 通过验证
-        return true;
-    }
-
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-            throws Exception {
-        // 如果不删除ThreadLocal中的信息,会有内存泄露的风险
-        requestContext.removeCurrentUser();
-    }
+    // @Autowired
+    // private RequestContext requestContext;
+    //
+    // /**
+    //  * 本项目从 headers.Authorization = `Bearer ${token}` 中拿到的凭证
+    //  */
+    // @Override
+    // public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+    //         throws Exception {
+    //     // OPTIONS先放行
+    //     if (request.getMethod().equals("OPTIONS")) {
+    //         return true;
+    //     }
+    //
+    //     String authorization = request.getHeader("Authorization");
+    //     if (!(authorization != null && authorization.startsWith("Bearer "))) {
+    //         throw new BusinessException(ResultCodeEnum.AuthError);
+    //     }
+    //
+    //     // 提取 Bearer 后面的内容
+    //     String token = authorization.substring("Bearer ".length()).trim();
+    //     requestContext.setCurrentUserByToken(token);
+    //     // 通过验证
+    //     return true;
+    // }
+    //
+    //
+    // @Override
+    // public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+    //         throws Exception {
+    //     // 如果不删除ThreadLocal中的信息,会有内存泄露的风险
+    //     requestContext.removeCurrentUser();
+    // }
 }

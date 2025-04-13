@@ -1,15 +1,17 @@
 package com.server.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.server.business.auth.domain.User;
-import com.server.business.auth.domain.vo.UserLoginVO;
+import com.server.business.auth.domain.vo.LoginVo;
 import com.server.config.redis.RedisPrefix;
 import com.server.exception.BusinessException;
 import com.server.pojo.ResultCodeEnum;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * @Description: 请求上下文
@@ -25,7 +27,7 @@ public class RequestContext {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private final ThreadLocal<UserLoginVO> userInfo = new ThreadLocal<>();
+    private final ThreadLocal<LoginVo> userInfo = new ThreadLocal<>();
 
 
     /**
@@ -33,56 +35,60 @@ public class RequestContext {
      *
      * @return User
      */
-    public UserLoginVO getUser() {
+    public LoginVo getUser() {
         return userInfo.get();
     }
 
-    public UserLoginVO getUserByToken(String token) {
-        String s = redisTemplate.opsForValue().get(RedisPrefix.USER_TOKEN + token);
+
+    /**
+     * 放入当前登录对象 LoginVo 至当前请求线程上下文中
+     * 可能抛出 BusinessException(ResultCodeEnum.AuthError)
+     *
+     * @param redisPrefix redis 前缀
+     * @param token token
+     * @return LoginVo
+     */
+    public LoginVo setLoginVoByToken(String redisPrefix, String token) {
+        String tokenFormRedis = redisTemplate.opsForValue().get(redisPrefix + token);
+        LoginVo vo;
         try {
-            return objectMapper.readValue(s, UserLoginVO.class);
+            vo = objectMapper.readValue(tokenFormRedis, LoginVo.class);
+            if (vo == null || !StringUtils.hasText(vo.getToken()))
+                throw new BusinessException(ResultCodeEnum.AuthError);
         } catch (Exception e) {
             throw new BusinessException(ResultCodeEnum.AuthError);
         }
-    }
-
-    public boolean setCurrentUserByToken(String token) {
-        UserLoginVO u = getUserByToken(token);
-        if (u == null) {
-            return false;
-        }
         try {
-            userInfo.set(u);
+            userInfo.set(vo);
         } catch (Exception e) {
             userInfo.remove();
             throw new BusinessException(ResultCodeEnum.AuthError);
         }
-        return true;
+        return vo;
     }
 
+    public LoginVo userLoginCheck() {
+        return setLoginVoByToken(RedisPrefix.USER_TOKEN, getToken());
+    }
+
+    public LoginVo adminLoginCheck() {
+        return setLoginVoByToken(RedisPrefix.ADMIN_TOKEN, getToken());
+    }
 
     public void removeCurrentUser() {
         userInfo.remove();
     }
 
+    public static String getToken() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        String authorization = request.getHeader("Authorization");
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            throw new BusinessException(ResultCodeEnum.AuthError);
+        }
+        // 提取 Bearer 后面的内容
+        return authorization.substring("Bearer ".length()).trim();
+    }
 
-    /**
-     * 获取当前已登录的 admin 管理员 请求的 id, 本项目从 Cookie 中拿到的， sa-token 默认还有别的方式也会拿
-     */
-    // public User getAdminId() {
-    //     return threadLocal.get();
-    // }
-    //
-    // public void setAdminId() {
-    //     try {
-    //         // threadLocal.set(Long.valueOf((String) StpAdminUtil.getLoginId()));
-    //     } catch (Exception e) {
-    //         threadLocal.remove();
-    //         throw new BusinessException(ResultCodeEnum.AuthError);
-    //     }
-    // }
-    //
-    // public void removeAdminId() {
-    //     threadLocal.remove();
-    // }
+
 }

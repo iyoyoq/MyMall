@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.business.auth.domain.User;
-import com.server.business.auth.domain.dto.UserLoginDTO;
-import com.server.business.auth.domain.vo.UserLoginVO;
+import com.server.business.auth.domain.dto.UserLoginDto;
+import com.server.business.auth.domain.vo.LoginVo;
 import com.server.business.auth.mapper.UserMapper;
 import com.server.business.auth.service.IUserService;
 import com.server.config.redis.RedisPrefix;
@@ -46,7 +46,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserLoginVO login(UserLoginDTO request) {
+    public LoginVo login(UserLoginDto request) {
         String userCode = request.getCode();
         String phone = request.getPhone();
         String redisCode = redisTemplate.opsForValue().get(RedisPrefix.PHONE_MSG_CODE + phone);
@@ -77,7 +77,7 @@ public class UserServiceImpl implements IUserService {
         }
         // 制作 token
         String token = IdUtil.simpleUUID() + RandomUtil.randomStringLowerWithoutStr(16, "");  // token
-        UserLoginVO vo = new UserLoginVO(token, user.getId());
+        LoginVo vo = new LoginVo(token, user.getId());
         // 存入 redis
         String k = RedisPrefix.USER_TOKEN + token;   // 即使是新用户，mp也会得到userId
         String v = null;

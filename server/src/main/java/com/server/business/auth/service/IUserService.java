@@ -2,14 +2,14 @@ package com.server.business.auth.service;
 
 
 import com.server.business.auth.domain.User;
-import com.server.business.auth.domain.dto.UserLoginDTO;
-import com.server.business.auth.domain.vo.UserLoginVO;
+import com.server.business.auth.domain.dto.UserLoginDto;
+import com.server.business.auth.domain.vo.LoginVo;
 
 public interface IUserService  {
 
     void sendLoginCode(String phone);
 
-    UserLoginVO login(UserLoginDTO dto);
+    LoginVo login(UserLoginDto dto);
 
     User getUserByToken(String token);
 

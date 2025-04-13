@@ -14,8 +14,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private UserCheckInterceptor userCheckInterceptor;
+    // @Autowired
+    // private UserCheckInterceptor userCheckInterceptor;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -27,18 +27,18 @@ public class MvcConfig implements WebMvcConfigurer {
                 .maxAge(3600);
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(userCheckInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/auth/user/login/**")
-                // .excludePathPatterns("/admin/**")
-                // .excludePathPatterns("/upload/**")
-        ;
-
-        // registry.addInterceptor(new AdminCheckInterceptor())
-        //         .addPathPatterns("/admin/**")
-        //         .excludePathPatterns("/admin/auth/**");
-    }
+    // @Override
+    // public void addInterceptors(InterceptorRegistry registry) {
+    //     registry.addInterceptor(userCheckInterceptor)
+    //             .addPathPatterns("/**")
+    //             .excludePathPatterns("/auth/user/login/**")
+    //             // .excludePathPatterns("/admin/**")
+    //             // .excludePathPatterns("/upload/**")
+    //     ;
+    //
+    //     // registry.addInterceptor(new AdminCheckInterceptor())
+    //     //         .addPathPatterns("/admin/**")
+    //     //         .excludePathPatterns("/admin/auth/**");
+    // }
 
 }

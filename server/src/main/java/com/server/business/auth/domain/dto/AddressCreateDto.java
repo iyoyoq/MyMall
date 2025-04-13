@@ -8,7 +8,7 @@ import lombok.Data;
  * @Date: 2025/3/7 10:17
  */
 @Data
-public class AddressCreateDTO {
+public class AddressCreateDto {
     // 地址ID
     // private Long id;
     // 用户ID，关联auth_user表

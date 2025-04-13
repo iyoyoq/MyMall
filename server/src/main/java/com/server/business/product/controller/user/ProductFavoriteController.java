@@ -2,7 +2,7 @@ package com.server.business.product.controller.user;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.product.domain.Favorite;
-import com.server.business.product.domain.dto.FavoriteCreateDTO;
+import com.server.business.product.domain.dto.FavoriteCreateDto;
 import com.server.business.product.service.IFavoriteService;
 import com.server.pojo.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class ProductFavoriteController {
      * 增
      */
     @PostMapping("/save")
-    public R create(@RequestBody FavoriteCreateDTO dto) {
+    public R create(@RequestBody FavoriteCreateDto dto) {
         int ok = favoriteService.insert(dto);
         return R.judge(ok > 0, "保存失败");
     }

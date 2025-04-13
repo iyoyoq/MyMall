@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * @Date: 2025/3/29 18:28
  */
 @Data
-public class UserVO {
+public class UserVo {
     // 用户唯一标识
     private Long id;
     // 头像

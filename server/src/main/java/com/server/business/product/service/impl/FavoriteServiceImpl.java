@@ -5,7 +5,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.product.domain.Favorite;
-import com.server.business.product.domain.dto.FavoriteCreateDTO;
+import com.server.business.product.domain.dto.FavoriteCreateDto;
 import com.server.business.product.mapper.FavoriteMapper;
 import com.server.business.product.service.IFavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class FavoriteServiceImpl  implements IFavoriteService {
     }
 
     @Override
-    public int insert(FavoriteCreateDTO dto) {
+    public int insert(FavoriteCreateDto dto) {
         Favorite db = BeanUtil.copyProperties(dto, Favorite.class);
         return favoriteMapper.insert(db);
     }

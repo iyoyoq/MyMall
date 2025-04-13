@@ -1,6 +1,5 @@
 package com.server.business.auth.domain.vo;
 
-import com.server.business.auth.domain.User;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,17 +10,17 @@ import java.time.LocalDateTime;
  * @Date: 2025/3/1 19:25
  */
 @Data
-public class UserLoginVO {
+public class LoginVo {
     private String token;
     // 用户唯一标识
     private Long id;
     // token 创建时间
     private LocalDateTime tokenCreatTime = LocalDateTime.now();
 
-    public UserLoginVO() {
+    public LoginVo() {
     }
 
-    public UserLoginVO(String token, Long id) {
+    public LoginVo(String token, Long id) {
         this.token = token;
         this.id = id;
     }

@@ -6,5 +6,6 @@ public interface RedisPrefix {
     String PHONE_MSG_CODE = "auth:phone_msg_code:";
     // 用户 token
     String USER_TOKEN = "auth:user_token:";
-
+    // 管理员 token
+    String ADMIN_TOKEN = "auth:admin_token:";
 }

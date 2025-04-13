@@ -8,7 +8,7 @@ import lombok.Data;
  * @Date: 2024/12/7 11:14
  */
 @Data
-public class UserLoginDTO {
+public class UserLoginDto {
     private String phone;
     // private String password;
     private String code;

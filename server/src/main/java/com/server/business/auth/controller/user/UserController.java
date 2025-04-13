@@ -1,15 +1,16 @@
 package com.server.business.auth.controller.user;
 
 
+import com.server.aop.CheckLogin;
 import com.server.business.auth.domain.User;
-import com.server.business.auth.domain.vo.UserLoginVO;
 import com.server.business.auth.service.IUserService;
 import com.server.pojo.R;
 import com.server.util.RequestContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+
+import static com.server.aop.LoginType.USER;
 
 /**
  * @Description: 用户信息  接口地址规范 -> 模块名/user或admin/表名/self或other
@@ -37,6 +38,7 @@ public class UserController {
     /**
      * 自己的 User 信息
      */
+    @CheckLogin(allowRole = {USER})
     @GetMapping("/self/detail")
     public R detail() {
         Long id = requestContext.getUser().getId();
