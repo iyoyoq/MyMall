@@ -1,4 +1,4 @@
-package com.server.business.auth.controller.user;
+package com.server.business.auth.controller;
 
 import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.dto.AddressCreateDto;

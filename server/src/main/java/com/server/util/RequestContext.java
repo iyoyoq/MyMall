@@ -90,5 +90,4 @@ public class RequestContext {
         return authorization.substring("Bearer ".length()).trim();
     }
 
-
 }

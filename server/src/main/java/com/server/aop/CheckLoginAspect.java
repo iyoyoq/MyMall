@@ -10,6 +10,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Description: 登录校验切面
  * @Author: yjy
@@ -25,22 +28,51 @@ public class CheckLoginAspect {
 
     @Around("@annotation(checkLogin)")
     public Object around(ProceedingJoinPoint joinPoint, CheckLogin checkLogin) throws Throwable {
-        log.info("进入切面: 方法 = {}", joinPoint.getSignature());
+        // log.info("进入切面: 方法 = {}", joinPoint.getSignature());
         LoginType[] roleArr = checkLogin.allowRole();
+
+        // 不让空，空就是 Admin
+        if (roleArr.length == 0) {
+            roleArr = new LoginType[]{LoginType.ADMIN};
+        }
+
+        boolean hasValidRole = false;
+        List<Exception> exceptionList = new ArrayList<>();
+
+        // 尝试每个允许的角色，只要有一个通过即可
         for (LoginType role : roleArr) {
             if (LoginType.USER.equals(role)) {
                 // 用户登录校验
-                requestContext.userLoginCheck();
+                try {
+                    requestContext.userLoginCheck();
+                    hasValidRole = true;
+                    break;
+                } catch (Exception e) {
+                    exceptionList.add(e);
+                }
             } else if (LoginType.ADMIN.equals(role)) {
                 // 管理员登录校验
-                requestContext.adminLoginCheck();
+                try {
+                    requestContext.adminLoginCheck();
+                    hasValidRole = true;
+                    break;
+                } catch (Exception e) {
+                    exceptionList.add(e);
+                }
             } else {
-                log.error("20250413160915 不合规的LoginType");
-                throw new BusinessException(ResultCodeEnum.AuthError);
+                throw new IllegalArgumentException("20250414193059 不合法的 LoginType");
             }
+
         }
+
+        if (!hasValidRole) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(stringBuilder.append("20250414194136 身份校验失败\n"));
+            exceptionList.forEach(e -> stringBuilder.append(e.getMessage()).append("\n"));
+            log.error(stringBuilder.toString());
+            throw new BusinessException(ResultCodeEnum.AuthError);
+        }
+
         return joinPoint.proceed();
     }
-
-
 }
