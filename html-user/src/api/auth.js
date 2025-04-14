@@ -1,5 +1,5 @@
 import request from '@/utils/request.js'
-const base = '/auth/user'
+const base = '/auth'
 
 // 示例
 export function demoApi () {

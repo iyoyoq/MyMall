@@ -1,6 +1,6 @@
 import request from '@/utils/request.js'
 
-const base = '/product/user'
+const base = '/product'
 
 export async function pageApi (param) {
   return request({
