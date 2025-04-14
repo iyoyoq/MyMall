@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * @Date: 2025/3/1 19:12
  */
 @RestController
-@RequestMapping("/auth/user/login")
+@RequestMapping("/auth/login")
 public class LoginController {
 
     @Autowired

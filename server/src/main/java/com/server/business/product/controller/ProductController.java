@@ -1,4 +1,4 @@
-package com.server.business.product.controller.user;
+package com.server.business.product.controller;
 
 import com.server.business.product.domain.Product;
 import com.server.business.product.domain.dto.ProductListQueryDto;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
-@RequestMapping("/product/user/product")
+@RequestMapping("/product/product")
 public class ProductController {
 
     @Autowired

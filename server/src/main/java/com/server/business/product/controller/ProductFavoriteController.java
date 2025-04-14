@@ -1,4 +1,4 @@
-package com.server.business.product.controller.user;
+package com.server.business.product.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.product.domain.Favorite;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * @Date: 2025/3/12 22:52
  */
 @RestController
-@RequestMapping("/product/user/favorite")
+@RequestMapping("/product/favorite")
 public class ProductFavoriteController {
     @Autowired
     private IFavoriteService favoriteService;

@@ -1,4 +1,4 @@
-package com.server.business.product.controller.user;
+package com.server.business.product.controller;
 
 import com.server.business.product.domain.ProductCategory;
 import com.server.business.product.service.IProductCategoryService;
@@ -14,7 +14,7 @@ import java.util.List;
  * @Date: 2025/4/6 21:00
  */
 @RestController
-@RequestMapping("/product/user/category")
+@RequestMapping("/product/category")
 public class ProductCategoryController {
 
     @Autowired

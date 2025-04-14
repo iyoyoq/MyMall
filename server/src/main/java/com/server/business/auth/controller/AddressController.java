@@ -1,5 +1,7 @@
 package com.server.business.auth.controller;
 
+import com.server.aop.CheckLogin;
+import com.server.aop.LoginType;
 import com.server.business.auth.domain.Address;
 import com.server.business.auth.domain.dto.AddressCreateDto;
 import com.server.business.auth.service.IAddressService;
@@ -18,7 +20,7 @@ import java.util.List;
  * @Date: 2025/3/6 17:02
  */
 @RestController
-@RequestMapping("/auth/user/address")
+@RequestMapping("/auth/address")
 public class AddressController {
     @Autowired
     private IAddressService addressService;
@@ -30,6 +32,7 @@ public class AddressController {
      * 查自己的地址: 不分页, 最多查一百条就行
      */
     @PostMapping("/list")
+    @CheckLogin(allowRole = {LoginType.USER})
     public R list(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
@@ -45,6 +48,7 @@ public class AddressController {
      * 增
      */
     @PostMapping("/save")
+    @CheckLogin(allowRole = {LoginType.USER})
     public R create(@RequestBody AddressCreateDto dto) {
         int ok = addressService.insert(dto);
         return R.judge(ok > 0, "保存失败");
@@ -54,6 +58,7 @@ public class AddressController {
      * 删
      */
     @DeleteMapping("/remove")
+    @CheckLogin(allowRole = {LoginType.USER})
     public R remove(@RequestBody List<Long> idList) {
         int result = addressService.removeById(idList);
         return R.judge(result > 0, "删除失败");
@@ -63,6 +68,7 @@ public class AddressController {
      * 改
      */
     @PutMapping("/update")
+    @CheckLogin(allowRole = {LoginType.USER})
     public R update(@RequestBody Address address) {
         int b = addressService.updateById(address);
         return R.judge(b > 0,   "");
