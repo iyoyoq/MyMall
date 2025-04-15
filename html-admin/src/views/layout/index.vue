@@ -1,8 +1,8 @@
 <template>
-  <div style="display: flex;">
+  <div style="display: flex; " class="bg-color-gray">
     <div class="menu">
       <a-menu
-          :style="{ width: '200px', height: '100%' }"
+          :style="{ width: '192px', height: '100%' }"
           show-collapse-button
           v-model:selected-keys="selectedKeys"
           :default-open-keys="defaultParentMenu"
