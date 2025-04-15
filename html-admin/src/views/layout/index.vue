@@ -3,16 +3,17 @@
     <div class="menu">
       <a-menu
           :style="{ width: '200px', height: '100%' }"
-          :default-open-keys="['0']"
-          :default-selected-keys="['0_1']"
           show-collapse-button
+          v-model:selected-keys="selectedKeys"
+          :default-open-keys="defaultParentMenu"
+          @menu-item-click="clickMenu"
       >
-        <a-menu-item key="0_0_0">后台总览</a-menu-item>
-        <a-sub-menu key="0">
+        <a-menu-item key="/dashboard">后台总览</a-menu-item>
+        <a-sub-menu key="/product">
           <template #title>商品管理</template>
-          <a-menu-item key="0_0">商品管理</a-menu-item>
-          <a-menu-item key="0_1">商品评论</a-menu-item>
-          <a-menu-item key="0_2">商品分类</a-menu-item>
+          <a-menu-item key="/product/list">商品管理</a-menu-item>
+          <a-menu-item key="/product/comment">商品评论</a-menu-item>
+          <a-menu-item key="/product/category">商品分类</a-menu-item>
         </a-sub-menu>
         <a-menu-item key="1_1">用户管理</a-menu-item>
         <a-sub-menu key="2">
@@ -37,10 +38,32 @@
   </div>
 </template>
 <script>
-
+import router from '@/router/index.js'
+import { ref, watch } from 'vue'
 
 export default {
   components: {},
+  setup () {
+    const currentPath = ref(router.currentRoute.value.path)
+    const selectedKeys = ref([currentPath.value])
+    const defaultParentMenu = ref([])
+    const parts = currentPath.value.split('/').filter(part => part !== '')
+    defaultParentMenu.value = parts.length === 2 ? ['/' + parts[0]] : []
+    // 监听路由变化
+    watch(() => router.currentRoute.value.path, (newPath) => {
+      currentPath.value = newPath
+      selectedKeys.value = [newPath]
+    })
+    const clickMenu = (key) => {
+      router.push(key)
+    }
+    return {
+      currentPath,  // 当前路径
+      defaultParentMenu,  // 展开的父菜单
+      selectedKeys, //选择的 菜单
+      clickMenu,  // 点击菜单
+    }
+  },
 }
 </script>
 <style scoped>
