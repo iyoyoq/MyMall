@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
 public @interface CheckLogin {
     /**
      * 拥有任意一个角色即可访问
+     * 如果就这么用 @CheckLogin 意思是至少登录，游客不行
      */
     LoginType[] allowRole() default {LoginType.USER, LoginType.ADMIN};
 

@@ -57,7 +57,7 @@ public class AddressController {
     /**
      * 删
      */
-    @DeleteMapping("/remove")
+    @PostMapping("/remove")
     @CheckLogin(allowRole = {LoginType.USER})
     public R remove(@RequestBody List<Long> idList) {
         int result = addressService.removeById(idList);
@@ -67,7 +67,7 @@ public class AddressController {
     /**
      * 改
      */
-    @PutMapping("/update")
+    @PostMapping("/update")
     @CheckLogin(allowRole = {LoginType.USER})
     public R update(@RequestBody Address address) {
         int b = addressService.updateById(address);

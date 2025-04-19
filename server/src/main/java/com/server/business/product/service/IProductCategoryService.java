@@ -12,4 +12,10 @@ import java.util.List;
 
 public interface IProductCategoryService {
     List<ProductCategory> list();
+
+    int insert(ProductCategory dto);
+
+    int removeById(Long id);
+
+    int updateById(ProductCategory productCategory);
 }

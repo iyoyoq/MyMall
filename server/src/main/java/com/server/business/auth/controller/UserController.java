@@ -50,7 +50,7 @@ public class UserController {
     /**
      * 改自己的 User 信息
      */
-    @PutMapping("/self/update")
+    @PostMapping("/self/update")
     @CheckLogin(allowRole = {USER})
     public R update(@RequestBody User user) {
         int b = userService.updateSelfById(user);
