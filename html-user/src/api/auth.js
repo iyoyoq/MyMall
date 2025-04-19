@@ -38,7 +38,7 @@ export function codeLoginApi (data) {
 export function updateUserInfoApi(data){
   return request({
     url: `${base}/user/self/update`,
-    method: 'put',
+    method: 'post',
     data: data
   })
 }
@@ -66,7 +66,7 @@ export function addressAddApi(data){
 export function addressEditApi(data){
   return request({
     url: `${base}/address/update`,
-    method: 'put',
+    method: 'post',
     data: data
   })
 }
@@ -74,7 +74,7 @@ export function addressEditApi(data){
 export function addressRemoveApi(idList){
   return request({
     url: `${base}/address/remove`,
-    method: 'delete',
+    method: 'post',
     data: idList
   })
 }
