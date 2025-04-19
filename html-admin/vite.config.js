@@ -21,7 +21,8 @@ export default defineConfig({
       ]
     }),
     vitePluginForArco({
-      style: 'css'
+      theme:  '@arco-themes/vue-taolu-publishing-platform',
+      style:  true
     })
   ],
   resolve: {
