@@ -1,8 +1,11 @@
 import axios from 'axios'
 import router from '@/router'
 import JSONBig  from 'json-bigint'
+import { Message } from '@arco-design/web-vue'
 
 const baseURL = 'http://localhost:45000/api'
+export const localStorageTokenName = 'MyMall-token'
+
 const instance = axios.create({
   // 1.基础地址，超时时间 /ms
   baseURL,
@@ -21,34 +24,52 @@ const instance = axios.create({
     }
   }]
 })
-
 // 请求拦截器
-// instance.interceptors.request.use(
-//   (config) => {
-//     // 2.携带 token
-//     const userStore = useUserStore()
-//     if (userStore.token) {
-//     }
-//     return config
-//   },
-//   (err) => Promise.reject(err),
-// )
+instance.interceptors.request.use(
+  (config) => {
+    // 2.携带 token
+    const token = localStorage.getItem(localStorageTokenName)
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  (err) => Promise.reject(err),
+)
 
 // 响应拦截器
 instance.interceptors.response.use(
   (res) => {
+    const code = res.data.code
+    const msg = res.data.msg
     // 3. 处理业务失败
     //  4.摘取核心响应数据
-    if (res.data.code === 1) {
-      return res
-    } else if (res.data.code === 10003) { //身份无效
-      router.push('/login')
-      return
-    } else if (res.data.code === 10002) { //普通业务异常
-      // 业务异常
-      return Promise.reject(res.data)
+    if (code === undefined || code === null) {
+      Message.error('系统繁忙')
+      // alert('响应格式异常')
     }
-    return Promise.reject(res.data)
+    switch (code) {
+      case 1:
+        return res
+      case 10003: {
+        Message.error('身份无效,请重新登录')
+        return
+      }
+      case 10002: {
+        // 业务异常
+        Message.error(msg)
+        return Promise.reject(res.data)
+      }
+      case 10001: {  //未处理的系统异常 RuntimeException or Exception
+        Message.error('系统繁忙 10001')
+        return Promise.reject(res.data)
+      }
+      default: {
+        // Message.error('')
+        Message.error('系统繁忙 10000')
+        return Promise.reject(res.data)
+      }
+    }
   },
   (err) => {
     // console.log(err)
@@ -63,10 +84,10 @@ instance.interceptors.response.use(
     // }
     // 错误默认情况
     // ElMessage.error(err.response.data.message || '服务异常')
-    router.push('/login')
+    Message.error('系统繁忙')
+    // console.log(22222)
     return Promise.reject(err)
   })
-// const request = instance
 
 export default instance
 
