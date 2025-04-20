@@ -168,7 +168,6 @@ export default {
     return {
       loading: false,
       tableData: [],
-      categoryOptions: [],
       pagination: {
         total: 0,
         current: 1,
