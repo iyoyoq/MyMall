@@ -241,16 +241,14 @@ export default {
     // 删除分类
     async handleDelete (record) {
       try {
-        // TODO: 替换为实际的API调用
-        // await deleteCategoryApi(record.id)
-
+        await productCategoryUpdateApi({
+          id: record.id,
+          status: -1
+        })
         // 模拟API调用
-        await new Promise(resolve => setTimeout(resolve, 500))
-
         Message.success('删除分类成功')
         this.fetchCategoryList()
       } catch (error) {
-        console.error('删除分类失败', error)
         Message.error('删除分类失败')
       }
     },
