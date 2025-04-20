@@ -1,15 +1,26 @@
 import request from '@/utils/request.js'
 
-const base = '/product'
-
-export async function pageApi (param) {
+// 商品
+export function productListApi (data) {
   return request({
-    url: `${base}/product/list`,
+    url: `/product/product/list`,
     method: 'post',
     params: {
-      pageNum: param.pageNum,
-      pageSize: param.pageSize,
+      pageNum: data.pageNum,
+      pageSize: data.pageSize,
     },
-    data: param.dto
+    data: data,
   })
 }
+
+
+// 商品分类
+export function productCategoryListApi () {
+  return request({
+    url: `/product/category/list`,
+    method: 'get',
+  })
+}
+
+
+
