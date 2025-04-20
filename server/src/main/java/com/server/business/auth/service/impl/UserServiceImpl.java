@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.server.aop.LoginType;
 import com.server.business.auth.domain.User;
 import com.server.business.auth.domain.dto.UserLoginDto;
 import com.server.business.auth.domain.vo.LoginVo;
@@ -77,7 +78,7 @@ public class UserServiceImpl implements IUserService {
         }
         // 制作 token
         String token = IdUtil.simpleUUID() + RandomUtil.randomStringLowerWithoutStr(16, "");  // token
-        LoginVo vo = new LoginVo(token, user.getId());
+        LoginVo vo = new LoginVo(token, user.getId(), LoginType.USER);
         // 存入 redis
         String k = RedisPrefix.USER_TOKEN + token;   // 即使是新用户，mp也会得到userId
         String v = null;

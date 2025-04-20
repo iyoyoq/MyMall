@@ -1,6 +1,6 @@
 <template>
-  <div style="display: flex; " class="bg-color-gray">
-    <div class="menu">
+  <div style="display: flex;" class="bg-color-gray">
+    <div class="menu" >
       <a-menu
           :style="{ width: '192px', height: '100%' }"
           show-collapse-button
@@ -72,6 +72,6 @@ export default {
   max-width: 200px;
   height: 100vh;
   padding: 50px 4px 0 4px;
-  background-color: var(--color-bg-1)
+  background-color:  var(--color-menu-light-bg);
 }
 </style>

@@ -77,12 +77,7 @@
     >
       <a-form :model="form" ref="formRef" :rules="rules" label-align="right">
         <a-form-item field="parentId" label="父级分类">
-          <a-tree-select
-              v-model="form.parentId"
-              :data="categoryTreeData"
-              placeholder="请选择父级分类"
-              allow-clear
-          />
+          <product-category-selector :key="keySelector" v-model="form.parentId" />
         </a-form-item>
         <a-form-item field="name" label="分类名称" required>
           <a-input v-model="form.name" placeholder="请输入分类名称"/>
@@ -106,6 +101,7 @@ import {
   IconDelete,
 } from '@arco-design/web-vue/es/icon'
 import { productCategoryCreateApi, productCategoryListApi, productCategoryUpdateApi } from '@/api/product.js'
+import ProductCategorySelector from './component/ProductCategorySelector.vue'
 
 export default {
   name: 'ProductCategory',
@@ -113,6 +109,7 @@ export default {
     IconPlus,
     IconEdit,
     IconDelete,
+    ProductCategorySelector
   },
   data () {
     return {
@@ -132,20 +129,8 @@ export default {
           { required: true, message: '请输入分类名称' },
         ],
       },
+      keySelector: 1
     }
-  },
-  computed: {
-    categoryTreeData () {
-      const treeData = this.tableData.map(item => ({
-        key: item.id.toString(), // 将 id 转换为字符串
-        title: item.name,
-        children: item.children?.map(child => ({
-          key: child.id.toString(), // 将 id 转换为字符串
-          title: child.name,
-        })) || [],
-      }))
-      return [{ key: '-1', title: '顶级分类', children: treeData }] // 顶级分类的 key 也使用字符串
-    },
   },
   created () {
     this.fetchCategoryList()
@@ -161,27 +146,6 @@ export default {
       } finally {
         this.loading = false
       }
-    },
-
-    // 将平铺数据转换为树形结构
-    handleTreeData (data) {
-      const result = []
-      const map = {}
-
-      data.forEach(item => {
-        map[item.id] = { ...item, children: [] }
-      })
-
-      data.forEach(item => {
-        const parent = map[item.parentId]
-        if (parent) {
-          parent.children.push(map[item.id])
-        } else {
-          result.push(map[item.id])
-        }
-      })
-
-      return result
     },
 
     // 打开新增/编辑弹窗
@@ -229,6 +193,7 @@ export default {
             await productCategoryCreateApi(this.form)
           }
           Message.success(`${isEdit ? '更新' : '添加'}分类成功`)
+          this.keySelector++
           this.fetchCategoryList()
           done()
         } catch (error) {
@@ -245,7 +210,7 @@ export default {
           id: record.id,
           status: -1
         })
-        // 模拟API调用
+        this.keySelector++
         Message.success('删除分类成功')
         this.fetchCategoryList()
       } catch (error) {
@@ -269,13 +234,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  margin: 20px 0 0 0;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 4px;
-  width: 1200px;
-}
+
 
 .header {
   margin-bottom: 20px;

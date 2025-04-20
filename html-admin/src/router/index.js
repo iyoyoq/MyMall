@@ -31,7 +31,7 @@ export const routes = [
         children: [
           {
             path: 'list',
-            component: () => import('@/views/product/index.vue'),
+            component: () => import('@/views/product/product.vue'),
             name: 'ProductList',
             meta: { title: '商品管理', subtitle: '商品列表' },
           },

@@ -1,6 +1,7 @@
 package com.server.business.product.controller;
 
 import com.server.aop.CheckLogin;
+import com.server.aop.LoginType;
 import com.server.business.product.domain.ProductCategory;
 import com.server.business.product.service.IProductCategoryService;
 import com.server.pojo.R;
@@ -35,6 +36,7 @@ public class ProductCategoryController {
     /**
      * 增
      */
+    @CheckLogin(allowRole = LoginType.ADMIN)
     @PostMapping("/save")
     public R create(@RequestBody ProductCategory dto) {
         int result = categoryService.insert(dto);
@@ -45,6 +47,7 @@ public class ProductCategoryController {
      * 删
      */
     @PostMapping("/remove")
+    @CheckLogin(allowRole = LoginType.ADMIN)
     public R remove(Long id) {
         int result = categoryService.removeById(id);
         return R.ok();
@@ -54,6 +57,7 @@ public class ProductCategoryController {
      * 改
      */
     @PostMapping("/update")
+    @CheckLogin(allowRole = LoginType.ADMIN)
     public R update(@RequestBody ProductCategory productCategory) {
         int result = categoryService.updateById(productCategory);
         return R.ok();

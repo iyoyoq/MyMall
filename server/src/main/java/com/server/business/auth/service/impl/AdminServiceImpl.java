@@ -5,6 +5,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.server.aop.LoginType;
 import com.server.business.auth.domain.Admin;
 import com.server.business.auth.domain.dto.AdminLoginDto;
 import com.server.business.auth.domain.vo.LoginVo;
@@ -47,7 +48,7 @@ public class AdminServiceImpl implements IAdminService {
         // 登录成功
         // 制作 token
         String token = IdUtil.simpleUUID() + RandomUtil.randomStringLowerWithoutStr(16, "");  // token
-        LoginVo vo = new LoginVo(token, admin.getId());
+        LoginVo vo = new LoginVo(token, admin.getId(), LoginType.ADMIN);
         // 存入 redis
         String k = RedisPrefix.ADMIN_TOKEN + token;
         String v = null;

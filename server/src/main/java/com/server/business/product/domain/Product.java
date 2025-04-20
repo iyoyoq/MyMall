@@ -2,6 +2,7 @@ package com.server.business.product.domain;
 
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -33,6 +34,9 @@ public class Product {
     // 更新时间
     private Date updateTime;
 
+    // 分类名称
+    @TableField(exist = false)
+    private String categoryName;
 
 }
 

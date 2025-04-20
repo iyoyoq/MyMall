@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.product.domain.Product;
-import com.server.business.product.domain.dto.ProductListQueryDto;
 import com.server.business.product.mapper.ProductMapper;
 import com.server.business.product.service.IProductService;
 import com.server.pojo.RPage;
@@ -23,13 +22,21 @@ public class ProductServiceImpl implements IProductService {
     private ProductMapper productMapper;
 
     @Override
-    public RPage<Product> selectPage(Integer pageNum, Integer pageSize, ProductListQueryDto dto) {
-        LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(StringUtils.isNotBlank(dto.getName()), Product::getName, dto.getName());
-        wrapper.eq(dto.getCategoryId() != null, Product::getCategoryId, dto.getCategoryId());
-        wrapper.eq(Product::getStatus, 1); // 已上架
-        Page<Product> productPage = productMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+    public RPage<Product> selectPage(Integer pageNum, Integer pageSize, Product dto) {
+
+        Page<Product> productPage = productMapper.selectProductPage(new Page<>(pageNum, pageSize), dto);
         RPage<Product> result = new RPage<>(productPage);
+
         return result;
+    }
+
+    @Override
+    public int insert(Product dto) {
+        return productMapper.insert(dto);
+    }
+
+    @Override
+    public int updateById(Product dto) {
+        return productMapper.updateById(dto);
     }
 }

@@ -53,6 +53,7 @@ instance.interceptors.response.use(
         return res
       case 10003: {
         Message.error('身份无效,请重新登录')
+        router.push('/login')
         return
       }
       case 10002: {
