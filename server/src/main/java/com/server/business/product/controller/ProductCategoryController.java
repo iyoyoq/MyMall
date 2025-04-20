@@ -54,7 +54,7 @@ public class ProductCategoryController {
      * 改
      */
     @PostMapping("/update")
-    public R update(ProductCategory productCategory) {
+    public R update(@RequestBody ProductCategory productCategory) {
         int result = categoryService.updateById(productCategory);
         return R.ok();
     }
