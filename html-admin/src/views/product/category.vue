@@ -105,7 +105,7 @@ import {
   IconEdit,
   IconDelete,
 } from '@arco-design/web-vue/es/icon'
-import { productCategoryListApi } from '@/api/product.js'
+import { productCategoryCreateApi, productCategoryListApi, productCategoryUpdateApi } from '@/api/product.js'
 
 export default {
   name: 'ProductCategory',
@@ -121,7 +121,6 @@ export default {
       searchKeyword: '',
       modalVisible: false,
       modalTitle: '添加分类',
-      currentParentId: null,
       form: {
         id: null,
         parentId: null,
@@ -138,14 +137,14 @@ export default {
   computed: {
     categoryTreeData () {
       const treeData = this.tableData.map(item => ({
-        key: item.id,
+        key: item.id.toString(), // 将 id 转换为字符串
         title: item.name,
         children: item.children?.map(child => ({
-          key: child.id,
+          key: child.id.toString(), // 将 id 转换为字符串
           title: child.name,
         })) || [],
       }))
-      return [{ key: -1, title: '顶级分类', children: treeData }]
+      return [{ key: '-1', title: '顶级分类', children: treeData }] // 顶级分类的 key 也使用字符串
     },
   },
   created () {
@@ -157,7 +156,7 @@ export default {
       this.loading = true
       try {
         const res = await productCategoryListApi()
-        console.log(res.data.result)
+        // console.log(res.data.result)
         this.tableData = res.data.result
       } finally {
         this.loading = false
@@ -186,7 +185,7 @@ export default {
     },
 
     // 打开新增/编辑弹窗
-    openAddModal (record, parentId = null) {
+    openAddModal (record, parentId = '-1') {
       this.resetForm()
 
       if (record) {
@@ -194,14 +193,14 @@ export default {
         this.modalTitle = '编辑分类'
         Object.keys(this.form).forEach(key => {
           if (key in record) {
-            this.form[key] = record[key]
+            // 确保 parentId 是字符串类型
+            this.form[key] = key === 'parentId' ? record[key].toString() : record[key]
           }
         })
       } else {
         // 新增模式
         this.modalTitle = '添加分类'
-        this.form.parentId = parentId || -1  // 修改为 -1
-        this.currentParentId = parentId
+        this.form.parentId = parentId.toString()
       }
 
       this.modalVisible = true
@@ -222,25 +221,17 @@ export default {
           done(false)
           return
         }
-
+        const isEdit = !!this.form.id
         try {
-          const isEdit = !!this.form.id
-
-          // TODO: 替换为实际的API调用
-          // if (isEdit) {
-          //   await updateCategoryApi(this.form)
-          // } else {
-          //   await addCategoryApi(this.form)
-          // }
-
-          // 模拟API调用
-          await new Promise(resolve => setTimeout(resolve, 500))
-
+          if (isEdit) {
+            await productCategoryUpdateApi(this.form)
+          } else {
+            await productCategoryCreateApi(this.form)
+          }
           Message.success(`${isEdit ? '更新' : '添加'}分类成功`)
           this.fetchCategoryList()
           done()
         } catch (error) {
-          console.error(`${isEdit ? '更新' : '添加'}分类失败`, error)
           Message.error(`${isEdit ? '更新' : '添加'}分类失败`)
           done(false)
         }
