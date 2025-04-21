@@ -4,7 +4,10 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * 商品表(ProductProduct)表实体类
@@ -14,6 +17,9 @@ import lombok.Data;
  */
 @Data
 @TableName("product_product")
+@Accessors(chain = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
     // 商品ID
     private Long id;
@@ -33,6 +39,9 @@ public class Product {
     private Date createTime;
     // 更新时间
     private Date updateTime;
+
+    // sku 属性名称列表, 逗号分隔
+    private String skuAttrNames;
 
     // 分类名称
     @TableField(exist = false)
