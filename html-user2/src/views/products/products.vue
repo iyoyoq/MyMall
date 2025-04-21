@@ -46,7 +46,7 @@
                   <span class="price-symbol">¥</span>
                   <span class="price-value">{{ product.price }}</span>
                 </div>
-                <a-button size="mini" class="add-cart-btn" type="outline">加入购物车</a-button>
+                <a-button size="mini"  type="outline">加入购物车</a-button>
               </div>
             </div>
           </a-card>
@@ -273,26 +273,13 @@ export default {
 .price-symbol {
   font-size: 14px;
   font-weight: bold;
-  color: var(--color-primary-6);
+  color: var(--mymall-price-color);
 }
 
 .price-value {
   font-size: 16px;
   font-weight: bold;
-  color: var(--color-primary-6);
-}
-
-.add-cart-btn {
-  font-size: 12px;
-  padding: 0 8px;
-  height: 24px;
-  line-height: 24px;
-  border-color: var(--color-primary-6);
-  color: var(--color-primary-6);
-}
-
-.add-cart-btn:hover {
-  background: var(--color-primary-1);
+  color: var(--mymall-price-color);
 }
 
 .pagination-wrapper {
