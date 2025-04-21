@@ -246,7 +246,7 @@ export default {
         })
         // 处理图片列表
         if (record.images) {
-          this.form.images = JSON.parse(record.images)
+          this.form.images = record.images ? record.images.split(',').filter(Boolean) : [] // 过滤空值
         }
         // console.log(20250420180020, this.form)
       } else {
@@ -265,7 +265,7 @@ export default {
         const isEdit = !!this.form.id
         const formToSubmit = {
           ...this.form,
-          images: JSON.stringify(this.form.images),
+          images: Array.isArray(this.form.images) ? this.form.images.filter(Boolean).join(',') : '', // 确保是数组且过滤空值
         }
         try {
           console.log(20250420180130, formToSubmit)

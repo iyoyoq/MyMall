@@ -23,10 +23,10 @@ export default {
       type: [String, Array],
       default: '',
     },
-    maxNum :{
+    maxNum: {
       type: Number,
-      default: 5
-    }
+      default: 5,
+    },
   },
   emits: ['update:modelValue'],
   computed: {
@@ -68,8 +68,10 @@ export default {
         const url = resp.data.result
 
         if (this.imageLimit > 1) {
-          const newFileList = [...this.fileList, { url, name: `图片${this.fileList.length + 1}` }]
+          const newFileList = [...this.fileList]
+          newFileList.at(-1).url = url
           this.fileList = newFileList
+          // console.log(this.fileList)
         } else {
           this.fileList = [{ url, name: '图片' }]
         }
@@ -79,10 +81,11 @@ export default {
         onError()
       }
     },
-    changeFileList(list){
+    changeFileList (list) {
       this.fileList = list
-      // console.log(20250420181544,list)
-    }
+      // console.log('changeFileList', list)
+      // console.log(20250421124016, this.fileList)
+    },
   },
 }
 </script>
