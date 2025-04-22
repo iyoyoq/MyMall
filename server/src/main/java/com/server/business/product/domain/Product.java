@@ -23,6 +23,8 @@ import lombok.experimental.Accessors;
 public class Product {
     // 商品ID
     private Long id;
+    // 当前商品信息快照id
+    private Long currentSnapshotId;
     // 商品名称
     private String name;
     // 分类ID

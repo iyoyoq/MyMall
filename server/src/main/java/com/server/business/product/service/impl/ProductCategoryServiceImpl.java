@@ -1,7 +1,6 @@
 package com.server.business.product.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.server.business.product.domain.Favorite;
 import com.server.business.product.domain.ProductCategory;
 import com.server.business.product.mapper.ProductCategoryMapper;
 import com.server.business.product.service.IProductCategoryService;

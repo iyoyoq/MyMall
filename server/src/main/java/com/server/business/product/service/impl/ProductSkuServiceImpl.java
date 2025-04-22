@@ -55,7 +55,7 @@ public class ProductSkuServiceImpl implements IProductSkuService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int insertOrUpdate(ProductSkuDto dto) {
 
         if (!dto.check()) throw new BusinessException("20250421152128 请求参数有误");

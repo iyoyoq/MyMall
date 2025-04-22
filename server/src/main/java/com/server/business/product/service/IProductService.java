@@ -8,5 +8,7 @@ public interface IProductService {
 
     int insert(Product dto);
 
+    Product getById(Long id);
+
     int updateById(Product dto);
 }
