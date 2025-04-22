@@ -1,12 +1,12 @@
 package com.server.business.product.service;
 
 import com.server.business.product.domain.dto.ProductSkuDto;
-import com.server.business.product.domain.vo.ProductSkuVo;
+
+import java.util.List;
 
 public interface IProductSkuService {
-    ProductSkuVo getByProductId(Long productId);
+    ProductSkuDto getByProductId(Long productId, List<Integer> status);
 
-    int insert(ProductSkuDto dto);
+    int insertOrUpdate(ProductSkuDto dto);
 
-    int updateById(ProductSkuDto dto);
 }

@@ -1,6 +1,7 @@
 package com.server.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.server.aop.LoginType;
 import com.server.business.auth.domain.vo.LoginVo;
 import com.server.config.redis.RedisPrefix;
 import com.server.exception.BusinessException;
@@ -39,13 +40,20 @@ public class RequestContext {
         return userInfo.get();
     }
 
+    public boolean isUser() {
+        return getUser().getLoginType().equals(LoginType.USER);
+    }
+
+    public boolean isAdmin() {
+        return getUser().getLoginType().equals(LoginType.ADMIN);
+    }
 
     /**
      * 放入当前登录对象 LoginVo 至当前请求线程上下文中
      * 可能抛出 BusinessException(ResultCodeEnum.AuthError)
      *
      * @param redisPrefix redis 前缀
-     * @param token token
+     * @param token       token
      * @return LoginVo
      */
     public LoginVo setLoginVoByToken(String redisPrefix, String token) {

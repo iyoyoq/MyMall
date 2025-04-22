@@ -1,6 +1,9 @@
 package com.server.business.product.domain.vo;
 
+import com.server.business.product.domain.ProductSku;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @Description: TODO
@@ -9,4 +12,6 @@ import lombok.Data;
  */
 @Data
 public class ProductSkuVo {
+
+    List<ProductSku> productSkuList;
 }

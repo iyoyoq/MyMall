@@ -1,10 +1,12 @@
 package com.server.business.product.domain.dto;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.server.business.product.domain.ProductSku;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,13 +17,16 @@ import java.util.List;
  */
 @Data
 public class ProductSkuDto {
+
+    // 商品 id
     private Long productId;
+
+    // sku 属性名
+    private List<String> skuAttrNameList;
 
     // sku 列表
     private List<SingleSku> skuList;
 
-    // sku 属性名
-    private List<String> skuAttrNameList;
 
     @EqualsAndHashCode(callSuper = true)
     @Data
@@ -43,5 +48,18 @@ public class ProductSkuDto {
         return true;
     }
 
+    /**
+     * 把原始数据库 逗号隔开的数据  进行转义为 List skuAttrValueList
+     * @param productSkuList 原始数据
+     */
+    public void setSkuListByProductSkuList(List<ProductSku> productSkuList){
+        List<SingleSku> s = new ArrayList<>();
+        for (ProductSku productSku : productSkuList) {
+            SingleSku singleSku = BeanUtil.copyProperties(productSku, SingleSku.class);
+            singleSku.setSkuAttrValueList(List.of(productSku.getSkuAttrValues().split(",")));
+            s.add(singleSku);
+        }
+        this.skuList = s;
+    }
 
 }
