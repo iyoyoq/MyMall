@@ -4,7 +4,7 @@ import JSONBig from 'json-bigint'
 import { Message } from '@arco-design/web-vue'
 
 const baseURL = 'http://localhost:45000/api' // 后端api
-const localStorageTokenName = 'amity-mall-token' // 存到localStorage 里面的 TokenName
+const localStorageTokenName = 'MyMall-token' // 存到localStorage 里面的 TokenName
 
 const instance = axios.create({
   // 1.基础地址，超时时间 /ms

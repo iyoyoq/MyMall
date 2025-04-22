@@ -178,42 +178,9 @@ export default {
   display: grid;
   gap: 16px;
   /* 默认8列布局 (最宽屏幕) */
-  grid-template-columns: repeat(8, 200px);
+  grid-template-columns: repeat(5, 200px);
 }
 
-/* 屏幕宽度小于1800px时，切换为6列布局 */
-@media screen and (max-width: 1800px) {
-  .products-wrapper {
-    grid-template-columns: repeat(6, 200px);
-  }
-}
-
-/* 屏幕宽度小于1400px时，切换为4列布局 */
-@media screen and (max-width: 1400px) {
-  .products-wrapper {
-    grid-template-columns: repeat(4, 200px);
-  }
-}
-
-/* 屏幕宽度小于1000px时，切换为3列布局 */
-@media screen and (max-width: 1000px) {
-  .products-wrapper {
-    grid-template-columns: repeat(3, 200px);
-  }
-}
-
-/* 屏幕宽度小于  px时，切换为 2列布局 */
-@media screen and (max-width: 800px) {
-  .products-wrapper {
-    grid-template-columns: repeat(2, 200px);
-  }
-}
-
-@media screen and (max-width: 550px) {
-  .products-wrapper {
-    grid-template-columns: repeat(1, 200px);
-  }
-}
 
 .product-item {
   width: 200px;

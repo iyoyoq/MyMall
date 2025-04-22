@@ -18,8 +18,10 @@
           </div>
         </div>
       </a-layout-header>
-      <a-layout-content style="min-height: 100vh; display: flex; justify-content: center">
-        <router-view></router-view>
+      <a-layout-content style="min-height: 100vh; display: flex; justify-content: center; ">
+        <div style="max-width: 1200px">
+          <router-view></router-view>
+        </div>
       </a-layout-content>
     </a-layout>
   </div>

@@ -12,7 +12,7 @@ export function demoApi () {
 
 export async function sendLoginCodeApi (phone) {
   return request({
-    url: '/auth/user/login/sendLoginCode',
+    url: '/auth/login/sendLoginCode',
     method: 'get',
     params: {phone:phone},
   })
@@ -20,7 +20,7 @@ export async function sendLoginCodeApi (phone) {
 
 export function codeLoginApi (data) {
   return request({
-    url: '/auth/user/login/codeLogin',
+    url: '/auth/login/codeLogin',
     method: 'post',
     data: data
   })
