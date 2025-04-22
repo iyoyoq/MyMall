@@ -1,7 +1,9 @@
 package com.server.business.product.domain;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -27,6 +29,8 @@ public class Product {
     private Long currentSnapshotId;
     // 商品名称
     private String name;
+    // 商品销量
+    private Integer salesCount;
     // 分类ID
     private Long categoryId;
     // 商品描述
@@ -37,10 +41,12 @@ public class Product {
     private String images;
     // 状态(-1删除 0下架 1上架)
     private Integer status;
-    // 创建时间
-    private Date createTime;
     // 更新时间
-    private Date updateTime;
+    @TableField(fill = FieldFill.UPDATE)
+    private LocalDateTime updateTime;
+    //  创建时间
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
     // sku 属性名称列表, 逗号分隔
     private String skuAttrNames;

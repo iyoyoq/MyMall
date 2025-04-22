@@ -1,5 +1,7 @@
 package com.server.business.file.domain;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -24,6 +26,8 @@ public class File {
 
     private String webUrl;
 
+    //  创建时间
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
 }

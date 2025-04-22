@@ -1,7 +1,10 @@
 package com.server.business.auth.domain;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -22,10 +25,12 @@ public class Admin {
     private String userName;
     // 密码
     private String password;
-    // 创建时间
-    private Date creatTime;
     // 更新时间
-    private Date updateTime;
+    @TableField(fill = FieldFill.UPDATE)
+    private LocalDateTime updateTime;
+    //  创建时间
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
 
 }

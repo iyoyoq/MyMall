@@ -1,5 +1,7 @@
 package com.server.business.auth.domain;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -34,10 +36,12 @@ public class Address {
     private Integer isDefault;
     // 状态（1正常 -1删除）
     private Integer status;
-    // 创建时间
-    private LocalDateTime createTime;
     // 更新时间
+    @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
+    //  创建时间
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
 
 }

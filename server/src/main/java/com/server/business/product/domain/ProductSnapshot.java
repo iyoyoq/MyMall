@@ -1,11 +1,14 @@
 package com.server.business.product.domain;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 /**
  * 商品快照表(ProductSnapshot)表实体类
@@ -24,10 +27,12 @@ public class ProductSnapshot {
     private Long productId;
     // 商品信息json
     private String productInfoJson;
-    // 创建时间
-    private Date createTime;
     // 更新时间
-    private Date updateTime;
+    @TableField(fill = FieldFill.UPDATE)
+    private LocalDateTime updateTime;
+    //  创建时间
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
 }
 

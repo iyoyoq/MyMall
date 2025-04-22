@@ -1,6 +1,10 @@
 package com.server.business.product.domain;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 /**
@@ -31,10 +35,12 @@ public class ProductSku {
     private Integer salesCount;
     // 状态(-1删除  0 下架 1上架)
     private Integer status;
-    // 创建时间
-    private Date createTime;
     // 更新时间
-    private Date updateTime;
+    @TableField(fill = FieldFill.UPDATE)
+    private LocalDateTime updateTime;
+    //  创建时间
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
 
 }

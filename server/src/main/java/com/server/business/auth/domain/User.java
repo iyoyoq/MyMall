@@ -29,6 +29,8 @@ public class User {
     private Long phone;
     // 密码
     private String password;
+    // 支付积分
+    private Integer payPoints;
     // 状态 0禁用 1启用
     private Integer status;
     // 更新时间
