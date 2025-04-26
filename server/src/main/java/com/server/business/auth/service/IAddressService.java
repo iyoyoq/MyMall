@@ -21,5 +21,7 @@ public interface IAddressService {
     int removeById(List<Long> id);
 
     int updateById(Address address);
+
+    void setDefault(Long userId, Long addressId);
 }
 

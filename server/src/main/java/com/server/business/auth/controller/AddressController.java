@@ -42,6 +42,12 @@ public class AddressController {
         return R.ok(result);
     }
 
+    @PostMapping("/setDefault")
+    @CheckLogin(allowRole = {LoginType.USER})
+    public R setDefault(@RequestParam("addressId") Long addressId) {
+        addressService.setDefault( requestContext.getUser().getId(), addressId);
+        return R.ok();
+    }
 
 
     /**
@@ -71,7 +77,7 @@ public class AddressController {
     @CheckLogin(allowRole = {LoginType.USER})
     public R update(@RequestBody Address address) {
         int b = addressService.updateById(address);
-        return R.judge(b > 0,   "");
+        return R.judge(b > 0, "");
     }
 
 

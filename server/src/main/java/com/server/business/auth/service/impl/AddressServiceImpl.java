@@ -37,10 +37,10 @@ public class AddressServiceImpl implements IAddressService {
     public RPage<Address> selectPage(Integer pageNum, Integer pageSize, Address address) {
         LambdaQueryWrapper<Address> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Address::getUserId, address.getUserId());
-        lambdaQueryWrapper.eq(Address::getStatus, 1);  //未删除的地址
+        lambdaQueryWrapper.eq(Address::getStatus, 1);  // 未删除的地址
+        lambdaQueryWrapper.orderByDesc(Address::getCreateTime);
         return new RPage<>(addressMapper.selectPage(new Page<>(pageNum, pageSize), lambdaQueryWrapper));
     }
-
 
 
     @Override
@@ -66,6 +66,15 @@ public class AddressServiceImpl implements IAddressService {
             throw new BusinessException("请求错误");
         }
         return addressMapper.updateById(address);
+    }
+
+    @Override
+    public void setDefault(Long userId, Long addressId) {
+        // 全部设为非默认
+        addressMapper.update(new Address().setUserId(userId).setIsDefault(0),
+                new LambdaQueryWrapper<Address>().eq(Address::getUserId, userId)
+        );
+        addressMapper.updateById(new Address().setId(addressId).setIsDefault(1));
     }
 
 
