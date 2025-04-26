@@ -34,6 +34,9 @@
     <!-- 编辑资料对话框 -->
     <a-modal v-model:visible="modalVisible" title="编辑个人资料" @ok="updateProfile" ok-text="保存" cancel-text="取消">
       <a-form :model="formState" :label-col="{ span: 4 }" :wrapper-col="{ span: 18 }">
+        <a-form-item label="头像">
+          <image-uploader style="margin: 0 0 0 4px" v-model="formState.avatar" />
+        </a-form-item>
         <a-form-item label="昵称">
           <a-input v-model="formState.nickName"/>
         </a-form-item>
@@ -50,9 +53,11 @@
 
 <script>
 import { selfDetailApi, updateSelfDetailApi } from '@/api/auth.js'
+import ImageUploader from '@/views/component/ImageUploader.vue'
 
 export default {
   name: 'Profile',
+  components: { ImageUploader },
   data () {
     return {
       modalVisible: false,
