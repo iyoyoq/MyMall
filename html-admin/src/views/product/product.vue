@@ -110,6 +110,7 @@
         :title="modalTitle"
         @cancel="resetForm"
         @before-ok="handleSubmit"
+        width="600px"
     >
       <a-form :model="form" ref="formRef" :rules="rules" label-align="right">
         <a-form-item field="name" label="商品名称" required>
@@ -136,6 +137,29 @@
             <a-radio :value="1">上架</a-radio>
             <a-radio :value="0">下架</a-radio>
           </a-radio-group>
+        </a-form-item>
+        <a-form-item field="shippingFee" label="运费">
+          <a-space>
+            <a-radio-group v-model="form.shippingFeeType" @change="handleShippingFeeTypeChange">
+              <a-radio value="cod">到付</a-radio>
+              <a-radio value="free">免运费</a-radio>
+              <a-radio value="fixed">固定运费</a-radio>
+            </a-radio-group>
+            <div v-if="form.shippingFeeType === 'fixed'">
+              <a-input-number
+                  v-model="form.shippingFeeAmount"
+                  :min="0.01"
+                  :precision="2"
+                  :step="0.01"
+                  style="width: 150px"
+                  placeholder="请输入运费"
+              >
+                <template #append>
+                  元
+                </template>
+              </a-input-number>
+            </div>
+          </a-space>
         </a-form-item>
       </a-form>
     </a-modal>
@@ -195,7 +219,6 @@ export default {
     this.fetchProductList()
   },
   methods: {
-    // 重置表单
     resetForm () {
       this.form = {
         id: null,
@@ -205,6 +228,9 @@ export default {
         mainImage: '',
         images: [],
         status: 1,
+        shippingFee: 0, // 添加运费字段初始值
+        shippingFeeType: 'free', // 默认免运费
+        shippingFeeAmount: 0, // 具体运费金额（元）
       }
       this.$refs.formRef?.clearValidate()
     },
@@ -265,7 +291,13 @@ export default {
         const isEdit = !!this.form.id
         const formToSubmit = {
           ...this.form,
-          images: Array.isArray(this.form.images) ? this.form.images.filter(Boolean).join(',') : '', // 确保是数组且过滤空值
+          images: Array.isArray(this.form.images) ? this.form.images.filter(Boolean).join(',') : '',
+          // 转换运费为分
+          shippingFee: this.form.shippingFeeType === 'cod'
+            ? -1
+            : this.form.shippingFeeType === 'free'
+              ? 0
+              : Math.round(this.form.shippingFeeAmount * 100)
         }
         try {
           console.log(20250420180130, formToSubmit)
@@ -274,7 +306,7 @@ export default {
           this.fetchProductList()
           done()
         } catch (error) {
-          Message.error(`${isEdit ? '更新' : '添加'}商品失败`)
+          // Message.error(`${isEdit ? '更新' : '添加'}商品失败`)
           done(false)
         }
       })
@@ -330,6 +362,20 @@ export default {
       if (!date) return ''
       const d = new Date(date)
       return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+    },
+    // 处理运费类型切换
+    handleShippingFeeTypeChange (type) {
+      switch (type) {
+        case 'cod':
+          this.form.shippingFeeAmount = -1
+          break
+        case 'free':
+          this.form.shippingFeeAmount = 0
+          break
+        case 'fixed':
+          this.form.shippingFeeAmount = 0
+          break
+      }
     },
   },
 }

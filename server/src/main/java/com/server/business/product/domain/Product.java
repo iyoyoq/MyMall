@@ -39,6 +39,8 @@ public class Product {
     private String mainImage;
     // 商品图片JSON数组
     private String images;
+    // 运费
+    private Integer shippingFee;
     // 状态(-1删除 0下架 1上架)
     private Integer status;
     // 更新时间

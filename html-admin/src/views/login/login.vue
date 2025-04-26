@@ -62,7 +62,7 @@ export default {
         Message.success('登录成功')
         router.push('/dashboard')
       } catch (e) {
-        Message.error('登录失败，请检查用户名和密码')
+        // Message.error('登录失败，请检查用户名和密码')
       } finally {
         loading.value = false
       }

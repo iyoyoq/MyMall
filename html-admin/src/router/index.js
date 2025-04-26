@@ -1,19 +1,20 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { localStorageTokenName } from '@/utils/request.js'
 
 export const routes = [
   {
     path: '/login',
-    component: () => import('@/views/login/index.vue'),
+    component: () => import('@/views/login/login.vue'),
     name: 'Login',
   },
   {
     path: '/',
-    component: () => import('@/views/layout/index.vue'),
+    component: () => import('@/views/layout/layout.vue'),
     redirect: '/dashboard',
     children: [
       {
         path: 'dashboard',
-        component: () => import('@/views/dashboard/index.vue'),
+        component: () => import('@/views/dashboard/dashboard.vue'),
         name: 'Dashboard',
         meta: { title: '仪表盘', icon: 'Odometer' },
       },
@@ -60,7 +61,7 @@ const router = createRouter({
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem(localStorageTokenName)
   if (to.path === '/login') {
     next()
   } else {
