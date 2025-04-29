@@ -43,7 +43,7 @@ public class ProductSkuController {
      * 增
      */
     @PostMapping("/save")
-    // @CheckLogin(allowRole = {LoginType.USER})
+    @CheckLogin(allowRole = {LoginType.ADMIN})
     public R create(@RequestBody ProductSkuDto dto) {
         int ok = skuService.insertOrUpdate(dto);
         return R.ok();
@@ -54,7 +54,7 @@ public class ProductSkuController {
      * 改
      */
     @PostMapping("/update")
-    @CheckLogin(allowRole = {LoginType.USER})
+    @CheckLogin(allowRole = {LoginType.ADMIN})
     public R update(@RequestBody ProductSkuDto dto) {
         int b = skuService.insertOrUpdate(dto);
         return R.ok();

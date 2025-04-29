@@ -11,4 +11,6 @@ public interface IProductService {
     Product getById(Long id);
 
     int updateById(Product dto);
+
+    int logicDelete(Long productId);
 }

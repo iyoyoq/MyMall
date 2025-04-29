@@ -69,4 +69,9 @@ public class ProductServiceImpl implements IProductService {
         );
         return result;
     }
+
+    @Override
+    public int logicDelete(Long productId) {
+        return productMapper.updateById(new Product().setId(productId).setStatus(-1));
+    }
 }

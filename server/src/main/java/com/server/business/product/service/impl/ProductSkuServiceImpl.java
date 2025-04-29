@@ -8,6 +8,7 @@ import com.server.business.product.mapper.ProductMapper;
 import com.server.business.product.mapper.ProductSkuMapper;
 import com.server.business.product.service.IProductSkuService;
 import com.server.exception.BusinessException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import java.util.*;
  * @Date: 2025/4/21 14:11
  */
 @Service
+@Slf4j
 public class ProductSkuServiceImpl implements IProductSkuService {
 
 
@@ -34,16 +36,23 @@ public class ProductSkuServiceImpl implements IProductSkuService {
     public ProductSkuDto getByProductId(Long productId, List<Integer> status) {
         List<ProductSku> productSkuList = skuMapper.selectList(new LambdaQueryWrapper<ProductSku>()
                 .eq(ProductSku::getProductId, productId)
-                .eq(status.size() == 1, ProductSku::getStatus, status)
+                .eq(status.size() == 1, ProductSku::getStatus, status.get(0))
                 // 如果某个属性全部下架，那么不显示该 sku 属性
                 .in(status.size() > 1, ProductSku::getStatus, status)
         );
 
         // sku 属性列表
-        List<String> skuNameList = List.of(productMapper.selectOne(new LambdaQueryWrapper<Product>()
-                .select(Product::getSkuAttrNames)
-                .eq(Product::getId, productId)
-        ).getSkuAttrNames().split(","));
+        List<String> skuNameList;
+        try {
+            skuNameList = List.of(productMapper.selectOne(new LambdaQueryWrapper<Product>()
+                    .select(Product::getSkuAttrNames)
+                    .eq(Product::getId, productId)
+            ).getSkuAttrNames().split(","));
+        } catch (Exception e) {
+            String msg = "SKU属性不存在";
+            log.error(msg, e);
+            throw new BusinessException(msg);
+        }
 
         ProductSkuDto vo = new ProductSkuDto();
         vo.setProductId(productId);
@@ -64,6 +73,7 @@ public class ProductSkuServiceImpl implements IProductSkuService {
 
         List<ProductSku> insertList = new ArrayList<>();
         for (ProductSkuDto.SingleSku sku : skuList) {
+            sku.setId(null); // 防止新增时原主键冲突
             sku.setSkuAttrValues(String.join(",", sku.getSkuAttrValueList()));
             sku.setProductId(dto.getProductId());
             sku.setStatus(1);

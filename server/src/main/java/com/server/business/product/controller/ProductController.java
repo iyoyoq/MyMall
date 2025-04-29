@@ -63,5 +63,13 @@ public class ProductController {
         return R.ok();
     }
 
-
+    /**
+     * 删
+     */
+    @PostMapping("/delete")
+    @CheckLogin(allowRole = LoginType.ADMIN)
+    public R delete(@RequestParam("productId") Long productId) {
+        int result = productService.logicDelete(productId);
+        return R.ok();
+    }
 }
