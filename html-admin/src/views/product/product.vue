@@ -80,6 +80,9 @@
                 <icon-edit/>
                 编辑
               </a-button>
+              <a-button type="text" size="small" @click="clickSku(record)">
+                SKU
+              </a-button>
               <a-button
                   type="text"
                   size="small"
@@ -141,8 +144,8 @@
         <a-form-item field="shippingFee" label="运费">
           <a-space>
             <a-radio-group v-model="form.shippingFeeType" @change="handleShippingFeeTypeChange">
-              <a-radio value="cod">到付</a-radio>
               <a-radio value="free">免运费</a-radio>
+              <a-radio value="cod">到付</a-radio>
               <a-radio value="fixed">固定运费</a-radio>
             </a-radio-group>
             <div v-if="form.shippingFeeType === 'fixed'">
@@ -177,6 +180,7 @@ import {
 import { productListApi, productSaveApi, productUpdateApi } from '@/api/product.js'
 import ProductCategorySelector from './component/ProductCategorySelector.vue'
 import ImageUploader from './component/ImageUploader.vue'
+import router from '@/router/index.js'
 
 export default {
   name: 'ProductList',
@@ -259,7 +263,15 @@ export default {
       this.pagination.current = current
       this.fetchProductList()
     },
-
+    clickSku (record) {
+      // console.log(record)
+      router.push({
+        path: '/product/sku',
+        query: {
+          skuId: record.id,
+        },
+      })
+    },
     // 打开新增/编辑弹窗
     openAddModal (record) {
       this.resetForm()
@@ -294,10 +306,10 @@ export default {
           images: Array.isArray(this.form.images) ? this.form.images.filter(Boolean).join(',') : '',
           // 转换运费为分
           shippingFee: this.form.shippingFeeType === 'cod'
-            ? -1
-            : this.form.shippingFeeType === 'free'
-              ? 0
-              : Math.round(this.form.shippingFeeAmount * 100)
+              ? -1
+              : this.form.shippingFeeType === 'free'
+                  ? 0
+                  : Math.round(this.form.shippingFeeAmount * 100),
         }
         try {
           console.log(20250420180130, formToSubmit)

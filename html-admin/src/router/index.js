@@ -37,6 +37,12 @@ export const routes = [
             meta: { title: '商品管理', subtitle: '商品列表' },
           },
           {
+            path: 'sku',
+            component: () => import('@/views/product/sku.vue'),
+            name: 'SKU',
+            meta: { title: 'SKU', subtitle: 'SKU' },
+          },
+          {
             path: 'category',
             component: () => import('@/views/product/category.vue'),
             name: 'Category',
