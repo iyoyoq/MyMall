@@ -20,11 +20,22 @@ export function productSaveApi (data) {
     data: data,
   })
 }
+
 export function productUpdateApi (data) {
   return request({
     url: `/product/product/update`,
     method: 'post',
     data: data,
+  })
+}
+
+export function productDeleteApi (productId) {
+  return request({
+    url: `/product/product/delete`,
+    method: 'post',
+    params: {
+      productId
+    }
   })
 }
 
@@ -51,3 +62,22 @@ export function productCategoryUpdateApi (dto) {
     data: dto,
   })
 }
+
+export function productSkuCreateApi (dto) {
+  return request({
+    url: `/product/sku/save`,
+    method: 'post',
+    data: dto,
+  })
+}
+
+export function productSkuQueryApi (productId) {
+  return request({
+    url: `/product/sku/detail`,
+    method: 'get',
+    params: {
+      productId,
+    },
+  })
+}
+

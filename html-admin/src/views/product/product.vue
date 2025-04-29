@@ -177,7 +177,7 @@ import {
   IconDelete,
   IconSwap,
 } from '@arco-design/web-vue/es/icon'
-import { productListApi, productSaveApi, productUpdateApi } from '@/api/product.js'
+import { productDeleteApi, productListApi, productSaveApi, productUpdateApi } from '@/api/product.js'
 import ProductCategorySelector from './component/ProductCategorySelector.vue'
 import ImageUploader from './component/ImageUploader.vue'
 import router from '@/router/index.js'
@@ -268,7 +268,7 @@ export default {
       router.push({
         path: '/product/sku',
         query: {
-          skuId: record.id,
+          productId: record.id,
         },
       })
     },
@@ -340,13 +340,10 @@ export default {
 
     // 删除商品
     async handleDelete (record) {
-      try {
-        // TODO: 调用删除接口
-        Message.success('删除商品成功')
-        this.fetchProductList()
-      } catch (error) {
-        Message.error('删除商品失败')
-      }
+      await productDeleteApi(record.id)
+      Message.success('删除商品成功')
+      this.fetchProductList()
+
     },
 
     // 获取状态文本
