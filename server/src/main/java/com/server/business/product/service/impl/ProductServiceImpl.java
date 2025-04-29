@@ -41,14 +41,8 @@ public class ProductServiceImpl implements IProductService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int insert(Product dto) {
-        long snapshotId = IdWorker.getId();
-        dto.setCurrentSnapshotId(snapshotId);
         int result = productMapper.insert(dto);
-        snapshotMapper.insert(new ProductSnapshot()
-                .setId(snapshotId)
-                .setProductId(dto.getId())
-                .setProductInfoJson(JsonUtil.getJson(dto))
-        );
+        generateProductSnapshot(dto.getId());
         return result;
     }
 
@@ -59,19 +53,22 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public int updateById(Product dto) {
-        long snapshotId = IdWorker.getId();
-        dto.setCurrentSnapshotId(snapshotId);
         int result = productMapper.updateById(dto);
-        snapshotMapper.insert(new ProductSnapshot()
-                .setId(snapshotId)
-                .setProductId(dto.getId())
-                .setProductInfoJson(JsonUtil.getJson(dto))
-        );
+        generateProductSnapshot(dto.getId());
         return result;
     }
 
     @Override
     public int logicDelete(Long productId) {
         return productMapper.updateById(new Product().setId(productId).setStatus(-1));
+    }
+
+    private void generateProductSnapshot(Long productId){
+        Product product = productMapper.selectById(productId);
+        snapshotMapper.insert(new ProductSnapshot()
+                .setId(IdWorker.getId())
+                .setProductId(productId)
+                .setProductInfoJson(JsonUtil.getJson(product))
+        );
     }
 }
