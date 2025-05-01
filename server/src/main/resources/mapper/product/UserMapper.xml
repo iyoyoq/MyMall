@@ -12,6 +12,7 @@
         p.category_id,
         c.name AS category_name,
         p.description,
+        p.starting_price,
         p.main_image,
         p.images,
         p.status,

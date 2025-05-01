@@ -71,18 +71,25 @@ public class ProductSkuServiceImpl implements IProductSkuService {
 
         List<ProductSkuDto.SingleSku> skuList = dto.getSkuList();
 
+        int startingPrice = 0;
+
         List<ProductSku> insertList = new ArrayList<>();
         for (ProductSkuDto.SingleSku sku : skuList) {
             sku.setId(null); // 防止新增时原主键冲突
             sku.setSkuAttrValues(String.join(",", sku.getSkuAttrValueList()));
             sku.setProductId(dto.getProductId());
             sku.setStatus(1);
+            startingPrice = Math.min(startingPrice, sku.getPrice());
             insertList.add(sku);
         }
 
         // 存入 skuAttrNames
         String skuAttrNames = String.join(",", dto.getSkuAttrNameList());
-        productMapper.updateById(new Product().setId(dto.getProductId()).setSkuAttrNames(skuAttrNames));
+        productMapper.updateById(new Product()
+                .setId(dto.getProductId())
+                .setSkuAttrNames(skuAttrNames)
+                .setStartingPrice(startingPrice)
+        );
 
         // 把原 sku全部下架
         List<ProductSku> origin = skuMapper.selectList(new LambdaQueryWrapper<ProductSku>()

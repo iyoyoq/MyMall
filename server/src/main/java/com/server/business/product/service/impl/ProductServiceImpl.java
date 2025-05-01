@@ -5,14 +5,18 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.product.domain.Product;
 import com.server.business.product.domain.ProductSnapshot;
+import com.server.business.product.domain.dto.ProductSkuDto;
 import com.server.business.product.mapper.ProductMapper;
 import com.server.business.product.mapper.ProductSnapshotMapper;
 import com.server.business.product.service.IProductService;
+import com.server.business.product.service.IProductSkuService;
 import com.server.pojo.RPage;
 import com.server.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @Description: TODO
@@ -26,7 +30,8 @@ public class ProductServiceImpl implements IProductService {
     private ProductMapper productMapper;
     @Autowired
     private ProductSnapshotMapper snapshotMapper;
-
+    @Autowired
+    private IProductSkuService skuService;
 
     @Override
     public RPage<Product> selectPage(Integer pageNum, Integer pageSize, Product dto) {
@@ -48,7 +53,9 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public Product getById(Long id) {
-        return productMapper.selectById(id);
+        Product vo = productMapper.selectById(id);
+        vo.setSku(skuService.getByProductId(id, List.of(1)));
+        return vo;
     }
 
     @Override

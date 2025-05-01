@@ -6,6 +6,7 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.server.business.product.domain.dto.ProductSkuDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class Product {
     private Long categoryId;
     // 商品描述
     private String description;
+    private Integer startingPrice;
     // 主图URL
     private String mainImage;
     // 商品图片JSON数组
@@ -56,6 +58,10 @@ public class Product {
     // 分类名称
     @TableField(exist = false)
     private String categoryName;
+
+    // SKU信息
+    @TableField(exist = false)
+    private ProductSkuDto sku;
 
 }
 

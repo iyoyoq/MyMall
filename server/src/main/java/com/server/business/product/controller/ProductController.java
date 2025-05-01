@@ -26,8 +26,18 @@ public class ProductController {
     @Autowired
     private RequestContext requestContext;
 
+
     /**
      * 获取商品详情
+     */
+    @GetMapping("/detail")
+    @CheckLogin
+    public R detail(@RequestParam("id") Long id) {
+        return R.ok(productService.getById(id));
+    }
+
+    /**
+     * 获取商品列表
      */
     @PostMapping("/list")
     @CheckLogin
