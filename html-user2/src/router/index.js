@@ -1,5 +1,15 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
+/* 示例跳转
+router.push({
+  path: '/product/sku',
+  query: {
+    productId: record.id,
+  },
+})
+
+productId: this.$route.query.productId,
+*/
 export const routes = [
   {
     path: '/',
@@ -13,6 +23,7 @@ export const routes = [
         name: 'products',
         meta: { title: '首页' },
       },
+
       {
         path: 'favorites',
         component: () => import('@/views/favorites/favorites.vue'),
@@ -43,6 +54,13 @@ export const routes = [
         name: 'profile',
         meta: { title: '个人中心' },
       },
+      {
+        path: 'product',
+        component: () => import('@/views/products/product.vue'),
+        name: 'product',
+        meta: { title: '个人中心' },
+      },
+
     ],
   },
   {

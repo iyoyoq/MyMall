@@ -11,10 +11,10 @@
               <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">
                 <a-tag color="blue" v-if="item.isDefault === 1" style="margin: 0 0 3px 0;">默认</a-tag>
                 {{ item.receiverName }}
-                <span style="margin-left: 8px; color: var(--mymall-text-regular);">{{ item.receiverPhone }}</span>
+                <span style="margin-left: 8px;">{{ item.receiverPhone }}</span>
 
               </div>
-              <div style="color: var(--mymall-text-regular);">
+              <div style="color: var(--mymall-text-regular)">
                 {{ item.province || '' }}{{ item.city || '' }}{{ item.district || '' }}
               </div>
               <div style="color: var(--mymall-text-regular); margin-top: 4px;">

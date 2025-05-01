@@ -1,4 +1,8 @@
+/*颜色配置*/
+
+/*https://arco.design/themes/design/12442/setting/base/Color?from=%2Fthemes%2Fstores%2Fmanage%3FdepLibrary%3D%26keyword%3D%26type%3Dstar*/
+
 :root {
-    --mymall-price-color: #F53F3F;
-    --mymall-text-regular: #333333; /* 你可以根据需要调整颜色值 */
+    --mymall-price-color: #F53F3F; /*首页商品价格颜色*/
+    --mymall-text-regular: #333333; /*文本颜色 */
 }

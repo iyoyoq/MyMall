@@ -30,11 +30,11 @@
     <!-- 商品列表 -->
     <div class="products-grid">
       <div class="products-wrapper">
-        <div class="product-item" v-for="product in displayedProducts" :key="product.id">
+        <div class="product-item" @click="clickProductCard(product)" v-for="product in products" :key="product.id">
           <a-card class="product-card" :bordered="false">
             <div class="product-image-wrapper">
               <img
-                  :src="product.image"
+                  :src="product.mainImage"
                   alt="产品图片"
                   class="product-image"
               />
@@ -44,9 +44,8 @@
               <div class="product-bottom">
                 <div class="product-price">
                   <span class="price-symbol">¥</span>
-                  <span class="price-value">{{ product.price }}</span>
+                  <span class="price-value">{{ product.startingPrice }}</span>
                 </div>
-                <a-button size="mini"  type="outline">加入购物车</a-button>
               </div>
             </div>
           </a-card>
@@ -58,7 +57,8 @@
     <div class="pagination-wrapper">
       <div class="pagination-section">
         <a-pagination
-            v-model:current="currentPage"
+            v-model:current="querySearch.pageNum"
+            v-model:page-size="querySearch.pageSize"
             :total="total"
             show-total
             show-jumper
@@ -71,75 +71,72 @@
 
 <script>
 import { IconSearch } from '@arco-design/web-vue/es/icon'
+import { productCategoryListApi, productListApi } from '@/api/product.js'
+import router from '@/router/index.js'
 
 export default {
   name: 'Products',
   components: {
-    IconSearch
+    IconSearch,
   },
 
-  data() {
+  data () {
     return {
       searchKeyword: '',
       activeCategory: 'all',
-      currentPage: 1,
-      total: 100,
       pageSize: 24,
       products: [],
-      displayedProducts: [],
-      categories: [
-        { id: 1, name: '手机数码' },
-        { id: 2, name: '电脑办公' },
-        { id: 3, name: '家用电器' },
-        { id: 4, name: '服装鞋包' },
-        { id: 5, name: '食品生鲜' },
-      ]
+      categories: [],
+      total: 0,
+      querySearch: {
+        pageNum: 1,
+        pageSize: 25,
+      },
     }
   },
-
+  created () {
+    this.fetchCategory()
+    this.fetchProductList()
+  },
   methods: {
-    generateProducts(count) {
-      const productTypes = ['智能手机', '笔记本电脑', '平板电脑', '智能手表', '蓝牙耳机']
-      const brands = ['小米', '华为', '苹果', '三星', '联想']
-      const products = []
-
-      for (let i = 1; i <= count; i++) {
-        const typeIndex = Math.floor(Math.random() * productTypes.length)
-        const brandIndex = Math.floor(Math.random() * brands.length)
-        const price = Math.floor(Math.random() * (9999 - 99)) + 99
-
-        products.push({
-          id: i,
-          name: `${brands[brandIndex]} ${productTypes[typeIndex]} ${i}号`,
-          price: price,
-          image: `https://img1.baidu.com/it/u=3234918589,2701109302&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=667`,
-        })
-      }
-      return products
+    clickProductCard(product){
+      router.push({
+        path: '/product',
+        query: {
+          productId: product.id,
+        },
+      })
+    },
+    async fetchProductList () {
+      const resp = await productListApi(this.querySearch)
+      const result = resp.data.result
+      this.products = result.records
+      this.total = result.total
+    },
+    async fetchCategory () {
+      const resp = await productCategoryListApi()
+      const result = resp.data.result
+      this.categories = result
     },
 
-    handleSearch(value) {
+    handleSearch (value) {
       console.log('搜索关键词：', value)
-      // 实现搜索逻辑
     },
 
-    handlePageChange(page) {
+    handlePageChange (page) {
       this.currentPage = page
       this.updateDisplayedProducts()
     },
 
-    updateDisplayedProducts() {
+    updateDisplayedProducts () {
       const start = (this.currentPage - 1) * this.pageSize
       const end = start + this.pageSize
       this.displayedProducts = this.products.slice(start, end)
-    }
+    },
   },
 
-  mounted() {
-    this.products = this.generateProducts(50)
-    this.total = this.products.length
-    this.updateDisplayedProducts()
-  }
+  mounted () {
+  },
 }
 </script>
 
@@ -197,6 +194,7 @@ export default {
 
 .product-card:hover {
   transform: translateY(-5px);
+  cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
 }
 
