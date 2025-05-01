@@ -1,51 +1,92 @@
 <template>
-  <div class="product-detail-container">
-    <div class="product-main">
-      <div class="product-images">
-        <img :src="product.mainImage" alt="主图" class="main-image"/>
-        <div class="image-list" v-if="imageList.length > 0">
+  <div
+      style="padding:30px;background:#fff;"
+  >
+    <div
+        style="display:flex;gap:40px;"
+    >
+      <div style="width:400px; height: 400px">
+        <a-image
+            width="400"
+            height="400"
+            :src="product.mainImage"
+            alt="主图"
+            style="width:400px;height:100%;object-fit:contain;border:1px solid #eee;background:#fafafa;"
+        />
+        <div
+            v-if="imageList.length > 0"
+            style="display:flex;gap:8px;margin-top:10px;"
+        >
           <img
               v-for="(img, idx) in imageList"
               :key="idx"
               :src="img"
-              class="sub-image"
               @click="product.mainImage = img"
               :class="{ active: img === product.mainImage }"
+              :style="`
+              width:60px;
+              height:60px;
+              object-fit:cover;
+              border:2px solid ${img === product.mainImage ? 'rgb(var(--primary-6))' : '#eee'};
+              cursor:pointer;
+            `"
           />
         </div>
       </div>
-      <div class="product-info">
-        <h2 class="product-title">{{ product.name }}</h2>
-        <div class="product-desc">{{ product.description }}</div>
-        <div class="product-price">
-          <span>￥{{
-              selectedSku ? (selectedSku.price / 100).toFixed(2) : (product.startingPrice / 100).toFixed(2)
-            }}</span>
+      <div style="flex:1;">
+        <h2 style="font-size:24px;font-weight:bold;margin-bottom:12px;">
+          {{ product.name }}
+        </h2>
+        <div style="margin-bottom:16px; " class="gray-text">
+          {{ product.description }}
         </div>
-        <div class="product-sku" v-if="skuAttrNames.length">
-          <div v-for="(attr, idx) in skuAttrNames" :key="attr" class="sku-attr">
+        <div>
+          <span
+              style="color:var(--mymall-price-color);font-size:28px;font-weight:bold;margin-bottom:16px;display:inline-block;">
+            ￥{{ selectedSku ? (selectedSku.price / 100).toFixed(2) : (product.startingPrice / 100).toFixed(2) }}
+          </span>
+          <span style="margin-left: 10px" class="gray-text">
+            已售{{ product.salesCount }}
+          </span>
+        </div>
+        <div v-if="skuAttrNames.length" style="margin-bottom:16px;">
+          <div
+              v-for="(attr, idx) in skuAttrNames"
+              :key="attr"
+              style="margin-bottom:8px;"
+          >
             <span>{{ attr }}：</span>
-            <div class="sku-attr-values">
+            <div style="display:inline-block;">
               <span
                   v-for="(value, vIdx) in getAttrValues(idx)"
                   :key="value"
                   :class="['sku-value', { selected: selectedAttr[idx] === value, disabled: isSkuDisabled(idx, value) }]"
                   @click="selectAttr(idx, value)"
-              >{{ value }}</span>
+                  :style="`
+                  display:inline-block;
+                  padding:4px 14px;
+                  margin-right:8px;
+                  margin-bottom:4px;
+                  border:1px solid ${selectedAttr[idx] === value ? 'rgb(var(--primary-6))' : isSkuDisabled(idx, value) ? '#eee' : '#ddd'};
+                  border-radius:3px;
+                  cursor:${isSkuDisabled(idx, value) ? 'not-allowed' : 'pointer'};
+                  background:${selectedAttr[idx] === value ? 'rgb(var(--primary-1))' : isSkuDisabled(idx, value) ? '#f5f5f5' : '#fafafa'};
+                  color:${selectedAttr[idx] === value ? 'rgb(var(--primary-6))' : isSkuDisabled(idx, value) ? '#bbb' : 'inherit'};
+                  transition:border-color 0.2s;
+                `"
+              >
+                {{ value }}
+              </span>
             </div>
           </div>
         </div>
-        <div class="product-stock">
+        <div style="margin-bottom:16px;color:#888;">
           库存：{{ selectedSku ? selectedSku.stockQuantity : '-' }}
         </div>
-        <div class="product-actions">
+        <div style="margin-bottom:16px;">
           <a-button type="primary" :disabled="!selectedSku || selectedSku.stockQuantity === 0">立即购买</a-button>
         </div>
       </div>
-    </div>
-    <div class="product-detail-desc">
-      <h3>商品详情</h3>
-      <div>{{ product.description }}</div>
     </div>
   </div>
 </template>
@@ -72,6 +113,7 @@ export default {
     fetchDetail () {
       productApi(this.productId).then((resp) => {
         const data = resp.data.result
+        console.log('detail', data)
         this.product = data
         this.imageList = data.images ? data.images.split(',') : []
         this.skuAttrNames = data.skuAttrNames ? data.skuAttrNames.split(',') : []
@@ -91,7 +133,7 @@ export default {
     },
     selectAttr (attrIdx, value) {
       if (this.isSkuDisabled(attrIdx, value)) return
-      this.$set(this.selectedAttr, attrIdx, value)
+      this.selectedAttr[attrIdx] = value
       this.updateSelectedSku()
     },
     updateSelectedSku () {
@@ -119,119 +161,6 @@ export default {
   },
 }
 </script>
-
 <style scoped>
-.product-detail-container {
-  padding: 30px;
-  background: #fff;
-}
 
-.product-main {
-  display: flex;
-  gap: 40px;
-}
-
-.product-images {
-  width: 400px;
-}
-
-.main-image {
-  width: 100%;
-  height: 400px;
-  object-fit: contain;
-  border: 1px solid #eee;
-  background: #fafafa;
-}
-
-.image-list {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.sub-image {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border: 2px solid #eee;
-  cursor: pointer;
-}
-
-.sub-image.active {
-  border-color: rgb(var(--primary-6));
-}
-
-.product-info {
-  flex: 1;
-}
-
-.product-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 12px;
-}
-
-.product-desc {
-  color: #666;
-  margin-bottom: 16px;
-}
-
-.product-price {
-  color: var(--mymall-price-color);
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 16px;
-}
-
-.product-sku {
-  margin-bottom: 16px;
-}
-
-.sku-attr {
-  margin-bottom: 8px;
-}
-
-.sku-attr-values {
-  display: inline-block;
-}
-
-.sku-value {
-  display: inline-block;
-  padding: 4px 14px;
-  margin-right: 8px;
-  margin-bottom: 4px;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-  cursor: pointer;
-  background: #fafafa;
-  transition: border-color 0.2s;
-}
-
-.sku-value.selected {
-  border-color: #409eff;
-  background: #e6f7ff;
-}
-
-.sku-value.disabled {
-  color: #bbb;
-  border-color: #eee;
-  cursor: not-allowed;
-  background: #f5f5f5;
-}
-
-.product-stock {
-  margin-bottom: 16px;
-  color: #888;
-}
-
-.product-actions {
-  margin-bottom: 16px;
-}
-
-.product-detail-desc {
-  margin-top: 40px;
-  padding: 20px;
-  background: #fafafa;
-  border-radius: 6px;
-}
 </style>

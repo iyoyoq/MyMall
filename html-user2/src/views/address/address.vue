@@ -14,10 +14,10 @@
                 <span style="margin-left: 8px;">{{ item.receiverPhone }}</span>
 
               </div>
-              <div style="color: var(--mymall-text-regular)">
+              <div >
                 {{ item.province || '' }}{{ item.city || '' }}{{ item.district || '' }}
               </div>
-              <div style="color: var(--mymall-text-regular); margin-top: 4px;">
+              <div style="margin-top: 4px;">
                 {{ item.detailAddress || '' }}
               </div>
             </div>

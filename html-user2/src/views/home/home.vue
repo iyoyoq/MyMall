@@ -4,7 +4,7 @@
       <a-layout-header style="padding: 0 20px; ">
         <div style="padding: 0 20px; display: flex; align-items: center;  justify-content: center; ">
           <div class="company-logo">
-            <a :href="companyLink" class="company-name" @click.prevent="onClickMenuItem('0')">{{ companyName }}</a>
+            <span  class="company-name" @click.prevent="onClickMenuItem('0')">{{ companyName }}</span>
           </div>
           <div style="width: 720px">
             <a-menu mode="horizontal" :default-selected-keys="[activeKey]">
@@ -31,7 +31,6 @@
 export default {
   data() {
     return {
-      companyLink: 'https://www.baidu.com',  // 公司链接
       companyName: 'MyMall 在线商城',
       activeKey: '0',
       // 路由路径和菜单键值的映射
