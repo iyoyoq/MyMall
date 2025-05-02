@@ -6,12 +6,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.product.domain.Product;
 import com.server.business.product.domain.ProductSnapshot;
 import com.server.business.product.domain.dto.ProductSkuDto;
+import com.server.business.product.mapper.FavoriteMapper;
 import com.server.business.product.mapper.ProductMapper;
 import com.server.business.product.mapper.ProductSnapshotMapper;
 import com.server.business.product.service.IProductService;
 import com.server.business.product.service.IProductSkuService;
 import com.server.pojo.RPage;
 import com.server.util.JsonUtil;
+import com.server.util.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,10 @@ public class ProductServiceImpl implements IProductService {
     private ProductSnapshotMapper snapshotMapper;
     @Autowired
     private IProductSkuService skuService;
+    @Autowired
+    private FavoriteMapper favoriteMapper;
+    @Autowired
+    private RequestContext requestContext;
 
     @Override
     public RPage<Product> selectPage(Integer pageNum, Integer pageSize, Product dto) {
@@ -55,6 +61,9 @@ public class ProductServiceImpl implements IProductService {
     public Product getById(Long id) {
         Product vo = productMapper.selectById(id);
         vo.setSku(skuService.getByProductId(id, List.of(1)));
+        if (requestContext.isUser()) {
+            vo.setUserIsFavorite(favoriteMapper.userIsFavorite(requestContext.getUser().getId(), id));
+        }
         return vo;
     }
 
@@ -70,7 +79,7 @@ public class ProductServiceImpl implements IProductService {
         return productMapper.updateById(new Product().setId(productId).setStatus(-1));
     }
 
-    private void generateProductSnapshot(Long productId){
+    private void generateProductSnapshot(Long productId) {
         Product product = productMapper.selectById(productId);
         snapshotMapper.insert(new ProductSnapshot()
                 .setId(IdWorker.getId())

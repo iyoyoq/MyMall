@@ -76,13 +76,16 @@ export default {
       // 初始化表单数据
       this.formState = {
         nickName: result.nickName,
-        phone: result.phone,
+        phone: result.phone ? String(result.phone) : '',
         intro: result.intro,
       }
     },
     showEditModal () {
       // 打开编辑对话框前，确保表单数据与当前用户信息同步
-      this.formState = this.userInfo
+      this.formState = {
+        ...this.userInfo,
+        phone: this.userInfo.phone ? String(this.userInfo.phone) : ''
+      }
       this.modalVisible = true
     },
     async updateProfile () {

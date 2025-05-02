@@ -5,7 +5,8 @@
     <div
         style="display:flex;gap:40px;"
     >
-      <div style="width:400px; height: 400px">
+      <!--左半部分-->
+      <div style="width:400px; height: 400px; ">
         <a-image
             width="400"
             height="400"
@@ -33,6 +34,8 @@
           />
         </div>
       </div>
+
+      <!--右半部分-->
       <div style="flex:1;">
         <h2 style="font-size:24px;font-weight:bold;margin-bottom:12px;">
           {{ product.name }}
@@ -49,13 +52,13 @@
             已售{{ product.salesCount }}
           </span>
         </div>
-        <div v-if="skuAttrNames.length" style="margin-bottom:16px;">
+        <div v-if="skuAttrNames.length">
           <div
               v-for="(attr, idx) in skuAttrNames"
               :key="attr"
-              style="margin-bottom:8px;"
+              class="attr-bottom"
           >
-            <span>{{ attr }}：</span>
+            <span class="gray-text attr-right">{{ attr }}</span>
             <div style="display:inline-block;">
               <span
                   v-for="(value, vIdx) in getAttrValues(idx)"
@@ -80,18 +83,40 @@
             </div>
           </div>
         </div>
-        <div style="margin-bottom:16px;color:#888;">
-          库存：{{ selectedSku ? selectedSku.stockQuantity : '-' }}
+        <div class="attr-bottom " style="display:flex; align-items: center; ">
+          <div class="gray-text attr-right">数量</div>
+          <div class="attr-right">
+            <a-input-number size="small" style="width: 120px" :default-value="1" mode="button"/>
+          </div>
+          <div class="gray-text"><span>库存</span>{{ selectedSku ? selectedSku.stockQuantity : '-' }}</div>
         </div>
-        <div style="margin-bottom:16px;">
-          <a-button type="primary" :disabled="!selectedSku || selectedSku.stockQuantity === 0">立即购买</a-button>
+        <div style="margin-bottom:16px; display: flex">
+          <div>
+            <!--加入购物车-->
+            <a-button type="outline" :disabled="!selectedSku || selectedSku.stockQuantity === 0">加入购物车</a-button>
+          </div>
+          <div style="width: 150px; margin: 0 0 0 10px">
+            <a-button long type="primary" :disabled="!selectedSku || selectedSku.stockQuantity === 0">立即购买
+            </a-button>
+          </div>
+
+          <!--收藏按钮-->
+          <div style=" margin: 0 0 0 10px;">
+            <a-button @click="clickFavorite(product.userIsFavorite)" type="dashed"
+                      :status="product.userIsFavorite ? 'warning':'primary'">
+              <template #icon>
+                <icon-star-fill/>
+              </template>
+            </a-button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { productApi } from '@/api/product.js'
+import { productApi, updateFavoriteApi } from '@/api/product.js'
+import { Message } from '@arco-design/web-vue'
 
 export default {
   name: 'product',
@@ -113,7 +138,7 @@ export default {
     fetchDetail () {
       productApi(this.productId).then((resp) => {
         const data = resp.data.result
-        console.log('detail', data)
+        // console.log('detail', data)
         this.product = data
         this.imageList = data.images ? data.images.split(',') : []
         this.skuAttrNames = data.skuAttrNames ? data.skuAttrNames.split(',') : []
@@ -158,9 +183,26 @@ export default {
           }) && sku.stockQuantity > 0,
       )
     },
+    clickFavorite (currentIsFavorite) {
+      const targetStatus = !currentIsFavorite
+      updateFavoriteApi({
+        productId: this.productId,
+        status: targetStatus ? 1 : 0,
+      }).then(resp => {
+        this.product.userIsFavorite = targetStatus
+        Message.success(targetStatus ? '收藏成功' : '已取消收藏')
+      })
+
+    },
   },
 }
 </script>
 <style scoped>
+.attr-bottom {
+  margin-bottom: 16px;
+}
 
+.attr-right {
+  margin-right: 8px;
+}
 </style>

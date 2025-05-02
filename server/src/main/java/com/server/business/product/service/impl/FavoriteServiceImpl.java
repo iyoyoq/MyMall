@@ -8,8 +8,10 @@ import com.server.business.product.domain.Favorite;
 import com.server.business.product.domain.dto.FavoriteCreateDto;
 import com.server.business.product.mapper.FavoriteMapper;
 import com.server.business.product.service.IFavoriteService;
+import com.server.util.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 用户收藏表(Favorite)表服务实现类
@@ -22,6 +24,8 @@ public class FavoriteServiceImpl  implements IFavoriteService {
 
     @Autowired
     private FavoriteMapper favoriteMapper;
+    @Autowired
+    private RequestContext requestContext;
 
     @Override
     public Page<Favorite> selectPage(Integer pageNum, Integer pageSize, Favorite favorite) {
@@ -49,5 +53,17 @@ public class FavoriteServiceImpl  implements IFavoriteService {
     public int updateById(Favorite favorite) {
         return favoriteMapper.updateById(favorite);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int update(Favorite favorite) {
+        if(requestContext.isUser()){
+            Long userId = requestContext.getUser().getId();
+            favorite.setUserId(userId);
+        }
+        return favoriteMapper.update(favorite);
+    }
+
+
 }
 

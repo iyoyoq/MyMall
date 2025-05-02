@@ -22,5 +22,7 @@ public interface IFavoriteService {
     int removeById(Long id);
 
     int updateById(Favorite favorite);
+
+    int update(Favorite favorite);
 }
 

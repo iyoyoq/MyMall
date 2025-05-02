@@ -91,7 +91,11 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
+*/
 
- */
+// 每次路由跳转后滚动到顶部
+router.afterEach(() => {
+  window.scrollTo(0, 0)
+})
 
 export default router

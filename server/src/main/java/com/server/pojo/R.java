@@ -1,6 +1,8 @@
 package com.server.pojo;
 
 
+import com.server.exception.BusinessException;
+
 import static com.server.pojo.ResultCodeEnum.BusinessError;
 /**
  * 统一响应结果
@@ -31,6 +33,9 @@ public class R<T> {
     }
 
     public static R<String> judge(boolean success, String errMsg) {
+        if(!success){
+            throw new BusinessException(errMsg);
+        }
         return success ? R.ok() : R.error(errMsg);
     }
 

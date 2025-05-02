@@ -5,7 +5,7 @@ export function productListApi (query) {
   return request({
     url: '/product/product/list',
     method: 'post',
-    data: { query },
+    data: { ...query },
     params: {
       pageNum: query.pageNum,
       pageSize: query.pageSize,
@@ -29,5 +29,15 @@ export function productCategoryListApi () {
   return request({
     url: `/product/category/list`,
     method: 'get',
+  })
+}
+
+
+// 商品收藏 update
+export function updateFavoriteApi (data) {
+  return request({
+    url: `/product/favorite/update`,
+    method: 'post',
+    data
   })
 }

@@ -12,8 +12,8 @@
           <icon-search/>
         </template>
       </a-input-search>
-    </div>
 
+    </div>
     <!-- 分类导航 -->
     <div class="category-wrapper">
       <div class="category-section">
@@ -73,6 +73,7 @@
 import { IconSearch } from '@arco-design/web-vue/es/icon'
 import { productCategoryListApi, productListApi } from '@/api/product.js'
 import router from '@/router/index.js'
+import { hasValue } from '@/utils/check.js'
 
 export default {
   name: 'Products',
@@ -88,18 +89,23 @@ export default {
       products: [],
       categories: [],
       total: 0,
-      querySearch: {
-        pageNum: 1,
-        pageSize: 25,
-      },
+      querySearch: null
     }
   },
   created () {
+    this.resetQuerySearch()
     this.fetchCategory()
     this.fetchProductList()
   },
   methods: {
-    clickProductCard(product){
+    resetQuerySearch(){
+      this.querySearch = {
+        pageNum: 1,
+        pageSize: 25,
+        name: null
+      }
+    },
+    clickProductCard (product) {
       router.push({
         path: '/product',
         query: {
@@ -120,7 +126,16 @@ export default {
     },
 
     handleSearch (value) {
-      console.log('搜索关键词：', value)
+      if(!hasValue(value)){
+        this.searchKeyword = ''
+        this.resetQuerySearch()
+        this.fetchProductList()
+        return
+      }
+      // console.log('搜索关键词：', value)
+      this.resetQuerySearch()
+      this.querySearch.name = value
+      this.fetchProductList()
     },
 
     handlePageChange (page) {
@@ -202,13 +217,17 @@ export default {
   width: 100%;
   height: 120px;
   overflow: hidden;
-  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
 
 .product-info {
@@ -250,6 +269,7 @@ export default {
 .pagination-wrapper {
   overflow-x: auto;
   margin-top: 20px;
+  height: 50px;
   /* 隐藏滚动条但保持功能 */
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -260,7 +280,6 @@ export default {
 }
 
 .pagination-section {
-  min-width: min-content;
   display: flex;
   justify-content: center;
   padding: 0 20px;

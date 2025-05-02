@@ -63,5 +63,8 @@ public class Product {
     @TableField(exist = false)
     private ProductSkuDto sku;
 
+    // 用户是否收藏
+    @TableField(exist = false)
+    private Boolean userIsFavorite;
 }
 

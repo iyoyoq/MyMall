@@ -1,6 +1,7 @@
 package com.server.business.product.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.server.aop.CheckLogin;
 import com.server.business.product.domain.Favorite;
 import com.server.business.product.domain.dto.FavoriteCreateDto;
 import com.server.business.product.service.IFavoriteService;
@@ -54,7 +55,7 @@ public class ProductFavoriteController {
     /**
      * 删
      */
-    @DeleteMapping("/remove")
+    @PostMapping("/remove")
     public R remove(Long id) {
         int result = favoriteService.removeById(id);
         return R.judge(result > 0, "删除失败");
@@ -63,10 +64,11 @@ public class ProductFavoriteController {
     /**
      * 改
      */
-    @PutMapping("/update")
-    public R update(Favorite favorite) {
-        int b = favoriteService.updateById(favorite);
-        return R.judge(b > 0, "");
+    @PostMapping("/update")
+    @CheckLogin
+    public R update(@RequestBody Favorite favorite) {
+        int b = favoriteService.update(favorite);
+        return R.judge(b > 0, "修改失败");
     }
 
 }

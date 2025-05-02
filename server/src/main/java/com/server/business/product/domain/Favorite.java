@@ -3,7 +3,10 @@ package com.server.business.product.domain;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +18,9 @@ import java.time.LocalDateTime;
  */
 @Data
 @TableName("product_favorite")
+@AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
 public class Favorite {
     // 收藏ID
     private Long id;
@@ -22,7 +28,7 @@ public class Favorite {
     private Long userId;
     // 商品ID，关联商品表
     private Long productId;
-
+    // 0取消收藏 1收藏
     private Integer status;
     // 更新时间
     @TableField(fill = FieldFill.UPDATE)
