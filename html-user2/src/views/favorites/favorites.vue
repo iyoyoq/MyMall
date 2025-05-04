@@ -3,9 +3,9 @@
     <div style="padding:25px;min-height:360px;">
       <div v-if="favoritesList.length"
            style="display:flex;justify-content:start;align-items:center;margin-bottom:16px;">
-        <span style="color:#333;">
+        <span class="gray-text-deeper">
           共
-          <span style="font-weight:600;">{{ favoritesList.length }}</span>
+          <span>{{ favoritesList.length }}</span>
           件商品
         </span>
         <a-button
@@ -26,7 +26,8 @@
               :model-value="isAllSelected"
               :indeterminate="isIndeterminate"
               @change="handleSelectAll"
-          >全选
+
+          ><span class="gray-text-deeper"> 全选</span>
           </a-checkbox>
           <a-button
               type="primary"
@@ -144,7 +145,7 @@ export default {
       this.fetchList()
       this.selectedItems = []
     },
-    goProductDetail(product) {
+    goProductDetail (product) {
       router.push({
         path: '/product',
         query: {

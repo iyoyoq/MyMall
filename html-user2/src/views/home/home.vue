@@ -27,54 +27,44 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      companyName: 'MyMall 在线商城',
-      activeKey: '0',
-      // 路由路径和菜单键值的映射
-      pathKeyMap: {
-        '/products': '0',
-        '/favorites': '1',
-        '/cart': '2',
-        '/orders': '3',
-        '/address': '4',
-        '/profile': '5',
-      },
-      // 菜单键值和路由路径的映射
-      keyPathMap: {
-        '0': '/products',
-        '1': '/favorites',
-        '2': '/cart',
-        '3': '/orders',
-        '4': '/address',
-        '5': '/profile',
-      }
-    }
-  },
+<script setup>
+import { ref, watch, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
-  methods: {
-    setActiveKeyFromRoute() {
-      this.activeKey = this.pathKeyMap[this.$route.path] || '0'
-    },
+const companyName = 'MyMall 在线商城'
+const activeKey = ref('')
+const router = useRouter()
+const route = useRoute()
 
-    onClickMenuItem(key) {
-      this.$router.push(this.keyPathMap[key])
-    }
-  },
-
-  watch: {
-    '$route.path': {
-      handler: 'setActiveKeyFromRoute',
-      immediate: true
-    }
-  },
-
-  mounted() {
-    this.setActiveKeyFromRoute()
-  }
+// 合并后的路由映射对象
+const menuMap = {
+  '0': '/products',
+  '1': '/favorites',
+  '2': '/cart',
+  '3': '/orders',
+  '4': '/address',
+  '5': '/profile'
 }
+
+// 反向映射
+const pathToKey = Object.fromEntries(Object.entries(menuMap).map(([k, v]) => [v, k]))
+
+function setActiveKeyFromRoute() {
+  // 如果找不到匹配，则 activeKey 设为 ''
+  activeKey.value = pathToKey[route.path] ?? ''
+}
+
+function onClickMenuItem(key) {
+  router.push(menuMap[key])
+}
+
+watch(
+  () => route.path,
+  setActiveKeyFromRoute,
+  { immediate: true }
+)
+
+onMounted(setActiveKeyFromRoute)
 </script>
 
 <style scoped>
