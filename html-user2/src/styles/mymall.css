@@ -12,3 +12,10 @@
 .gray-text {
     color: #7a7a7a;
 }
+
+.price-color{
+    color: var(--mymall-price-color);
+}
+
+
+

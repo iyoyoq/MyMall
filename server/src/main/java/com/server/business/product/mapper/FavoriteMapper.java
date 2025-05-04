@@ -1,10 +1,10 @@
 package com.server.business.product.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.server.business.product.domain.Favorite;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -25,6 +25,7 @@ public interface FavoriteMapper extends BaseMapper<Favorite> {
         List<Favorite> favorites = selectList(new LambdaQueryWrapper<Favorite>()
                 .eq(Favorite::getUserId, userId)
                 .eq(Favorite::getProductId, productId)
+                .eq(Favorite::getStatus, 1)
         );
         return favorites != null && !favorites.isEmpty();
     }
@@ -45,6 +46,23 @@ public interface FavoriteMapper extends BaseMapper<Favorite> {
                 .setStatus(favorite.getStatus())
         );
 
+    }
+
+    List<Favorite> selectPageForSelf(@Param("favorite") Favorite favorite,
+                                        @Param("limit") Integer limit,
+                                        @Param("offset") Integer offset);
+
+    /**
+     * 用户收藏数
+     */
+    Long countForSelf(Long userId);
+
+    default int batchCancel(List<Long> favoriteIdList, Long userId){
+        return update(new Favorite().setStatus(0),
+                new LambdaQueryWrapper<Favorite>()
+                        .eq(Favorite::getUserId, userId)
+                        .in(Favorite::getId, favoriteIdList)
+        );
     }
 }
 

@@ -45,6 +45,10 @@ public class AddressServiceImpl implements IAddressService {
 
     @Override
     public int insert(AddressCreateDto dto) {
+        Long count = addressMapper.selectCount(new LambdaQueryWrapper<Address>()
+                .eq(Address::getUserId, requestContext.getUser().getId())
+        );
+        if (count > 100) throw new BusinessException("最多只能保存100个收货地址");
         dto.setUserId(requestContext.getUser().getId());
         Address db = BeanUtil.copyProperties(dto, Address.class);
         return addressMapper.insert(db);

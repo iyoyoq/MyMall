@@ -37,6 +37,8 @@ public class Favorite {
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-
+    // 商品信息
+    @TableField(exist = false)
+    private Product product;
 }
 

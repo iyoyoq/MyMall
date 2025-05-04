@@ -32,12 +32,32 @@ export function productCategoryListApi () {
   })
 }
 
-
 // 商品收藏 update
 export function updateFavoriteApi (data) {
   return request({
     url: `/product/favorite/update`,
     method: 'post',
-    data
+    data,
   })
 }
+
+// 商品收藏 list
+export function listFavoriteApi (params) {
+  return request({
+    url: `/product/favorite/list`,
+    method: 'get',
+    params,
+  })
+}
+
+// 商品收藏 list
+export function favoriteBatchCancelApi (favoriteIdList) {
+  return request({
+    url: `/product/favorite/batchCancel`,
+    method: 'post',
+    data: [
+      ...favoriteIdList,
+    ],
+  })
+}
+

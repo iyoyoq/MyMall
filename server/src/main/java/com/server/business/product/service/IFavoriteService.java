@@ -1,9 +1,10 @@
 package com.server.business.product.service;
 
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.product.domain.Favorite;
-import com.server.business.product.domain.dto.FavoriteCreateDto;
+import com.server.pojo.RPage;
+
+import java.util.List;
 
 /**
  * 用户收藏表(Favorite)表服务接口
@@ -13,16 +14,12 @@ import com.server.business.product.domain.dto.FavoriteCreateDto;
  */
 public interface IFavoriteService {
 
-    Page<Favorite> selectPage(Integer pageNum, Integer pageSize, Favorite favorite);
+    RPage<Favorite> pageForSelf(Integer pageNum, Integer pageSize, Favorite favorite);
 
-    Favorite selectById(Long id);
 
-    int insert(FavoriteCreateDto dto);
-
-    int removeById(Long id);
-
-    int updateById(Favorite favorite);
 
     int update(Favorite favorite);
+
+    int batchCancel(List<Long> favoriteIdList);
 }
 

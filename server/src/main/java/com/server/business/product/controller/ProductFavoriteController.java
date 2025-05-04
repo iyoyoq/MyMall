@@ -1,13 +1,14 @@
 package com.server.business.product.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.aop.CheckLogin;
 import com.server.business.product.domain.Favorite;
-import com.server.business.product.domain.dto.FavoriteCreateDto;
 import com.server.business.product.service.IFavoriteService;
 import com.server.pojo.R;
+import com.server.pojo.RPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Description: 用户收藏表
@@ -24,45 +25,29 @@ public class ProductFavoriteController {
     /**
      * 分页查询
      */
-    @PostMapping("/list")
+    @GetMapping("/list")
+    @CheckLogin
     public R list(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
-            @RequestBody Favorite favorite) {
-        Page<Favorite> result = favoriteService.selectPage(pageNum, pageSize, favorite);
+            Favorite favorite) {
+        RPage<Favorite> result = favoriteService.pageForSelf(pageNum, pageSize, favorite);
         return R.ok(result);
     }
 
     /**
-     * 单条查询
+     * 批量取消收藏
      */
-    @GetMapping("/detail")
-    public R detail(Long id) {
-        Favorite address = favoriteService.selectById(id);
-        return R.ok(address);
+    @PostMapping("/batchCancel")
+    @CheckLogin
+    public R batchCancel(@RequestBody List<Long> favoriteIdList) {
+        int b = favoriteService.batchCancel(favoriteIdList);
+        return R.ok();
     }
 
 
     /**
-     * 增
-     */
-    @PostMapping("/save")
-    public R create(@RequestBody FavoriteCreateDto dto) {
-        int ok = favoriteService.insert(dto);
-        return R.judge(ok > 0, "保存失败");
-    }
-
-    /**
-     * 删
-     */
-    @PostMapping("/remove")
-    public R remove(Long id) {
-        int result = favoriteService.removeById(id);
-        return R.judge(result > 0, "删除失败");
-    }
-
-    /**
-     * 改
+     * 单条改：新增收藏或取消收藏
      */
     @PostMapping("/update")
     @CheckLogin

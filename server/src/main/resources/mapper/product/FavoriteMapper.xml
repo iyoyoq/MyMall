@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.server.business.product.mapper.FavoriteMapper">
+
+    <!-- 新增 resultMap，映射 product 字段 -->
+    <resultMap id="FavoriteWithProductMap" type="com.server.business.product.domain.Favorite">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="status" column="status"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createTime" column="create_time"/>
+        <!-- 嵌套 product 对象 -->
+        <association property="product" javaType="com.server.business.product.domain.Product">
+            <id property="id" column="p_id"/>
+            <result property="name" column="name"/>
+            <result property="salesCount" column="sales_count"/>
+            <result property="categoryId" column="category_id"/>
+            <result property="description" column="description"/>
+            <result property="startingPrice" column="starting_price"/>
+            <result property="mainImage" column="main_image"/>
+            <result property="images" column="images"/>
+            <result property="shippingFee" column="shipping_fee"/>
+            <result property="status" column="p_status"/>
+            <result property="updateTime" column="p_update_time"/>
+            <result property="createTime" column="p_create_time"/>
+            <result property="skuAttrNames" column="sku_attr_names"/>
+        </association>
+    </resultMap>
+
+    <select id="selectPageForSelf" resultMap="FavoriteWithProductMap">
+        select
+            f.id, f.user_id, f.product_id, f.status, f.update_time, f.create_time,
+            p.id as p_id, p.name, p.sales_count, p.category_id, p.description, p.starting_price,
+            p.main_image, p.images, p.shipping_fee, p.status as p_status,
+            p.update_time as p_update_time, p.create_time as p_create_time, p.sku_attr_names
+        from product_favorite as f
+                 left join product_product as p
+                           on f.product_id = p.id
+        where f.status = 1 and f.user_id = #{favorite.userId}
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="countForSelf" resultType="java.lang.Long">
+        select count(*)
+        from product_favorite
+        where user_id = #{userId}
+          and status = 1
+    </select>
+</mapper>
