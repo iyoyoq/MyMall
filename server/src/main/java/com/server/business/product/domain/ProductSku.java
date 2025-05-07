@@ -1,11 +1,12 @@
 package com.server.business.product.domain;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * 商品SKU表(ProductSku)表实体类
@@ -14,6 +15,7 @@ import lombok.Data;
  * @since 2025-04-21 14:07:29
  */
 @Data
+@NoArgsConstructor
 public class ProductSku {
     // SKU ID
     private Long id;

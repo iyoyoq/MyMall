@@ -5,6 +5,8 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.server.business.product.domain.ProductSku;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +32,17 @@ public class ProductSkuDto {
 
     @EqualsAndHashCode(callSuper = true)
     @Data
+    @NoArgsConstructor
     public static class SingleSku extends ProductSku {
         // sku 属性列表
         private List<String> skuAttrValueList;
+
+        public SingleSku(Integer price, Integer stockQuantity, List<String> skuAttrValueList){
+            this.setPrice(price);
+            this.setStockQuantity(stockQuantity);
+            this.setSkuAttrValues(String.join(",", skuAttrValueList));
+            this.skuAttrValueList = skuAttrValueList;
+        }
     }
 
 

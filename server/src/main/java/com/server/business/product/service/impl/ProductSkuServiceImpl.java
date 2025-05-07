@@ -71,7 +71,7 @@ public class ProductSkuServiceImpl implements IProductSkuService {
 
         List<ProductSkuDto.SingleSku> skuList = dto.getSkuList();
 
-        int startingPrice = 0;
+        int startingPrice = skuList.get(0).getPrice();
 
         List<ProductSku> insertList = new ArrayList<>();
         for (ProductSkuDto.SingleSku sku : skuList) {

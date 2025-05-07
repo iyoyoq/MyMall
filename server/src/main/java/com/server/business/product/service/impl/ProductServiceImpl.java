@@ -81,10 +81,12 @@ public class ProductServiceImpl implements IProductService {
 
     private void generateProductSnapshot(Long productId) {
         Product product = productMapper.selectById(productId);
+        Long snapshotId = IdWorker.getId();
         snapshotMapper.insert(new ProductSnapshot()
-                .setId(IdWorker.getId())
+                .setId(snapshotId)
                 .setProductId(productId)
                 .setProductInfoJson(JsonUtil.getJson(product))
         );
+        productMapper.updateById(new Product().setId(productId).setCurrentSnapshotId(snapshotId));
     }
 }

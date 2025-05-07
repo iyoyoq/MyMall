@@ -87,7 +87,7 @@ public class UserServiceImpl implements IUserService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException("用户序列化失败", e);
         }
-        redisTemplate.opsForValue().set(k, v, 24, TimeUnit.HOURS);
+        redisTemplate.opsForValue().set(k, v, 24 * 200, TimeUnit.HOURS);
         redisTemplate.delete(RedisPrefix.PHONE_MSG_CODE + request.getPhone());
         vo.setToken(token);
         // 返回token
