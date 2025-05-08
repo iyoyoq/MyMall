@@ -17,10 +17,10 @@
     <!-- 分类导航 -->
     <div class="category-wrapper">
       <div class="category-section">
-        <a-tabs v-model:activeKey="activeCategory">
+        <a-tabs v-model:activeKey="activeCategory" @change="changeActiveCategory">
           <a-tab-pane key="all" title="全部"></a-tab-pane>
           <a-tab-pane v-for="category in categories"
-                      :key="category.id"
+                      :key="category.id.toString()"
                       :title="category.name"
           ></a-tab-pane>
         </a-tabs>
@@ -57,8 +57,8 @@
     <div class="pagination-wrapper">
       <div class="pagination-section">
         <a-pagination
-            v-model:current="querySearch.pageNum"
             v-model:page-size="querySearch.pageSize"
+            v-model:current="querySearch.pageNum"
             :total="total"
             show-total
             show-jumper
@@ -89,7 +89,7 @@ export default {
       products: [],
       categories: [],
       total: 0,
-      querySearch: null
+      querySearch: null,
     }
   },
   created () {
@@ -98,12 +98,20 @@ export default {
     this.fetchProductList()
   },
   methods: {
-    resetQuerySearch(){
+    resetQuerySearch () {
       this.querySearch = {
         pageNum: 1,
         pageSize: 25,
-        name: null
+        name: null,
+        categoryId: null,
       }
+    },
+    changeActiveCategory (categoryId) {
+
+      if (categoryId === 'all') this.querySearch.categoryId = null
+      else this.querySearch.categoryId = categoryId
+
+      this.fetchProductList()
     },
     clickProductCard (product) {
       router.push({
@@ -126,7 +134,7 @@ export default {
     },
 
     handleSearch (value) {
-      if(!hasValue(value)){
+      if (!hasValue(value)) {
         this.searchKeyword = ''
         this.resetQuerySearch()
         this.fetchProductList()
@@ -139,15 +147,11 @@ export default {
     },
 
     handlePageChange (page) {
-      this.currentPage = page
-      this.updateDisplayedProducts()
+      // console.log(page)
+      this.querySearch.pageNum = page
+      this.fetchProductList()
     },
 
-    updateDisplayedProducts () {
-      const start = (this.currentPage - 1) * this.pageSize
-      const end = start + this.pageSize
-      this.displayedProducts = this.products.slice(start, end)
-    },
   },
 
   mounted () {

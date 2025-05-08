@@ -6,6 +6,8 @@ import com.server.business.product.domain.Product;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Set;
+
 /**
  * @Description: TODO
  * @Author: yjy
@@ -15,5 +17,8 @@ import org.apache.ibatis.annotations.Param;
 public interface ProductMapper extends BaseMapper<Product> {
 
 
-    Page<Product> selectProductPage(@Param("page") Page<Object> page, @Param("dto") Product dto);
+    Page<Product> selectProductPage(@Param("page") Page<Object> page,
+                                    @Param("dto") Product dto,
+                                    @Param("allSonCategoryId") Set<Long> allSonCategoryId
+    );
 }

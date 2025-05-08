@@ -7,6 +7,7 @@ import com.server.business.product.domain.Product;
 import com.server.business.product.domain.ProductSnapshot;
 import com.server.business.product.domain.dto.ProductSkuDto;
 import com.server.business.product.mapper.FavoriteMapper;
+import com.server.business.product.mapper.ProductCategoryMapper;
 import com.server.business.product.mapper.ProductMapper;
 import com.server.business.product.mapper.ProductSnapshotMapper;
 import com.server.business.product.service.IProductService;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Description: TODO
@@ -38,11 +40,15 @@ public class ProductServiceImpl implements IProductService {
     private FavoriteMapper favoriteMapper;
     @Autowired
     private RequestContext requestContext;
+    @Autowired
+    private ProductCategoryMapper categoryMapper;
 
     @Override
     public RPage<Product> selectPage(Integer pageNum, Integer pageSize, Product dto) {
 
-        Page<Product> productPage = productMapper.selectProductPage(new Page<>(pageNum, pageSize), dto);
+        Set<Long> allSonCategoryId = categoryMapper.getAllSonByParentId(dto.getCategoryId());
+
+        Page<Product> productPage = productMapper.selectProductPage(new Page<>(pageNum, pageSize), dto, allSonCategoryId);
         RPage<Product> result = new RPage<>(productPage);
 
         return result;
