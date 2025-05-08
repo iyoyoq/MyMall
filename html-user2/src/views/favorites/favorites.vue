@@ -5,7 +5,7 @@
            style="display:flex;justify-content:start;align-items:center;margin-bottom:16px;">
         <span class="gray-text-deeper">
           共
-          <span>{{ favoritesList.length }}</span>
+          <span>{{ total }}</span>
           件商品
         </span>
         <a-button
@@ -80,8 +80,28 @@
             </div>
           </div>
         </template>
+
+
+        <!-- 分页 -->
+        <div class="pagination-wrapper">
+          <div class="pagination-section">
+            <a-pagination
+                v-model:page-size="queryParams.pageSize"
+                v-model:current="queryParams.pageNum"
+                :total="total"
+                show-total
+                show-jumper
+                @change="handlePageChange"
+            />
+          </div>
+        </div>
+
       </div>
     </div>
+
+
+
+
   </div>
 </template>
 
@@ -99,6 +119,7 @@ export default {
       favoritesList: [],
       queryParams: null,
       loading: true,
+      total: 0,
     }
   },
   created () {
@@ -114,6 +135,11 @@ export default {
     },
   },
   methods: {
+    handlePageChange (page) {
+      // console.log(page)
+      this.queryParams.pageNum = page
+      this.fetchList()
+    },
     resetQueryParams () {
       this.queryParams = {
         pageNum: 1,
@@ -122,8 +148,11 @@ export default {
     },
     async fetchList () {
       const resp = await listFavoriteApi(this.queryParams)
+      const result = resp.data.result
+      // console.log(result)
+      this.total = result.total
       // 适配接口返回结构，并将 id 转为字符串
-      this.favoritesList = (resp.data.result.records || []).map(item => ({
+      this.favoritesList = (result.records || []).map(item => ({
         id: String(item.id),
         product: item.product,
       }))

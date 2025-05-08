@@ -270,22 +270,5 @@ export default {
   color: var(--mymall-price-color);
 }
 
-.pagination-wrapper {
-  overflow-x: auto;
-  margin-top: 20px;
-  height: 50px;
-  /* 隐藏滚动条但保持功能 */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
 
-.pagination-wrapper::-webkit-scrollbar {
-  display: none;
-}
-
-.pagination-section {
-  display: flex;
-  justify-content: center;
-  padding: 0 20px;
-}
 </style>
