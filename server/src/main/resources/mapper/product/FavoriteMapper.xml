@@ -9,7 +9,6 @@
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="productId" column="product_id"/>
-        <result property="status" column="status"/>
         <result property="updateTime" column="update_time"/>
         <result property="createTime" column="create_time"/>
         <!-- 嵌套 product 对象 -->
@@ -31,15 +30,28 @@
     </resultMap>
 
     <select id="selectPageForSelf" resultMap="FavoriteWithProductMap">
-        select
-            f.id, f.user_id, f.product_id, f.status, f.update_time, f.create_time,
-            p.id as p_id, p.name, p.sales_count, p.category_id, p.description, p.starting_price,
-            p.main_image, p.images, p.shipping_fee, p.status as p_status,
-            p.update_time as p_update_time, p.create_time as p_create_time, p.sku_attr_names
+        select f.id,
+               f.user_id,
+               f.product_id,
+               f.update_time,
+               f.create_time,
+               p.id          as p_id,
+               p.name,
+               p.sales_count,
+               p.category_id,
+               p.description,
+               p.starting_price,
+               p.main_image,
+               p.images,
+               p.shipping_fee,
+               p.status      as p_status,
+               p.update_time as p_update_time,
+               p.create_time as p_create_time,
+               p.sku_attr_names
         from product_favorite as f
                  left join product_product as p
                            on f.product_id = p.id
-        where f.status = 1 and f.user_id = #{favorite.userId}
+        where f.user_id = #{favorite.userId}
         limit #{limit} offset #{offset}
     </select>
 
@@ -47,6 +59,5 @@
         select count(*)
         from product_favorite
         where user_id = #{userId}
-          and status = 1
     </select>
 </mapper>

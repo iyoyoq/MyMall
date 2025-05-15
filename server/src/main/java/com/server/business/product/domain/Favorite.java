@@ -28,8 +28,6 @@ public class Favorite {
     private Long userId;
     // 商品ID，关联商品表
     private Long productId;
-    // 0取消收藏 1收藏
-    private Integer status;
     // 更新时间
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;

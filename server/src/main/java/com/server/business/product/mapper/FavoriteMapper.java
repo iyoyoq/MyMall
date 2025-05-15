@@ -25,43 +25,24 @@ public interface FavoriteMapper extends BaseMapper<Favorite> {
         List<Favorite> favorites = selectList(new LambdaQueryWrapper<Favorite>()
                 .eq(Favorite::getUserId, userId)
                 .eq(Favorite::getProductId, productId)
-                .eq(Favorite::getStatus, 1)
         );
         return favorites != null && !favorites.isEmpty();
     }
 
-    /**
-     * 更新收藏
-     */
-    default int update(Favorite favorite) {
-        Favorite favoriteInDb = selectOne(new LambdaQueryWrapper<Favorite>()
-                .eq(Favorite::getUserId, favorite.getUserId())
-                .eq(Favorite::getProductId, favorite.getProductId()));
-        if (favoriteInDb == null || favoriteInDb.getId() == null) {
-            insert(favorite);
-            return 1;
-        }
-
-        return updateById(new Favorite().setId(favoriteInDb.getId())
-                .setStatus(favorite.getStatus())
-        );
-
-    }
 
     List<Favorite> selectPageForSelf(@Param("favorite") Favorite favorite,
-                                        @Param("limit") Integer limit,
-                                        @Param("offset") Integer offset);
+                                     @Param("limit") Integer limit,
+                                     @Param("offset") Integer offset);
 
     /**
      * 用户收藏数
      */
     Long countForSelf(Long userId);
 
-    default int batchCancel(List<Long> favoriteIdList, Long userId){
-        return update(new Favorite().setStatus(0),
-                new LambdaQueryWrapper<Favorite>()
-                        .eq(Favorite::getUserId, userId)
-                        .in(Favorite::getId, favoriteIdList)
+    default int batchCancel(List<Long> favoriteIdList, Long userId) {
+        return delete(new LambdaQueryWrapper<Favorite>()
+                .eq(Favorite::getUserId, userId)
+                .in(Favorite::getId, favoriteIdList)
         );
     }
 }

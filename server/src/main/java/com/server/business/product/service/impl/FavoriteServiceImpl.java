@@ -2,6 +2,7 @@ package com.server.business.product.service.impl;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.server.business.product.domain.Favorite;
 import com.server.business.product.mapper.FavoriteMapper;
 import com.server.business.product.service.IFavoriteService;
@@ -42,19 +43,25 @@ public class FavoriteServiceImpl implements IFavoriteService {
 
 
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int update(Favorite favorite) {
-        if (requestContext.isUser()) {
-            Long userId = requestContext.getUser().getId();
-            favorite.setUserId(userId);
-        }
-        return favoriteMapper.update(favorite);
-    }
+
 
     @Override
     public int batchCancel(List<Long> favoriteIdList) {
        return favoriteMapper.batchCancel(favoriteIdList, requestContext.getUser().getId());
+    }
+
+    @Override
+    public int add(Favorite favorite) {
+        favorite.setUserId(requestContext.getUser().getId());
+        return favoriteMapper.insert(favorite);
+    }
+
+    @Override
+    public int cancel(Long productId) {
+        return favoriteMapper.delete(new LambdaQueryWrapper<Favorite>()
+                .eq(Favorite::getProductId, productId)
+                .eq(Favorite::getUserId, requestContext.getUser().getId())
+        );
     }
 
 

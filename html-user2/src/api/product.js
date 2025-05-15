@@ -32,10 +32,10 @@ export function productCategoryListApi () {
   })
 }
 
-// 商品收藏 update
-export function updateFavoriteApi (data) {
+// 商品收藏 新增
+export function addFavoriteApi (data) {
   return request({
-    url: `/product/favorite/update`,
+    url: `/product/favorite/add`,
     method: 'post',
     data,
   })
@@ -50,7 +50,7 @@ export function listFavoriteApi (params) {
   })
 }
 
-// 商品收藏 list
+// 商品收藏 批量取消
 export function favoriteBatchCancelApi (favoriteIdList) {
   return request({
     url: `/product/favorite/batchCancel`,
@@ -58,6 +58,18 @@ export function favoriteBatchCancelApi (favoriteIdList) {
     data: [
       ...favoriteIdList,
     ],
+  })
+}
+
+
+// 商品收藏 单条取消
+export function favoriteCancelApi (productId) {
+  return request({
+    url: `/product/favorite/cancel`,
+    method: 'post',
+    params: {
+      productId,
+    },
   })
 }
 

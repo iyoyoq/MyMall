@@ -94,7 +94,8 @@
         <div style="margin-bottom:16px; display: flex">
           <div>
             <!--加入购物车-->
-            <a-button :loading="loadingAddCart" @click="addCart" type="outline" :disabled="!selectedSku || selectedSku.stockQuantity === 0">
+            <a-button :loading="loadingAddCart" @click="addCart" type="outline"
+                      :disabled="!selectedSku || selectedSku.stockQuantity === 0">
               加入购物车
             </a-button>
           </div>
@@ -118,7 +119,7 @@
   </div>
 </template>
 <script>
-import { productApi, updateFavoriteApi } from '@/api/product.js'
+import { addFavoriteApi, favoriteCancelApi, productApi } from '@/api/product.js'
 import { Message } from '@arco-design/web-vue'
 import { cartAddApi } from '@/api/cart.js'
 
@@ -134,7 +135,7 @@ export default {
       selectedAttr: [],
       selectedSku: null,
       purchaseQuantity: 1,
-      loadingAddCart: false
+      loadingAddCart: false,
     }
   },
   created () {
@@ -142,13 +143,13 @@ export default {
   },
   methods: {
     addCart () {
-      console.log('选中的sku',this.selectedSku)
+      console.log('选中的sku', this.selectedSku)
       console.log('选择数量', this.purchaseQuantity)
       this.loadingAddCart = true
       cartAddApi({
         skuId: this.selectedSku.id,
         purchaseQuantity: this.purchaseQuantity,
-        skuCode: this.selectedSku.code
+        skuCode: this.selectedSku.code,
       }).then((resp) => {
         Message.success('添加至购物车成功')
       }).catch((error) => {
@@ -206,14 +207,20 @@ export default {
       )
     },
     clickFavorite (currentIsFavorite) {
-      const targetStatus = !currentIsFavorite
-      updateFavoriteApi({
-        productId: this.productId,
-        status: targetStatus ? 1 : 0,
-      }).then(resp => {
-        this.product.userIsFavorite = targetStatus
-        Message.success(targetStatus ? '收藏成功' : '已取消收藏')
-      })
+
+      if (!currentIsFavorite) {
+        addFavoriteApi({
+          productId: this.productId,
+        }).then(resp => {
+          this.product.userIsFavorite = true
+          Message.success('收藏成功')
+        })
+      } else {
+        favoriteCancelApi(this.productId).then(resp => {
+          this.product.userIsFavorite = false
+          Message.success('取消收藏成功')
+        })
+      }
 
     },
   },

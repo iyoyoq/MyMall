@@ -16,10 +16,10 @@ public interface IFavoriteService {
 
     RPage<Favorite> pageForSelf(Integer pageNum, Integer pageSize, Favorite favorite);
 
-
-
-    int update(Favorite favorite);
-
     int batchCancel(List<Long> favoriteIdList);
+
+    int add(Favorite favorite);
+
+    int cancel(Long productId);
 }
 

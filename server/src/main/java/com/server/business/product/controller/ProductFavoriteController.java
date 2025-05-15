@@ -45,15 +45,25 @@ public class ProductFavoriteController {
         return R.ok();
     }
 
+    /**
+     * 商品页面单条取消收藏
+     */
+    @PostMapping("/cancel")
+    @CheckLogin
+    public R cancel(@RequestParam("productId") Long productId) {
+        int b = favoriteService.cancel(productId);
+        return R.ok();
+    }
+
 
     /**
-     * 单条改：新增收藏或取消收藏
+     * 新增收藏
      */
-    @PostMapping("/update")
+    @PostMapping("/add")
     @CheckLogin
     public R update(@RequestBody Favorite favorite) {
-        int b = favoriteService.update(favorite);
-        return R.judge(b > 0, "修改失败");
+        int b = favoriteService.add(favorite);
+        return R.judge(b > 0, "新增失败");
     }
 
 }
