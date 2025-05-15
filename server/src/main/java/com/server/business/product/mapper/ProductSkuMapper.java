@@ -2,7 +2,10 @@ package com.server.business.product.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.server.business.product.domain.ProductSku;
+import com.server.business.product.domain.vo.ProductSkuDetailVo;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * @Description: TODO
@@ -11,4 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ProductSkuMapper extends BaseMapper<ProductSku> {
+
+    List<ProductSkuDetailVo> getDetailBySkuIds(List<Long> ids);
+
 }

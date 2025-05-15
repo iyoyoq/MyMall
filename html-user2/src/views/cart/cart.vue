@@ -36,7 +36,7 @@
 
 
     <!-- 商品列表 -->
-    <div v-else >
+    <div v-else>
       <div
           v-for="item in cartItems"
           :key="item.id"
@@ -54,7 +54,7 @@
           <div
               style="flex: 1; text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 24px;">
             <h4 style="color: #000; margin: 0; width: 200px; padding: 0 0 0 10px;">{{ item.name }}</h4>
-            <p style=" font-size: 16px; margin: 0; width: 100px;"  class="price-color">¥{{ item.price }}</p>
+            <p style=" font-size: 16px; margin: 0; width: 100px;" class="price-color">¥{{ item.price }}</p>
             <div style="display: flex; align-items: center; gap: 16px;">
               <span style="font-size: 14px; width: 80px;" class="gray-text">库存: {{ item.stock }}</span>
               <a-input-number
@@ -90,10 +90,12 @@
     </div>
 
 
-    </div>
+  </div>
 </template>
 
 <script>
+import { cartListApi } from '@/api/cart.js'
+
 export default {
   name: 'Cart',
   data () {
@@ -202,15 +204,21 @@ export default {
   },
   created () {
     this.resetQuerySearch()
+    this.fetchCartList()
   },
   methods: {
-    resetQuerySearch(){
+    fetchCartList () {
+      cartListApi(this.querySearch).then(res => {
+        console.log(res)
+      })
+    },
+    resetQuerySearch () {
       this.querySearch = {
         pageNum: 1,
         pageSize: 10,
       }
     },
-    handlePageChange(){
+    handlePageChange () {
 
     },
     toggleEditMode () {

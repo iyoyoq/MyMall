@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.product.domain.Product;
 import com.server.business.product.domain.ProductSnapshot;
-import com.server.business.product.domain.dto.ProductSkuDto;
 import com.server.business.product.mapper.FavoriteMapper;
 import com.server.business.product.mapper.ProductCategoryMapper;
 import com.server.business.product.mapper.ProductMapper;

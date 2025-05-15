@@ -86,14 +86,17 @@
         <div class="attr-bottom " style="display:flex; align-items: center; ">
           <div class="gray-text attr-right">数量</div>
           <div class="attr-right">
-            <a-input-number size="small" style="width: 120px" :default-value="1" mode="button"/>
+            <a-input-number size="small" v-model="purchaseQuantity" style="width: 120px" :min="1" :default-value="1"
+                            mode="button"/>
           </div>
           <div class="gray-text"><span>库存</span>{{ selectedSku ? selectedSku.stockQuantity : '-' }}</div>
         </div>
         <div style="margin-bottom:16px; display: flex">
           <div>
             <!--加入购物车-->
-            <a-button type="outline" :disabled="!selectedSku || selectedSku.stockQuantity === 0">加入购物车</a-button>
+            <a-button :loading="loadingAddCart" @click="addCart" type="outline" :disabled="!selectedSku || selectedSku.stockQuantity === 0">
+              加入购物车
+            </a-button>
           </div>
           <div style="width: 150px; margin: 0 0 0 10px">
             <a-button long type="primary" :disabled="!selectedSku || selectedSku.stockQuantity === 0">立即购买
@@ -117,6 +120,7 @@
 <script>
 import { productApi, updateFavoriteApi } from '@/api/product.js'
 import { Message } from '@arco-design/web-vue'
+import { cartAddApi } from '@/api/cart.js'
 
 export default {
   name: 'product',
@@ -129,12 +133,30 @@ export default {
       skuList: [],
       selectedAttr: [],
       selectedSku: null,
+      purchaseQuantity: 1,
+      loadingAddCart: false
     }
   },
   created () {
     this.fetchDetail()
   },
   methods: {
+    addCart () {
+      console.log('选中的sku',this.selectedSku)
+      console.log('选择数量', this.purchaseQuantity)
+      this.loadingAddCart = true
+      cartAddApi({
+        skuId: this.selectedSku.id,
+        purchaseQuantity: this.purchaseQuantity,
+        skuCode: this.selectedSku.code
+      }).then((resp) => {
+        Message.success('添加至购物车成功')
+      }).catch((error) => {
+        Message.error('添加至购物车失败')
+      }).finally(() => {
+        this.loadingAddCart = false
+      })
+    },
     fetchDetail () {
       productApi(this.productId).then((resp) => {
         const data = resp.data.result
