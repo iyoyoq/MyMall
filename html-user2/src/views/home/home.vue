@@ -4,10 +4,10 @@
       <a-layout-header style="padding: 0 20px; ">
         <div style="padding: 0 20px; display: flex; align-items: center;  justify-content: center; ">
           <div class="company-logo">
-            <span  class="company-name" @click.prevent="onClickMenuItem('0')">{{ companyName }}</span>
+            <span class="company-name" @click.prevent="onClickMenuItem('0')">{{ companyName }}</span>
           </div>
           <div style="width: 720px">
-            <a-menu mode="horizontal" :default-selected-keys="[activeKey]">
+            <a-menu mode="horizontal" :key="activeKey" :default-selected-keys="[activeKey]">
               <a-menu-item key="0" @click="onClickMenuItem('0')">商城首页</a-menu-item>
               <a-menu-item key="1" @click="onClickMenuItem('1')">我的收藏</a-menu-item>
               <a-menu-item key="2" @click="onClickMenuItem('2')">购物车</a-menu-item>
@@ -43,25 +43,27 @@ const menuMap = {
   '2': '/cart',
   '3': '/orders',
   '4': '/address',
-  '5': '/profile'
+  '5': '/profile',
 }
 
 // 反向映射
 const pathToKey = Object.fromEntries(Object.entries(menuMap).map(([k, v]) => [v, k]))
 
-function setActiveKeyFromRoute() {
-  // 如果找不到匹配，则 activeKey 设为 ''
-  activeKey.value = pathToKey[route.path] ?? ''
+function setActiveKeyFromRoute (newPath) {
+  // console.log('newPath', newPath)
+  activeKey.value = pathToKey[newPath] ?? ''
+  // console.log('activeKey.value', activeKey.value)
 }
 
-function onClickMenuItem(key) {
+function onClickMenuItem (key) {
   router.push(menuMap[key])
 }
 
 watch(
-  () => route.path,
-  setActiveKeyFromRoute,
-  { immediate: true }
+    () => route.path,
+    setActiveKeyFromRoute,
+    { immediate: true },
+    { deep: true },
 )
 
 onMounted(setActiveKeyFromRoute)
