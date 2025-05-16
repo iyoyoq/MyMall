@@ -1,32 +1,5 @@
 <template>
   <div style="padding: 10px; min-height: 360px;">
-    <!-- 结算栏（非吸顶） -->
-    <div
-        v-if="cartItems.length"
-        style="max-width: 800px; margin: 0 auto; background: #fff;
-        padding: 0 24px 16px 24px; display: flex; justify-content: space-between; align-items: center;"
-    >
-      <div style="display: flex; align-items: center;">
-        <a-checkbox
-            v-if="!isEditMode"
-            :model-value="isAllSelected"
-            :indeterminate="isIndeterminate"
-            @change="handleSelectAll"
-        >全选
-        </a-checkbox>
-      </div>
-      <div style="display: flex; align-items: center; gap: 24px;">
-        <span style="font-size: 18px; font-weight: bold;">
-          <!--总计: -->
-          <span class="price-color"> ¥{{ total }}</span>
-        </span>
-        <a-button type="primary" size="medium" @click="handleCheckout">
-          去结算({{ totalQuantity }}件)
-        </a-button>
-      </div>
-    </div>
-
-
     <!-- 空购物车提示 -->
     <div
         v-if="!cartItems.length"
@@ -35,8 +8,33 @@
     </div>
 
 
-    <!-- 商品列表 -->
     <div v-else>
+      <!-- 结算栏-->
+      <div
+          style="max-width: 800px; margin: 0 auto; background: #fff;
+        padding: 0 24px 16px 24px; display: flex; justify-content: space-between; align-items: center;"
+      >
+        <div style="display: flex; align-items: center;">
+          <a-checkbox
+              v-if="!isEditMode"
+              :model-value="isAllSelected"
+              :indeterminate="isIndeterminate"
+              @change="handleSelectAll"
+          >全选
+          </a-checkbox>
+        </div>
+        <div style="display: flex; align-items: center; gap: 24px;">
+        <span style="font-size: 18px; font-weight: bold;">
+          <!--总计: -->
+          <span class="price-color"> ¥{{ totalPrice }}</span>
+        </span>
+          <a-button type="primary" size="medium" @click="handleCheckout">
+            去结算({{ totalQuantity }}件)
+          </a-button>
+        </div>
+      </div>
+
+      <!-- 商品列表 -->
       <div
           v-for="item in cartItems"
           :key="item.id"
@@ -48,19 +46,19 @@
               :value="item.id"
               style="margin-right: 16px;"
           />
-          <img :src="item.image" alt="商品图片"
+          <img :src="item.mainImage" alt="商品图片"
                style="width: 50px; height: 50px; object-fit: cover;
           "/>
           <div
               style="flex: 1; text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 24px;">
-            <h4 style="color: #000; margin: 0; width: 200px; padding: 0 0 0 10px;">{{ item.name }}</h4>
+            <h4 style="color: #000; margin: 0; width: 200px; padding: 0 0 0 10px;">{{ item.productName }}</h4>
             <p style=" font-size: 16px; margin: 0; width: 100px;" class="price-color">¥{{ item.price }}</p>
             <div style="display: flex; align-items: center; gap: 16px;">
-              <span style="font-size: 14px; width: 80px;" class="gray-text">库存: {{ item.stock }}</span>
+              <span style="font-size: 14px; width: 80px;" class="gray-text">库存: {{ item.stockQuantity }}</span>
               <a-input-number
                   style="width: 150px;"
                   mode="button"
-                  v-model="item.quantity"
+                  v-model="item.purchaseQuantity"
                   :min="1"
                   :max="1000000"
                   size="small"
@@ -94,7 +92,8 @@
 </template>
 
 <script>
-import { cartListApi } from '@/api/cart.js'
+import { cartListApi, cartRemoveApi } from '@/api/cart.js'
+import { Message, Modal } from '@arco-design/web-vue'
 
 export default {
   name: 'Cart',
@@ -102,88 +101,7 @@ export default {
     return {
       isEditMode: false,
       selectedItems: [],
-      cartItems: [
-        {
-          id: 1,
-          name: '2024新款连衣裙',
-          price: 199.00,
-          quantity: 1,
-          stock: 10,
-          image: 'https://img1.baidu.com/it/u=3234918589,2701109302&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=667',
-        },
-        {
-          id: 2,
-          name: '时尚休闲运动鞋',
-          price: 299.00,
-          quantity: 2,
-          stock: 5,
-          image: 'https://img1.baidu.com/it/u=3234918589,2701109302&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=667',
-        },
-        {
-          id: 2,
-          name: '时尚休闲运动鞋',
-          price: 299.00,
-          quantity: 2,
-          stock: 5,
-          image: 'https://img1.baidu.com/it/u=3234918589,2701109302&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=667',
-        },
-        {
-          id: 2,
-          name: '时尚休闲运动鞋',
-          price: 299.00,
-          quantity: 2,
-          stock: 5,
-          image: 'https://img1.baidu.com/it/u=3234918589,2701109302&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=667',
-        },
-        {
-          id: 2,
-          name: '时尚休闲运动鞋',
-          price: 299.00,
-          quantity: 2,
-          stock: 5,
-          image: 'https://img1.baidu.com/it/u=3234918589,2701109302&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=667',
-        },
-        {
-          id: 2,
-          name: '时尚休闲运动鞋',
-          price: 299.00,
-          quantity: 2,
-          stock: 5,
-          image: 'https://img1.baidu.com/it/u=3234918589,2701109302&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=667',
-        },
-        {
-          id: 2,
-          name: '时尚休闲运动鞋',
-          price: 299.00,
-          quantity: 2,
-          stock: 5,
-          image: 'https://img1.baidu.com/it/u=3234918589,2701109302&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=667',
-        },
-        {
-          id: 2,
-          name: '时尚休闲运动鞋',
-          price: 299.00,
-          quantity: 2,
-          stock: 5,
-          image: 'https://img1.baidu.com/it/u=3234918589,2701109302&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=667',
-        },
-        {
-          id: 2,
-          name: '时尚休闲运动鞋',
-          price: 299.00,
-          quantity: 2,
-          stock: 5,
-          image: 'https://img1.baidu.com/it/u=3234918589,2701109302&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=667',
-        },
-        {
-          id: 2,
-          name: '时尚休闲运动鞋',
-          price: 299.00,
-          quantity: 2,
-          stock: 5,
-          image: 'https://img1.baidu.com/it/u=3234918589,2701109302&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=667',
-        },
-      ],
+      cartItems: [],
       querySearch: null,
       total: 0,
     }
@@ -195,11 +113,11 @@ export default {
     isIndeterminate () {
       return this.selectedItems.length > 0 && !this.isAllSelected
     },
-    total () {
-      return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)
-    },
     totalQuantity () {
-      return this.cartItems.reduce((sum, item) => sum + item.quantity, 0)
+      return this.cartItems.reduce((sum, item) => sum + item.purchaseQuantity, 0)
+    },
+    totalPrice () {
+      return this.cartItems.reduce((sum, item) => sum + (item.purchaseQuantity * item.price), 0)
     },
   },
   created () {
@@ -209,7 +127,9 @@ export default {
   methods: {
     fetchCartList () {
       cartListApi(this.querySearch).then(res => {
-        console.log(res)
+        const page = res.data.result.page
+        this.cartItems = page.records
+        this.total = page.total
       })
     },
     resetQuerySearch () {
@@ -237,10 +157,19 @@ export default {
       this.selectedItems = []
     },
     removeItem (item) {
-      const index = this.cartItems.findIndex(cartItem => cartItem.id === item.id)
-      if (index !== -1) {
-        this.cartItems.splice(index, 1)
-      }
+      Modal.confirm({
+        title: '提示',
+        content: '确定删除？',
+        okText: '确定',
+        cancelText: '取消',
+        onOk: async () => {
+          await cartRemoveApi([item.id])
+          await this.fetchCartList()
+          Message.success('删除成功')
+        },
+        onCancel: () => {
+        },
+      })
     },
     handleQuantityChange (item, value) {
       item.quantity = value

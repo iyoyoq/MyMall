@@ -66,7 +66,7 @@
     <!-- 删除确认模态框 -->
     <a-modal
         v-model:visible="deleteModalVisible"
-        title="确认删除"
+        title="提示"
         @ok="handleDelete"
         @cancel="cancelDelete"
         width="400px"

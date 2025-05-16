@@ -1,6 +1,6 @@
 import request from '@/utils/request.js'
 
-// 获取购物车列表
+// 获取购物车列表, 这边返回的继承于 sku, 即 id字段为 skuId
 export function cartListApi(query) {
   return request({
     url: '/product/cart/list',
