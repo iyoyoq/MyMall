@@ -10,6 +10,7 @@ import com.server.business.product.mapper.ProductCartMapper;
 import com.server.business.product.mapper.ProductSkuMapper;
 import com.server.business.product.service.IProductCartService;
 import com.server.business.product.service.IProductService;
+import com.server.pojo.RPage;
 import com.server.util.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +57,9 @@ public class ProductCartServiceImpl implements IProductCartService {
     @Override
     public int remove(List<Long> skuIdList) {
         return cartMapper.delete(
-                new LambdaUpdateWrapper<ProductCart>().in(ProductCart::getId, skuIdList));
+                new LambdaUpdateWrapper<ProductCart>()
+                        .eq(ProductCart::getUserId, requestContext.getUser().getId())
+                        .in(ProductCart::getSkuId, skuIdList));
     }
 
     // 20250514160527
@@ -67,13 +70,29 @@ public class ProductCartServiceImpl implements IProductCartService {
         Page<ProductCart> mpPage = cartMapper.selectPage(
                 new Page<>(pageNum, pageSize),
                 new LambdaQueryWrapper<ProductCart>()
+                        .select(ProductCart::getSkuId, ProductCart::getPurchaseQuantity)
                         .eq(ProductCart::getUserId, requestContext.getUser().getId())
         );
 
         ProductCartVo vo = new ProductCartVo();
 
-        List<ProductSkuDetailVo> detailList = skuMapper.getDetailBySkuIds(
+        if (mpPage.getTotal() == 0L) {
+            vo.setPage(RPage.empty());
+            return vo;
+        }
+
+        List<ProductSkuDetailVo> skuDetailList = skuMapper.getDetailBySkuIds(
                 mpPage.getRecords().stream().map(ProductCart::getSkuId).collect(Collectors.toList()));
+
+        skuDetailList.forEach(detail -> {
+            // 存入购物车中SKU的数目
+            detail.setPurchaseQuantity(mpPage.getRecords().stream()
+                    .filter(cart -> cart.getSkuId().equals(detail.getId()))
+                    .mapToInt(ProductCart::getPurchaseQuantity)
+                    .sum());
+        });
+
+        vo.setPage(new RPage<>(skuDetailList, mpPage.getTotal()));
         return vo;
     }
 }

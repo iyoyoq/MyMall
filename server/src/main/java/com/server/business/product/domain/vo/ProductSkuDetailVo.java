@@ -22,4 +22,7 @@ public class ProductSkuDetailVo extends ProductSku {
 
     // 商品主图 url
     private String mainImage;
+
+    // 购物车中的数量
+    private Integer purchaseQuantity;
 }
