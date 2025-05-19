@@ -89,7 +89,7 @@
             <a-input-number size="small" v-model="purchaseQuantity" style="width: 120px" :min="1" :default-value="1"
                             mode="button"/>
           </div>
-          <div class="gray-text"><span>库存</span>{{ selectedSku ? selectedSku.stockQuantity : '-' }}</div>
+          <div class="gray-text" v-show="selectedSku"><span>库存</span>{{ selectedSku ? selectedSku.stockQuantity : '' }}</div>
         </div>
         <div style="margin-bottom:16px; display: flex">
           <div>
@@ -100,7 +100,7 @@
             </a-button>
           </div>
           <div style="width: 150px; margin: 0 0 0 10px">
-            <a-button long type="primary" :disabled="!selectedSku || selectedSku.stockQuantity === 0">立即购买
+            <a-button @click="clickBuy" long type="primary" :disabled="!selectedSku || selectedSku.stockQuantity === 0">立即购买
             </a-button>
           </div>
 
@@ -122,6 +122,7 @@
 import { addFavoriteApi, favoriteCancelApi, productApi } from '@/api/product.js'
 import { Message } from '@arco-design/web-vue'
 import { cartAddApi } from '@/api/cart.js'
+import router from '@/router/index.js'
 
 export default {
   name: 'product',
@@ -143,8 +144,8 @@ export default {
   },
   methods: {
     addCart () {
-      console.log('选中的sku', this.selectedSku)
-      console.log('选择数量', this.purchaseQuantity)
+      // console.log('选中的sku', this.selectedSku)
+      // console.log('选择数量', this.purchaseQuantity)
       this.loadingAddCart = true
       cartAddApi({
         skuId: this.selectedSku.id,
@@ -222,6 +223,11 @@ export default {
         })
       }
 
+    },
+    clickBuy(){
+      router.push({
+        path: '/order',
+      })
     },
   },
 }

@@ -3,7 +3,7 @@
     <!-- 空购物车提示 -->
     <div
         v-if="!cartItems.length"
-        style="text-align: center; color: var(--color-primary-hover); padding: 32px 0;"
+        style="text-align: center;  padding: 32px 0;"
     >购物车是空的
     </div>
 
@@ -11,7 +11,7 @@
     <div v-else>
       <!-- 结算栏-->
       <div
-          style="max-width: 800px; margin: 0 auto; background: #fff;
+          style="max-width: 900px; margin: 0 auto; background: #fff;
         padding: 0 24px 16px 24px; display: flex; justify-content: space-between; align-items: center;"
       >
         <div style="display: flex; align-items: center;">
@@ -38,7 +38,8 @@
       <div
           v-for="item in cartItems"
           :key="item.id"
-          style="width: 800px; margin-bottom: 16px; border: 1px solid #e8e8e8; border-radius: 4px; padding: 10px; transition: all 0.3s; height: 70px; box-sizing: border-box;"
+          style="width: 900px; margin-bottom: 16px; border: 1px solid #e8e8e8; border-radius: 4px; padding: 10px; transition: all 0.3s;
+           min-height: 70px; box-sizing: border-box;"
       >
         <div style="display: flex; align-items: center; justify-content: space-between;">
           <a-checkbox
@@ -51,10 +52,11 @@
           "/>
           <div
               style="flex: 1; text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 24px;">
-            <h4 style="color: #000; margin: 0; width: 200px; padding: 0 0 0 10px;">{{ item.productName }}</h4>
-            <p style=" font-size: 16px; margin: 0; width: 100px;" class="price-color">¥{{ item.price }}</p>
+            <h4 style="color: #000; margin: 0; width: 100px; padding: 0 0 0 10px;">{{ item.productName }}</h4>
+            <span style=" width: 100px; " class="gray-text">{{ item.skuAttrValues }}</span>
+            <span style=" font-size: 16px; margin: 0; width: 100px;" class="price-color">¥{{ item.price }}</span>
             <div style="display: flex; align-items: center; gap: 16px;">
-              <span style="font-size: 14px; width: 80px;" class="gray-text">库存: {{ item.stockQuantity }}</span>
+              <span style="font-size: 14px; width: 100px;" class="gray-text">库存: {{ item.stockQuantity }}</span>
               <a-input-number
                   style="width: 150px;"
                   mode="button"

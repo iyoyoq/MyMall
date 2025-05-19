@@ -60,7 +60,12 @@ export const routes = [
         name: 'product',
         meta: { title: '个人中心' },
       },
-
+      {
+        path: 'order',
+        component: () => import('@/views/orders/order.vue'),
+        name: 'order',
+        meta: { title: '订单' },
+      },
     ],
   },
   {
