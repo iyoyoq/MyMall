@@ -10,6 +10,7 @@
         product.main_image AS mainImage,
         sku.id AS id,
         sku.product_id AS productId,
+        sku.sku_attr_values AS skuAttrValues,
         sku.code AS code,
         sku.name AS name,
         sku.price AS price,
@@ -24,6 +25,18 @@
         ON sku.product_id = product.id -- 修改此处，使用表别名 sku
         where sku.id in
         <foreach item="item" collection="ids" separator="," open="(" close=")" index="">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="selectProductListBySkuIds" resultType="com.server.business.product.domain.Product">
+        select p.*
+        from product_sku s
+        left join product_product p on s.product_id = p.id
+
+        where s.id in
+        <foreach item="item" collection="skuIds" separator="," open="(" close=")" index="">
             #{item}
         </foreach>
     </select>

@@ -1,8 +1,12 @@
 package com.server.business.product.service;
 
+import com.server.business.product.domain.Product;
+import com.server.business.product.domain.ProductSku;
 import com.server.business.product.domain.dto.ProductSkuDto;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface IProductSkuService {
 
@@ -15,5 +19,16 @@ public interface IProductSkuService {
     ProductSkuDto getByProductId(Long productId, List<Integer> status);
 
     int insertOrUpdate(ProductSkuDto dto);
+
+
+    /**
+     * key  为 skuId , value 为 sku
+     */
+    Map<Long, ProductSku> getProductSkuBySkuIds(Set<Long> skuIds);
+
+    /**
+     * key  为 productId , value 为 product
+     */
+    Map<Long, Product> getProductBySkuIds(Set<Long> skuIds);
 
 }

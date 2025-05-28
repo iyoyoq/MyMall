@@ -5,6 +5,7 @@ import com.server.business.auth.domain.dto.AddressCreateDto;
 import com.server.pojo.RPage;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 用户地址表(Address)表服务接口
@@ -23,5 +24,10 @@ public interface IAddressService {
     int updateById(Address address);
 
     void setDefault(Long userId, Long addressId);
+
+    /**
+     * 获取默认地址
+     */
+    Optional<Address> getDefault(Long userId);
 }
 

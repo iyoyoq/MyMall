@@ -2,7 +2,6 @@ package com.server.business.auth.controller;
 
 
 import com.server.aop.CheckLogin;
-import com.server.aop.LoginType;
 import com.server.business.auth.domain.User;
 import com.server.business.auth.service.IUserService;
 import com.server.pojo.R;

@@ -3,10 +3,8 @@ package com.server.business.auth.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.auth.domain.Address;
-import com.server.business.auth.domain.User;
 import com.server.business.auth.domain.dto.AddressCreateDto;
 import com.server.business.auth.mapper.AddressMapper;
 import com.server.business.auth.service.IAddressService;
@@ -17,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 用户地址表(Address)表服务实现类
@@ -47,10 +46,12 @@ public class AddressServiceImpl implements IAddressService {
     public int insert(AddressCreateDto dto) {
         Long count = addressMapper.selectCount(new LambdaQueryWrapper<Address>()
                 .eq(Address::getUserId, requestContext.getUser().getId())
+                .eq(Address::getStatus, 1)
         );
         if (count > 100) throw new BusinessException("最多只能保存100个收货地址");
         dto.setUserId(requestContext.getUser().getId());
         Address db = BeanUtil.copyProperties(dto, Address.class);
+        if(count == 0) db.setIsDefault(1);
         return addressMapper.insert(db);
     }
 
@@ -79,6 +80,14 @@ public class AddressServiceImpl implements IAddressService {
                 new LambdaQueryWrapper<Address>().eq(Address::getUserId, userId)
         );
         addressMapper.updateById(new Address().setId(addressId).setIsDefault(1));
+    }
+
+    @Override
+    public Optional<Address> getDefault(Long userId) {
+        return Optional.ofNullable(addressMapper.selectOne(new LambdaQueryWrapper<Address>()
+                .eq(Address::getUserId, requestContext.getUser().getId())
+                .eq(Address::getStatus, 1)
+                .eq(Address::getIsDefault, 1)));
     }
 
 

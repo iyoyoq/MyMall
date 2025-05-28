@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Description: TODO
@@ -100,6 +101,35 @@ public class ProductSkuServiceImpl implements IProductSkuService {
         // 放入新sku列表
         skuMapper.insert(insertList);
         return insertList.size();
+    }
+
+    @Override
+    public Map<Long, ProductSku> getProductSkuBySkuIds(Set<Long> skuIds) {
+
+        List<ProductSku> productSkus = skuMapper.selectList(
+                new LambdaQueryWrapper<ProductSku>()
+                        .in(ProductSku::getId, skuIds)
+        );
+
+        // 将查询结果转换为 Map，键为 SKU ID，值为 ProductSku 对象
+        return productSkus.stream()
+                .collect(Collectors.toMap(
+                        ProductSku::getId,  // 使用 SKU ID 作为键
+                        sku -> sku,         // 使用 ProductSku 对象本身作为值
+                        (existing, replacement) -> existing  // 处理键冲突的情况，这里保留先出现的元素
+                ));
+    }
+
+    @Override
+    public Map<Long, Product> getProductBySkuIds(Set<Long> skuIds) {
+        List<Product> products = skuMapper.selectProductListBySkuIds(skuIds);
+
+        return products.stream()
+                .collect(Collectors.toMap(
+                        Product::getId,
+                        product -> product,
+                        (existing, replacement) -> existing
+                ));
     }
 
 
