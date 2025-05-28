@@ -1,6 +1,6 @@
 <template>
-  <div class="orders-container">
-    <div class="header">
+  <div style="padding: 24px; background: #fff; min-height: 360px; border-radius: 4px;width: 600px ">
+    <div style="display: flex; justify-content: start; align-items: center; margin-bottom: 24px;">
       <h4 style="color: black;">我的订单</h4>
       <a-radio-group
         type="button"
@@ -9,54 +9,54 @@
         style="margin-left: 10px;"
       >
         <a-radio value="all">全部</a-radio>
-        <a-radio value="pending">待发货</a-radio>
-        <a-radio value="shipping">待收货</a-radio>
-        <a-radio value="completed">已完成</a-radio>
+        <a-radio value="10">待支付</a-radio>
+        <a-radio value="20">待发货</a-radio>
+        <a-radio value="30">待收货</a-radio>
+        <a-radio value="40">已完成</a-radio>
+        <a-radio value="5">已取消</a-radio>
       </a-radio-group>
     </div>
 
-    <div class="order-list">
+    <div>
       <a-list
         :data="filteredOrders"
-        :pagination="{
-          pageSize: 5
-        }"
+        :pagination="{ pageSize: 5 }"
       >
         <template #item="{ item }">
           <a-list-item>
-            <a-card class="order-card">
-              <div class="order-header">
-                <div class="order-info">
-                  <span class="order-no">订单号：{{ item.orderNo }}</span>
-                  <span class="order-time">下单时间：{{ item.createTime }}</span>
+            <a-card style="width: 100%;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div style="display: flex; gap: 24px;">
+                  <span style="font-weight: bold;">订单号：{{ item.orderNo }}</span>
+                  <span style="color: #999;">下单时间：{{ item.createTime }}</span>
                 </div>
                 <a-tag :color="getStatusColor(item.status)">{{ item.status }}</a-tag>
               </div>
-              <div class="order-items">
-                <div v-for="product in item.products" :key="product.id" class="product-item">
-                  <img :src="product.image" :alt="product.name" class="product-image"/>
-                  <div class="product-info">
-                    <div class="product-name">{{ product.name }}</div>
-                    <div class="product-price">¥{{ product.price }} × {{ product.quantity }}</div>
+              <div style="border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; padding: 16px 0;">
+                <div v-for="product in item.products" :key="product.id" style="display: flex; align-items: center; margin-bottom: 12px;">
+                  <img :src="product.image" :alt="product.name" style="width: 60px; height: 60px; object-fit: cover; margin-right: 12px; border-radius: 4px;"/>
+                  <div style="flex: 1;">
+                    <div style="margin-bottom: 4px;">{{ product.name }}</div>
+                    <div style="color: #999;">¥{{ product.price }} × {{ product.quantity }}</div>
                   </div>
                 </div>
               </div>
-              <div class="order-footer">
-                <div class="total">实付款：<span class="price">¥{{ item.total }}</span></div>
-                <div class="actions">
-                  <a-button 
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+                <div>实付款：<span style="color: var(--color-primary-6); font-size: 16px; font-weight: bold;">¥{{ item.total }}</span></div>
+                <div style="display: flex; gap: 8px;">
+                  <a-button
                     v-if="item.status === '待发货'"
-                    type="primary" 
+                    type="primary"
                     size="small"
                   >提醒发货</a-button>
-                  <a-button 
+                  <a-button
                     v-if="item.status === '待收货'"
-                    type="primary" 
+                    type="primary"
                     size="small"
                   >确认收货</a-button>
-                  <a-button 
+                  <a-button
                     v-if="item.status === '已完成'"
-                    type="primary" 
+                    type="primary"
                     size="small"
                   >再次购买</a-button>
                 </div>
@@ -329,95 +329,5 @@ export default {
 </script>
 
 <style scoped>
-.orders-container {
-  padding: 24px;
-  background: #fff;
-  min-height: 360px;
-  border-radius: 4px;
-}
-
-.header {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.order-card {
-  width: 100%;
-}
-
-.order-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.order-info {
-  display: flex;
-  gap: 24px;
-}
-
-.order-no {
-  font-weight: bold;
-}
-
-.order-time {
-  color: #999;
-}
-
-.order-items {
-  border-top: 1px solid #f0f0f0;
-  border-bottom: 1px solid #f0f0f0;
-  padding: 16px 0;
-}
-
-.product-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.product-item:last-child {
-  margin-bottom: 0;
-}
-
-.product-image {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  margin-right: 12px;
-  border-radius: 4px;
-}
-
-.product-info {
-  flex: 1;
-}
-
-.product-name {
-  margin-bottom: 4px;
-}
-
-.product-price {
-  color: #999;
-}
-
-.order-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 16px;
-}
-
-.price {
-  color: var(--color-primary-6);
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.actions {
-  display: flex;
-  gap: 8px;
-}
+/* 移除所有类选择器的样式 */
 </style>

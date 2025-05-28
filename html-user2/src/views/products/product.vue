@@ -89,7 +89,10 @@
             <a-input-number size="small" v-model="purchaseQuantity" style="width: 120px" :min="1" :default-value="1"
                             mode="button"/>
           </div>
-          <div class="gray-text" v-show="selectedSku"><span>库存</span>{{ selectedSku ? selectedSku.stockQuantity : '' }}</div>
+          <div class="gray-text" v-show="selectedSku"><span>库存</span>{{
+              selectedSku ? selectedSku.stockQuantity : ''
+            }}
+          </div>
         </div>
         <div style="margin-bottom:16px; display: flex">
           <div>
@@ -100,7 +103,8 @@
             </a-button>
           </div>
           <div style="width: 150px; margin: 0 0 0 10px">
-            <a-button @click="clickBuy" long type="primary" :disabled="!selectedSku || selectedSku.stockQuantity === 0">立即购买
+            <a-button @click="clickBuy" long type="primary" :disabled="!selectedSku || selectedSku.stockQuantity === 0">
+              立即购买
             </a-button>
           </div>
 
@@ -123,12 +127,13 @@ import { addFavoriteApi, favoriteCancelApi, productApi } from '@/api/product.js'
 import { Message } from '@arco-design/web-vue'
 import { cartAddApi } from '@/api/cart.js'
 import router from '@/router/index.js'
+import { createOrderApi } from '@/api/order.js'
 
 export default {
   name: 'product',
   data () {
     return {
-      productId: this.$route.query.productId,
+      productId: null,
       product: {},
       imageList: [],
       skuAttrNames: [],
@@ -139,7 +144,8 @@ export default {
       loadingAddCart: false,
     }
   },
-  created () {
+  mounted () {
+    this.productId = this.$route.query.productId
     this.fetchDetail()
   },
   methods: {
@@ -208,7 +214,6 @@ export default {
       )
     },
     clickFavorite (currentIsFavorite) {
-
       if (!currentIsFavorite) {
         addFavoriteApi({
           productId: this.productId,
@@ -224,9 +229,23 @@ export default {
       }
 
     },
-    clickBuy(){
+    async clickBuy () {
+      // console.log('选中的sku', this.selectedSku)
+      // console.log('选择数量', this.purchaseQuantity)
+
+      const skuIdAndQuantity = {}
+
+      skuIdAndQuantity[this.selectedSku.id] = this.purchaseQuantity
+      // console.log(skuIdAndQuantity)
+      const resp = await createOrderApi({
+        skuIdAndQuantity
+      })
+      const orderId = resp.data.result
       router.push({
         path: '/order',
+        query: {
+          orderId
+        }
       })
     },
   },

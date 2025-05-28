@@ -66,7 +66,9 @@ watch(
     { deep: true },
 )
 
-onMounted(setActiveKeyFromRoute)
+onMounted(() => {
+  setActiveKeyFromRoute(route.path)
+})
 </script>
 
 <style scoped>

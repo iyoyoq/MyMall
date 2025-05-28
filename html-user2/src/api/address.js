@@ -20,12 +20,12 @@ export const addressApi = {
       method: 'post',
       data: {
         ...item,
-        isDefault: 0
+        isDefault: 0,
       },
     })
   },
   // 获取地址列表
-  list: (params, data = {}) => {
+  list: (params = { pageNum: 1, pageSize: 100 }, data = {}) => {
     return request({
       url: '/auth/address/list',
       method: 'post',

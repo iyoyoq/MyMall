@@ -3,6 +3,7 @@
     <!-- 空购物车提示 -->
     <div
         v-if="!cartItems.length"
+        class="gray-text"
         style="text-align: center;  padding: 32px 0;"
     >购物车是空的
     </div>
@@ -109,6 +110,7 @@ export default {
     }
   },
   computed: {
+    //todo 选择结算box框
     isAllSelected () {
       return this.cartItems.length === this.selectedItems.length
     },
@@ -158,12 +160,14 @@ export default {
       )
       this.selectedItems = []
     },
+    // +-*/ 确认框宽度400
     removeItem (item) {
-      Modal.confirm({
+      Modal.open({
         title: '提示',
         content: '确定删除？',
         okText: '确定',
         cancelText: '取消',
+        width: 400,
         onOk: async () => {
           await cartRemoveApi([item.id])
           await this.fetchCartList()
