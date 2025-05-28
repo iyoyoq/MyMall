@@ -17,12 +17,23 @@ export const routes = [
         component: () => import('@/views/dashboard/dashboard.vue'),
         name: 'Dashboard',
         meta: { title: '仪表盘', icon: 'Odometer' },
+
       },
       {
         path: 'user',
-        component: () => import('@/views/user/index.vue'),
         name: 'User',
         meta: { title: '用户管理', icon: 'User' },
+        redirect: '/user/points',
+        children: [
+          {
+            path: 'points',
+            component: () => import('@/views/user/points.vue'),
+          },
+          {
+            path: 'user',
+            component: () => import('@/views/user/user.vue'),
+          },
+        ],
       },
       {
         path: 'product',
@@ -48,12 +59,12 @@ export const routes = [
             name: 'Category',
             meta: { title: '商品管理', subtitle: '分类管理' },
           },
-          {
-            path: 'comment',
-            component: () => import('@/views/product/comment.vue'),
-            name: 'Comment',
-            meta: { title: '商品管理', subtitle: '评论管理' },
-          },
+          // {
+          //   path: 'comment',
+          //   component: () => import('@/views/product/comment.vue'),
+          //   name: 'Comment',
+          //   meta: { title: '商品管理', subtitle: '评论管理' },
+          // },
         ],
       },
     ],

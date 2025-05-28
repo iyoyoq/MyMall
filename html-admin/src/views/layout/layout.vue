@@ -12,21 +12,25 @@
         <a-sub-menu key="/product">
           <template #title>商品管理</template>
           <a-menu-item key="/product/list">商品管理</a-menu-item>
-          <a-menu-item key="/product/comment">商品评论</a-menu-item>
+          <!--<a-menu-item key="/product/comment">商品评论</a-menu-item>-->
           <a-menu-item key="/product/category">商品分类</a-menu-item>
         </a-sub-menu>
-        <a-menu-item key="1_1">用户管理</a-menu-item>
-        <a-sub-menu key="2">
-          <template #title>Navigation 3</template>
-          <a-menu-item-group title="Menu Group 1">
-            <a-menu-item key="2_0">Menu 1</a-menu-item>
-            <a-menu-item key="2_1">Menu 2</a-menu-item>
-          </a-menu-item-group>
-          <a-menu-item-group title="Menu Group 2">
-            <a-menu-item key="2_2">Menu 3</a-menu-item>
-            <a-menu-item key="2_3">Menu 4</a-menu-item>
-          </a-menu-item-group>
+        <a-sub-menu key="/user">
+          <template #title>用户管理</template>
+          <a-menu-item key="/user/points">积分管理</a-menu-item>
+          <!--<a-menu-item key="/product/category">用户管理</a-menu-item>-->
         </a-sub-menu>
+        <!--<a-sub-menu key="2">-->
+        <!--  <template #title>Navigation 3</template>-->
+        <!--  <a-menu-item-group title="Menu Group 1">-->
+        <!--    <a-menu-item key="2_0">Menu 1</a-menu-item>-->
+        <!--    <a-menu-item key="2_1">Menu 2</a-menu-item>-->
+        <!--  </a-menu-item-group>-->
+        <!--  <a-menu-item-group title="Menu Group 2">-->
+        <!--    <a-menu-item key="2_2">Menu 3</a-menu-item>-->
+        <!--    <a-menu-item key="2_3">Menu 4</a-menu-item>-->
+        <!--  </a-menu-item-group>-->
+        <!--</a-sub-menu>-->
       </a-menu>
     </div>
 
