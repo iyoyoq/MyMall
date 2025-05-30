@@ -46,7 +46,7 @@
         <div>
           <span
               style="color:var(--mymall-price-color);font-size:28px;font-weight:bold;margin-bottom:16px;display:inline-block;">
-            ￥{{ selectedSku ? (selectedSku.price / 100).toFixed(2) : (product.startingPrice / 100).toFixed(2) }}
+            ￥{{ selectedSku ? priceShowDecimalUtil(selectedSku.price) : '--' }}
           </span>
           <span style="margin-left: 10px" class="gray-text">
             已售{{ product.salesCount }}
@@ -128,6 +128,7 @@ import { Message } from '@arco-design/web-vue'
 import { cartAddApi } from '@/api/cart.js'
 import router from '@/router/index.js'
 import { createOrderApi } from '@/api/order.js'
+import { priceShowDecimalUtil } from '@/utils/price.js'
 
 export default {
   name: 'product',
@@ -149,6 +150,7 @@ export default {
     this.fetchDetail()
   },
   methods: {
+    priceShowDecimalUtil,
     addCart () {
       // console.log('选中的sku', this.selectedSku)
       // console.log('选择数量', this.purchaseQuantity)

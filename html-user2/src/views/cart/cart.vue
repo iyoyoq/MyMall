@@ -27,7 +27,7 @@
         <div style="display: flex; align-items: center; gap: 24px;">
         <span style="font-size: 18px; font-weight: bold;">
           <!--总计: -->
-          <span class="price-color"> ¥{{ totalPrice }}</span>
+          <span class="price-color"> ¥{{ priceShowDecimalUtil(totalPrice) }}</span>
         </span>
           <a-button type="primary" size="medium" @click="handleCheckout">
             去结算({{ totalQuantity }}件)
@@ -53,9 +53,9 @@
           "/>
           <div
               style="flex: 1; text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 24px;">
-            <h4 style="color: #000; margin: 0; width: 100px; padding: 0 0 0 10px;">{{ item.productName }}</h4>
+            <h4 style="color: #000; margin: 0; width: 150px; padding: 0 0 0 10px;">{{ item.productName }}</h4>
             <span style=" width: 100px; " class="gray-text">{{ item.skuAttrValues }}</span>
-            <span style=" font-size: 16px; margin: 0; width: 100px;" class="price-color">¥{{ item.price }}</span>
+            <span style=" font-size: 16px; margin: 0; width: 100px;" class="price-color">¥{{ priceShowDecimalUtil(item.price) }}</span>
             <div style="display: flex; align-items: center; gap: 16px;">
               <span style="font-size: 14px; width: 100px;" class="gray-text">库存: {{ item.stockQuantity }}</span>
               <a-input-number
@@ -97,6 +97,7 @@
 <script>
 import { cartListApi, cartRemoveApi } from '@/api/cart.js'
 import { Message, Modal } from '@arco-design/web-vue'
+import { priceShowDecimalUtil } from '../../utils/price.js'
 
 export default {
   name: 'Cart',
@@ -129,6 +130,7 @@ export default {
     this.fetchCartList()
   },
   methods: {
+    priceShowDecimalUtil,
     fetchCartList () {
       cartListApi(this.querySearch).then(res => {
         const page = res.data.result.page

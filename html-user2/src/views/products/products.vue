@@ -44,7 +44,7 @@
               <div class="product-bottom">
                 <div class="product-price">
                   <span class="price-symbol">¥</span>
-                  <span class="price-value">{{ product.startingPrice }}</span>
+                  <span class="price-value">{{ priceShowDecimalUtil(product.startingPrice) }}</span>
                 </div>
               </div>
             </div>
@@ -74,6 +74,7 @@ import { IconSearch } from '@arco-design/web-vue/es/icon'
 import { productCategoryListApi, productListApi } from '@/api/product.js'
 import router from '@/router/index.js'
 import { hasValue } from '@/utils/check.js'
+import { priceShowDecimalUtil } from '../../utils/price.js'
 
 export default {
   name: 'Products',
@@ -98,6 +99,7 @@ export default {
     this.fetchProductList()
   },
   methods: {
+    priceShowDecimalUtil,
     resetQuerySearch () {
       this.querySearch = {
         pageNum: 1,
