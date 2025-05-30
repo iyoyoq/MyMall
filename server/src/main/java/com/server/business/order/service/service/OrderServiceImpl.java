@@ -3,6 +3,7 @@ package com.server.business.order.service.service;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.server.business.auth.domain.Address;
 import com.server.business.auth.mapper.AddressMapper;
 import com.server.business.auth.service.IAddressService;
@@ -11,6 +12,7 @@ import com.server.business.order.domain.OrderDetail;
 import com.server.business.order.domain.dto.OrderCreateDto;
 import com.server.business.order.domain.dto.OrderPayDto;
 import com.server.business.order.domain.vo.OrderDetailVo;
+import com.server.business.order.domain.vo.OrderListVo;
 import com.server.business.order.mapper.OrderDetailMapper;
 import com.server.business.order.mapper.OrderMapper;
 import com.server.business.order.service.IOrderService;
@@ -24,10 +26,12 @@ import com.server.business.product.mapper.ProductSkuMapper;
 import com.server.business.product.service.IProductSkuService;
 import com.server.config.business.OrderConfig;
 import com.server.exception.BusinessException;
+import com.server.pojo.RPage;
 import com.server.util.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -70,6 +74,10 @@ public class OrderServiceImpl implements IOrderService {
     @Transactional(rollbackFor = Exception.class)
     public Long save(OrderCreateDto dto) {
 
+        // 1.扣减库存
+        productSkuService.deductStock(dto.getSkuIdAndQuantity());
+
+        // 2.生成订单
         Long userId = requestContext.userLoginCheck().getId();
         dto.setUserId(userId);
 
@@ -83,7 +91,7 @@ public class OrderServiceImpl implements IOrderService {
         AtomicInteger totalShippingFee = new AtomicInteger(0);
 
         List<OrderDetail> details = dto.getSkuIdAndQuantity().entrySet().stream()
-                .map(buyNum -> {  // 购买数量
+                .map(buyNum -> {  // k:skuId, v:购买数目
                     ProductSku productSku = productSkus.get(buyNum.getKey());
                     Product product = products.get(productSku.getProductId());
 
@@ -110,6 +118,7 @@ public class OrderServiceImpl implements IOrderService {
 
         LocalDateTime createTime = LocalDateTime.now();
 
+        // 生成订单信息
         orderMapper.insert(new Order()
                 .setId(orderId)
                 .setUserId(dto.getUserId())
@@ -158,26 +167,91 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Pay goPay(OrderPayDto dto) {
+        LocalDateTime now = LocalDateTime.now();
         Order order = orderMapper.selectById(dto.getId());
-        if (order == null || LocalDateTime.now().isAfter(order.getPayDdl())) {
-            throw new BusinessException("20250526121224订单超时已自动关闭");
+        if (order == null) {
+            throw new BusinessException("订单不存在 0529083852");
+        }
+        if (order.getStatus() != 10) {
+            throw new BusinessException("订单已支付 0529083816");
+        }
+        if (now.isAfter(order.getPayDdl())) {
+            throw new BusinessException("订单超时已自动关闭 0528223440");
         }
 
-        BeanUtil.copyProperties(dto, order);
-        orderMapper.updateById(order);
 
-
+        // 2.进行支付
+        Pay pay;
         if (dto.getPayMethod() == 10) {
-            Pay pay = payService.createPay(new Pay()
+            pay = payService.createPay(new Pay()
                     .setPayUserId(requestContext.getUser().getId())
                     .setAmount(order.getTotalAmount())
                     .setPayMethod(dto.getPayMethod())
             );
             payService.finishPay(new PayFinishDto(pay.getId()));
-            return pay;
         } else {
-            throw new BusinessException("20250525164409暂不支持该种支付方式");
+            throw new BusinessException("暂不支持该种支付方式 0528223436");
         }
 
+        // 3. 支付成功，更新订单状态
+        BeanUtil.copyProperties(dto, order);
+        order.setStatus(20);  //   更新订单状态为已支付
+        order.setPayTime(now);
+        order.setPayId(pay.getId());
+        orderMapper.updateById(order);
+        return pay;
+    }
+
+    @Override
+    public OrderListVo list(Integer pageNum, Integer pageSize, Long userId, Integer status) {
+        OrderListVo vo = new OrderListVo();
+        Page<Order> orderPage = orderMapper.selectPage(new Page<Order>(pageNum, pageSize),
+                new LambdaQueryWrapper<Order>()
+                        .eq(userId != null, Order::getUserId, userId)
+                        .eq(status != null, Order::getStatus, status)
+        );
+        if (orderPage.getTotal() == 0){
+            vo.setPage(RPage.empty());
+            return vo;
+        }
+        List<OrderDetailVo> orderDetailVoList = this.getOrderDetailVoList(orderPage.getRecords());
+        vo.setPage(new RPage<>(orderDetailVoList, orderPage.getTotal()));
+
+        return vo;
+    }
+
+    /**
+     * 根据订单获取订单详情
+     */
+    private List<OrderDetailVo> getOrderDetailVoList(List<Order> orders) {
+        // 订单详情
+        List<OrderDetail> detailList = orderDetailMapper.selectList(new LambdaQueryWrapper<OrderDetail>()
+                .in(!CollectionUtils.isEmpty(orders), OrderDetail::getOrderCode, orders.stream().map(Order::getId).collect(Collectors.toList()))
+        );
+        Map<String, List<OrderDetail>> orderDetailMap = detailList.stream().collect(Collectors.groupingBy(OrderDetail::getOrderCode));
+
+
+        // sku信息
+        List<ProductSkuDetailVo> skuList = skuMapper.getDetailBySkuIds(detailList.stream().map(OrderDetail::getSkuId).collect(Collectors.toList()));
+        Map<Long, ProductSkuDetailVo> skuMap = skuList.stream().collect(Collectors.toMap(ProductSkuDetailVo::getId, sku -> sku));
+
+
+        List<OrderDetailVo> result = new ArrayList<>();
+        for (Order order : orders) {
+            // 每个订单
+            OrderDetailVo vo = new OrderDetailVo().setOrder(order);
+            result.add(vo);
+            List<OrderDetailVo.OrderDetailExtendInfo> orderDetailList = new ArrayList<>();
+            vo.setOrderDetailList(orderDetailList);
+
+            // 一个订单中的订单详情
+            for (OrderDetail orderDetail : orderDetailMap.get(order.getId().toString())) {
+                orderDetailList.add(new OrderDetailVo.OrderDetailExtendInfo()
+                        .setOrderDetail(orderDetail)
+                        .setSku(skuMap.get(orderDetail.getSkuId()))
+                );
+            }
+        }
+        return result;
     }
 }

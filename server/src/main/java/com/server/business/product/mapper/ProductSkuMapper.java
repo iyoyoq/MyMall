@@ -21,4 +21,6 @@ public interface ProductSkuMapper extends BaseMapper<ProductSku> {
     List<ProductSkuDetailVo> getDetailBySkuIds(@Param("ids") List<Long> ids);
 
     List<Product> selectProductListBySkuIds(Set<Long> skuIds);
+
+    int deductStock(@Param("skuId") Long skuId, @Param("quantity") Integer quantity);
 }

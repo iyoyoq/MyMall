@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -130,6 +133,17 @@ public class ProductSkuServiceImpl implements IProductSkuService {
                         product -> product,
                         (existing, replacement) -> existing
                 ));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deductStock(Map<Long, Integer> skuIdAndQuantity) {
+        for (Long skuId : skuIdAndQuantity.keySet()) {
+            int rows = skuMapper.deductStock(skuId, skuIdAndQuantity.get(skuId));
+            if (rows != 1) {
+                throw new BusinessException("扣减库存失败 0528231107");
+            }
+        }
     }
 
 

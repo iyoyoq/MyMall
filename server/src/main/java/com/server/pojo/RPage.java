@@ -1,6 +1,5 @@
 package com.server.pojo;
 
-import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,12 +20,17 @@ import java.util.List;
 public class RPage<T> {
     private List<T> records;
     private Long total;
+
     public RPage(com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> mpPage) {
         records = mpPage.getRecords();
         total = mpPage.getTotal();
     }
 
-    public static <T>  RPage<T> empty(){
+    public static <T> RPage<T> empty() {
         return new RPage<>(Collections.emptyList(), 0L);
+    }
+
+    public RPage(long total) {
+        this.total = total;
     }
 }

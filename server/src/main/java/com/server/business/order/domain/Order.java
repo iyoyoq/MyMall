@@ -1,8 +1,5 @@
 package com.server.business.order.domain;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -10,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDateTime;
 
 /**
  * 订单主表(OrderOrder)表实体类
@@ -49,6 +48,9 @@ public class Order {
 
     // 订单超时自动取消时间
     private LocalDateTime payDdl;
+
+    // 支付id
+    private Long payId;
 
     // 支付时间
     private LocalDateTime payTime;

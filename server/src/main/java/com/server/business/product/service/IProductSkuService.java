@@ -31,4 +31,8 @@ public interface IProductSkuService {
      */
     Map<Long, Product> getProductBySkuIds(Set<Long> skuIds);
 
+    /**
+     * 扣减库存
+     */
+    void deductStock(Map<Long, Integer> skuIdAndQuantity);
 }
