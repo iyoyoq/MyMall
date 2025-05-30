@@ -8,7 +8,6 @@
     >购物车是空的
     </div>
 
-
     <div v-else>
       <!-- 结算栏-->
       <div
@@ -16,13 +15,6 @@
         padding: 0 24px 16px 24px; display: flex; justify-content: space-between; align-items: center;"
       >
         <div style="display: flex; align-items: center;">
-          <a-checkbox
-              v-if="!isEditMode"
-              :model-value="isAllSelected"
-              :indeterminate="isIndeterminate"
-              @change="handleSelectAll"
-          >全选
-          </a-checkbox>
         </div>
         <div style="display: flex; align-items: center; gap: 24px;">
         <span style="font-size: 18px; font-weight: bold;">
@@ -38,24 +30,25 @@
       <!-- 商品列表 -->
       <div
           v-for="item in cartItems"
-          :key="item.id"
+          :key="item.id.toString()"
           style="width: 900px; margin-bottom: 16px; border: 1px solid #e8e8e8; border-radius: 4px; padding: 10px; transition: all 0.3s;
            min-height: 70px; box-sizing: border-box;"
       >
         <div style="display: flex; align-items: center; justify-content: space-between;">
           <a-checkbox
-              v-model="selectedItems"
-              :value="item.id"
+              :default-checked="isItemSelected(item.id)"
               style="margin-right: 16px;"
+              @change="(checked) => handleItemSelect(item.id, checked)"
           />
           <img :src="item.mainImage" alt="商品图片"
-               style="width: 50px; height: 50px; object-fit: cover;
-          "/>
+               style="width: 50px; height: 50px; object-fit: cover;"/>
           <div
               style="flex: 1; text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 24px;">
             <h4 style="color: #000; margin: 0; width: 150px; padding: 0 0 0 10px;">{{ item.productName }}</h4>
             <span style=" width: 100px; " class="gray-text">{{ item.skuAttrValues }}</span>
-            <span style=" font-size: 16px; margin: 0; width: 100px;" class="price-color">¥{{ priceShowDecimalUtil(item.price) }}</span>
+            <span style=" font-size: 16px; margin: 0; width: 100px;" class="price-color">¥{{
+                priceShowDecimalUtil(item.price)
+              }}</span>
             <div style="display: flex; align-items: center; gap: 16px;">
               <span style="font-size: 14px; width: 100px;" class="gray-text">库存: {{ item.stockQuantity }}</span>
               <a-input-number
@@ -69,7 +62,7 @@
               />
             </div>
           </div>
-          <a-button style="margin-left: 10px;" v-if="!isEditMode" type="text" status="danger" @click="removeItem(item)">
+          <a-button style="margin-left: 10px;" type="text" status="danger" @click="removeItem(item)">
             删除
           </a-button>
         </div>
@@ -97,33 +90,46 @@
 <script>
 import { cartListApi, cartRemoveApi } from '@/api/cart.js'
 import { Message, Modal } from '@arco-design/web-vue'
-import { priceShowDecimalUtil } from '../../utils/price.js'
+import { priceShowDecimalUtil } from '@/utils/price.js'
+import { createOrderApi } from '@/api/order.js'
+import router from '@/router/index.js'
 
 export default {
   name: 'Cart',
   data () {
     return {
-      isEditMode: false,
-      selectedItems: [],
-      cartItems: [],
+      cartItems: [],  // 该页全部项
       querySearch: null,
       total: 0,
+      selectedMap: {}, // 新增，存储 skuId: 数量
     }
   },
   computed: {
-    //todo 选择结算box框
-    isAllSelected () {
-      return this.cartItems.length === this.selectedItems.length
-    },
-    isIndeterminate () {
-      return this.selectedItems.length > 0 && !this.isAllSelected
-    },
     totalQuantity () {
-      return this.cartItems.reduce((sum, item) => sum + item.purchaseQuantity, 0)
+      let total = 0
+      for (const item in this.selectedMap) {
+        // const quantity = this.selectedMap[skuId]
+        // total += quantity
+        total++   // 这边使用sku数目
+      }
+      return total
     },
     totalPrice () {
-      return this.cartItems.reduce((sum, item) => sum + (item.purchaseQuantity * item.price), 0)
+      let total = 0
+      for (const skuId in this.selectedMap) {
+        // console.log('skuId', skuId)
+        const thisItem = this.selectedMap[skuId]
+        // console.log('thisItem', thisItem)
+        total += thisItem.purchaseQuantity * thisItem.price
+      }
+      return total
     },
+    isItemSelected () {
+      return (id) => {
+        return this.selectedMap.hasOwnProperty(id)
+      }
+    }
+    ,
   },
   created () {
     this.resetQuerySearch()
@@ -135,6 +141,7 @@ export default {
       cartListApi(this.querySearch).then(res => {
         const page = res.data.result.page
         this.cartItems = page.records
+        // console.log('cartItems', page.records)
         this.total = page.total
       })
     },
@@ -144,23 +151,31 @@ export default {
         pageSize: 10,
       }
     },
-    handlePageChange () {
+    handlePageChange (page) {
+      // console.log(page)
+      this.querySearch.pageNum = page
+      this.fetchCartList()
+    },
+    // 监听单个复选框变化
+    handleItemSelect (id, checked) {
 
+      const item = this.cartItems.find(i => i.id === id)
+      if (checked) { // 添加
+        // console.log(item.purchaseQuantity)
+        this.selectedMap[id] = item
+        // console.log('添加后的selectedItems', this.selectedMap)
+      } else { // 移除
+        delete this.selectedMap[id]
+        // console.log('移除后的selectedItems', this.selectedMap)
+      }
+      // console.log('this.selectedMap', this.selectedMap)
     },
-    toggleEditMode () {
-      this.isEditMode = !this.isEditMode
-      this.selectedItems = []
-    },
-    handleSelectAll (checked) {
-      this.selectedItems = checked
-          ? this.cartItems.map(item => item.id)
-          : []
-    },
-    handleBatchDelete () {
-      this.cartItems = this.cartItems.filter(
-          item => !this.selectedItems.includes(item.id),
-      )
-      this.selectedItems = []
+    // 监听数量变化时同步 map
+    handleQuantityChange (item, value) {
+      item.purchaseQuantity = value
+      if (this.selectedMap[item.id] !== undefined) {
+        this.selectedMap[item.id] = item
+      }
     },
     // +-*/ 确认框宽度400
     removeItem (item) {
@@ -179,12 +194,27 @@ export default {
         },
       })
     },
-    handleQuantityChange (item, value) {
-      item.quantity = value
-    },
-    handleCheckout () {
-      // TODO: 实现结算逻辑
-      console.log('去结算', this.cartItems)
+    async handleCheckout () {
+      console.log('去结算', this.selectedMap)
+      const params = {
+        skuIdAndQuantity: {},
+      }
+      const rmSkuIdList = []
+      for (const skuId in this.selectedMap) {
+        rmSkuIdList.push(skuId)
+        params.skuIdAndQuantity[skuId] = this.selectedMap[skuId].purchaseQuantity
+      }
+      // 创建订单
+      const resp = await createOrderApi(params)
+      await cartRemoveApi(rmSkuIdList)
+      // 清除选中的购物车商品
+      const orderId = resp.data.result
+      this.$router.push({
+        path: '/order',
+        query: {
+          orderId: orderId,
+        },
+      })
     },
   },
 }
