@@ -195,7 +195,7 @@ export default {
       })
     },
     async handleCheckout () {
-      console.log('去结算', this.selectedMap)
+      // console.log('去结算', this.selectedMap)
       const params = {
         skuIdAndQuantity: {},
       }

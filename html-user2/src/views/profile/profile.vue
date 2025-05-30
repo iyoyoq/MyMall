@@ -14,17 +14,24 @@
         <!--右-->
         <div>
           <div style="margin: 8px 0;">
-            <div style="display: flex; margin-bottom: 16px;">
-              <div style="width: 100px; text-align: right; padding-right: 12px;">昵称：</div>
-              <div>{{ userInfo.nickName }}</div>
+            <div class="user-info-item">
+              <div class="label-container">编号：</div>
+              <div class="value-container">{{ userInfo.code }}</div>
             </div>
-            <div style="display: flex; margin-bottom: 16px;">
-              <div style="width: 100px; text-align: right; padding-right: 12px;">手机：</div>
-              <div>{{ userInfo.phone }}</div>
+
+            <div class="user-info-item">
+              <div class="label-container">昵称：</div>
+              <div class="value-container">{{ userInfo.nickName }}</div>
             </div>
-            <div style="display: flex; margin-bottom: 16px;">
-              <div style="width: 100px; text-align: right; padding-right: 12px;">简介：</div>
-              <div>{{ userInfo.intro }}</div>
+
+            <div class="user-info-item">
+              <div class="label-container">手机：</div>
+              <div class="value-container">{{ userInfo.phone }}</div>
+            </div>
+
+            <div class="user-info-item">
+              <div class="label-container">简介：</div>
+              <div class="value-container">{{ userInfo.intro }}</div>
             </div>
           </div>
         </div>
@@ -100,4 +107,18 @@ export default {
 </script>
 
 <style scoped>
+.user-info-item {
+  display: flex;
+  margin-bottom: 16px;
+}
+.label-container {
+  width: 100px; /* 统一设置标签宽度 */
+  text-align: right;
+  padding-right: 12px;
+  flex-shrink: 0; /* 防止标签宽度被压缩 */
+}
+.value-container {
+  flex-grow: 1; /* 内容区域自动填充剩余空间 */
+  word-break: break-all; /* 防止长内容溢出 */
+}
 </style>
