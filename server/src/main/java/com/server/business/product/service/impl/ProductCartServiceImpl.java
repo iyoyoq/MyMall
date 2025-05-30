@@ -9,13 +9,11 @@ import com.server.business.product.domain.vo.ProductSkuDetailVo;
 import com.server.business.product.mapper.ProductCartMapper;
 import com.server.business.product.mapper.ProductSkuMapper;
 import com.server.business.product.service.IProductCartService;
-import com.server.business.product.service.IProductService;
 import com.server.pojo.RPage;
 import com.server.util.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,6 +70,7 @@ public class ProductCartServiceImpl implements IProductCartService {
                 new LambdaQueryWrapper<ProductCart>()
                         .select(ProductCart::getSkuId, ProductCart::getPurchaseQuantity)
                         .eq(ProductCart::getUserId, requestContext.getUser().getId())
+                        .orderByDesc(ProductCart::getCreateTime)
         );
 
         ProductCartVo vo = new ProductCartVo();
