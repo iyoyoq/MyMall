@@ -42,8 +42,7 @@
     <a-table
         :loading="loading"
         :data="tableData"
-        :pagination="pagination"
-        @page-change="onPageChange"
+        :pagination="false"
     >
       <template #columns>
         <a-table-column title="商品名称" data-index="name">
@@ -106,6 +105,18 @@
         </a-table-column>
       </template>
     </a-table>
+
+    <!--分页-->
+    <div style="display: flex; justify-content: center; margin-top: 24px;">
+      <a-pagination
+          v-model:current="productListApiParam.pageNum"
+          v-model:pageSize="productListApiParam.pageSize"
+          :total="total"
+          :show-size-changer="true"
+          :show-total="true"
+          @change="handlePageChange"
+      />
+    </div>
 
     <!-- 新增/编辑商品弹窗 -->
     <a-modal
@@ -196,11 +207,6 @@ export default {
     return {
       loading: false,
       tableData: [],
-      pagination: {
-        total: 0,
-        current: 1,
-        pageSize: 10,
-      },
       modalVisible: false,
       modalTitle: '添加商品',
       rules: {
@@ -215,6 +221,7 @@ export default {
         categoryId: null,  // 分类 id
         status: null,
       },
+      total: 0,
       form: null,
     }
   },
@@ -223,6 +230,9 @@ export default {
     this.fetchProductList()
   },
   methods: {
+    handlePageChange(){
+      this.fetchProductList()
+    },
     resetForm () {
       this.form = {
         id: null,
@@ -246,7 +256,7 @@ export default {
         const resp = await productListApi(this.productListApiParam)
         // console.log(resp)
         this.tableData = resp.data.result.records
-        this.pagination.total = 0
+        this.total = resp.data.result.total
       } finally {
         this.loading = false
       }
@@ -254,15 +264,10 @@ export default {
 
     // 搜索
     handleSearch () {
-      this.pagination.current = 1
+      this.productListApiParam.pageNum = 1
       this.fetchProductList()
     },
 
-    // 翻页
-    onPageChange (current) {
-      this.pagination.current = current
-      this.fetchProductList()
-    },
     clickSku (record) {
       // console.log(record)
       router.push({

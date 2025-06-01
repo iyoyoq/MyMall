@@ -67,6 +67,16 @@ export const routes = [
           // },
         ],
       },
+      {
+        path: 'orders',
+        redirect: '/orders/orders',
+        children: [
+          {
+            path: 'orders',
+            component: () => import('@/views/orders/orders.vue'),
+          },
+        ],
+      },
     ],
   },
 ]

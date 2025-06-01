@@ -20,6 +20,11 @@
           <a-menu-item key="/user/points">积分管理</a-menu-item>
           <!--<a-menu-item key="/product/category">用户管理</a-menu-item>-->
         </a-sub-menu>
+        <a-sub-menu key="/orders">
+          <template #title>订单管理</template>
+          <a-menu-item key="/orders/orders">订单总览</a-menu-item>
+          <!--<a-menu-item key="/product/category">用户管理</a-menu-item>-->
+        </a-sub-menu>
         <!--<a-sub-menu key="2">-->
         <!--  <template #title>Navigation 3</template>-->
         <!--  <a-menu-item-group title="Menu Group 1">-->
@@ -75,7 +80,7 @@ export default {
   box-sizing: border-box;
   max-width: 200px;
   height: 100vh;
-  padding: 50px 4px 0 4px;
+  padding: 20px 4px 0 4px;
   background-color:  var(--color-menu-light-bg);
 }
 </style>
