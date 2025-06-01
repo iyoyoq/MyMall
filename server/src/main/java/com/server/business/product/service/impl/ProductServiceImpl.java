@@ -47,6 +47,10 @@ public class ProductServiceImpl implements IProductService {
 
         Set<Long> allSonCategoryId = categoryMapper.getAllSonByParentId(dto.getCategoryId());
 
+        if (allSonCategoryId.isEmpty() && dto.getCategoryId() != null) {
+            allSonCategoryId = Set.of(dto.getCategoryId());
+        }
+
         Page<Product> productPage = productMapper.selectProductPage(new Page<>(pageNum, pageSize), dto, allSonCategoryId);
         RPage<Product> result = new RPage<>(productPage);
 
