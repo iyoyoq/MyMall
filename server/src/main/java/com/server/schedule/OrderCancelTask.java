@@ -1,6 +1,8 @@
 package com.server.schedule;
 
+import com.server.business.order.service.IOrderService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -13,11 +15,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class OrderCancelTask {
 
+    @Autowired
+    private IOrderService orderService;
 
-    // 每隔5秒执行一次
-    // @Scheduled(fixedRate = 5000)
+    // 每隔60秒执行一次
+    @Scheduled(fixedRate = 60 * 1000)
     public void task() {
-        log.info("订单自动取消任务开始执行");
+         orderService.scanAndCancelOrder();
+        // log.info("订单自动取消任务开始执行");
     }
 
 }

@@ -229,8 +229,7 @@ public class OrderServiceImpl implements IOrderService {
         Order order = new Order()
                 .setDeliveryTime(LocalDateTime.now())
                 .setLogisticsCode(dto.getLogisticsCode())
-                .setStatus(30)
-                ;
+                .setStatus(30);
 
         int i = orderMapper.update(order,
                 new LambdaQueryWrapper<Order>()
@@ -245,8 +244,7 @@ public class OrderServiceImpl implements IOrderService {
     public void receive(OrderReceiveDto dto) {
         Order order = new Order()
                 .setReceiveTime(LocalDateTime.now())
-                .setStatus(40)
-                ;
+                .setStatus(40);
 
         int i = orderMapper.update(order,
                 new LambdaQueryWrapper<Order>()
@@ -256,6 +254,17 @@ public class OrderServiceImpl implements IOrderService {
         );
 
         if (i != 1) throw new BusinessException("收货执行失败 0602163606");
+    }
+
+    @Override
+    public void scanAndCancelOrder() {
+        LocalDateTime now = LocalDateTime.now();
+        int affectRowsNum = orderMapper.update(
+                new Order().setStatus(5), //  订单状态改为取消
+                new LambdaQueryWrapper<Order>()
+                        .eq(Order::getStatus, 10)
+                        .lt(Order::getPayDdl, now)
+        );
     }
 
     /**

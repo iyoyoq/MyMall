@@ -26,4 +26,6 @@ public interface IOrderService {
     void delivery(OrderDeliveryDto dto);
 
     void receive(OrderReceiveDto dto);
+
+    void scanAndCancelOrder();
 }
