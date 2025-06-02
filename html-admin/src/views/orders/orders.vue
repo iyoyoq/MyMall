@@ -20,7 +20,7 @@
                 allow-clear
                 @change="handleSearch"
             >
-              <a-option :value="10">待付款</a-option>
+              <a-option :value="10">待支付</a-option>
               <a-option :value="20">待发货</a-option>
               <a-option :value="30">待收货</a-option>
               <a-option :value="40">已完成</a-option>
@@ -37,9 +37,13 @@
         :pagination="false"
     >
       <template #columns>
-        <a-table-column title="订单号"  data-index="order.id"/>
+        <a-table-column title="订单号" data-index="order.id"/>
         <a-table-column title="用户ID" data-index="order.userId"/>
-        <a-table-column title="总金额" data-index="order.totalAmount"/>
+        <a-table-column title="总金额">
+          <template #cell="{ record }">
+            {{ priceShowDecimalUtil(record.order.totalAmount) }}
+          </template>
+        </a-table-column>
         <a-table-column title="订单状态">
           <template #cell="{ record }">
             {{ getOrderStatusText(record.order.status) }}
@@ -73,33 +77,75 @@
     <a-modal
         v-model:visible="modalVisible"
         title="订单详情"
-        @cancel="modalVisible = false"
+        @cancel="resetModalData()"
         :footer="false"
         width="800px"
     >
       <div v-if="selectedOrder">
-        <p><strong>订单号:</strong> {{ selectedOrder.orderNo }}</p>
-        <p><strong>用户ID:</strong> {{ selectedOrder.userId }}</p>
-        <p><strong>总金额:</strong> {{ selectedOrder.totalAmount }}</p>
-        <p><strong>状态:</strong> {{ getStatusText(selectedOrder.status) }}</p>
+        <p><strong class="order-detail-left">订单号:</strong> {{ selectedOrder.order.id }}</p>
+        <p><strong class="order-detail-left">用户ID:</strong> {{ selectedOrder.order.userId }}</p>
+        <p><strong class="order-detail-left">总金额:</strong> {{
+            priceShowDecimalUtil(selectedOrder.order.totalAmount)
+          }}</p>
+        <p><strong class="order-detail-left"> 状态:</strong> {{ getOrderStatusText(selectedOrder.order.status) }}</p>
+        <p><strong class="order-detail-left">收货人:</strong> {{ selectedOrder.address.receiverName }}</p>
+        <p><strong class="order-detail-left">联系电话:</strong> {{ selectedOrder.address.receiverPhone }}</p>
+        <p><strong class="order-detail-left">收货地址:</strong> {{
+            selectedOrder.address.province
+          }}{{ selectedOrder.address.city }}{{ selectedOrder.address.district }}{{
+            selectedOrder.address.detailAddress
+          }}</p>
         <h3>商品列表</h3>
-        <a-table :data="selectedOrder.orderItems" :pagination="false">
+        <a-table :data="selectedOrder.orderDetailList" :pagination="false">
           <template #columns>
-            <a-table-column title="商品名称" data-index="productName"/>
-            <a-table-column title="数量" data-index="quantity"/>
-            <a-table-column title="单价" data-index="price"/>
+            <a-table-column title="商品名称" data-index="sku.productName"/>
+            <a-table-column title="规格" data-index="sku.skuAttrValues"/>
+            <a-table-column title="单价">
+              <template #cell="{ record }">
+                {{ priceShowDecimalUtil(record.orderDetail.price) }}
+              </template>
+            </a-table-column>
+            <a-table-column title="运费">
+              <template #cell="{ record }">
+                {{ priceShowDecimalUtil(record.orderDetail.shippingFee) }}
+              </template>
+            </a-table-column>
+            <a-table-column title="数量" data-index="orderDetail.quantity"/>
+            <a-table-column title="当前库存" data-index="sku.stockQuantity"/>
           </template>
         </a-table>
+
+        <div>
+          <h3>物流信息</h3>
+          <div style="display: flex;">
+            <div style="width: 100px">物流单号</div>
+            <a-input v-model="inputLogisticsCode" :disabled="selectedOrder.order.status!==20"/>
+          </div>
+          <div style="display: flex; justify-content: center;">
+            <div style="margin: 10px 0 0 0">
+              <a-button v-if="selectedOrder.order.status===20" @click="clickDelivery()">确认发货</a-button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </a-modal>
   </div>
 </template>
 
 <script>
-import { getOrderStatusText, orderListsApi } from '@/api/order.js'
+import { deliveryApi, detailOrderApi, getOrderStatusText, orderListsApi } from '@/api/order.js'
+import {
+  IconEye,
+} from '@arco-design/web-vue/es/icon'
+import { Message } from '@arco-design/web-vue'
+import { priceShowDecimalUtil } from '@/utils/price.js' // 导入 priceShowDecimalUtil
 
 export default {
   name: 'OrderList',
+  components: {
+    IconEye,
+  },
   data () {
     return {
       loading: false,
@@ -113,6 +159,7 @@ export default {
         status: null,
       },
       total: 0,
+      inputLogisticsCode: '',
     }
   },
   created () {
@@ -120,7 +167,8 @@ export default {
   },
   methods: {
     getOrderStatusText,
-    handlePageChange(){
+    priceShowDecimalUtil, // 注册 priceShowDecimalUtil 方法
+    handlePageChange () {
       this.fetchOrderList()
     },
     async fetchOrderList () {
@@ -128,7 +176,7 @@ export default {
       try {
         const resp = await orderListsApi(this.orderListApiParam)
         this.tableData = resp.data.result.page.records
-        console.log('tableData', this.tableData)
+        // console.log('tableData', this.tableData)
         this.total = resp.data.result.page.total
       } finally {
         this.loading = false
@@ -138,9 +186,28 @@ export default {
       this.orderListApiParam.pageNum = 1
       this.fetchOrderList()
     },
-    viewOrderDetails (record) {
-      this.selectedOrder = record
+    async viewOrderDetails (record) {
+      // console.log('查看订单详情', record)
+      const resp = await detailOrderApi(record.order.id)
+      const result = resp.data.result
+      this.inputLogisticsCode = result.order.logisticsCode
+      // console.log('result', result)
+      this.selectedOrder = result // 将返回的 result 对象直接赋值给 selectedOrder
       this.modalVisible = true
+    },
+    async clickDelivery () {
+      const resp = await deliveryApi({
+        orderId: this.selectedOrder.order.id,
+        logisticsCode: this.inputLogisticsCode,
+      })
+      // console.log('resp', resp)
+      await this.viewOrderDetails(this.selectedOrder)
+      Message.success('成功更新订单状态：已发货')
+    },
+    resetModalData () {
+      this.modalVisible = false
+      this.selectedOrder = null
+      this.inputLogisticsCode = ''
     },
   },
 }
@@ -149,5 +216,10 @@ export default {
 <style scoped>
 .header {
   margin-bottom: 20px;
+}
+
+.order-detail-left {
+  width: 65px;
+  display: inline-block;
 }
 </style>

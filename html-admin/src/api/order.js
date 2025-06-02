@@ -13,6 +13,25 @@ export function orderListsApi (data) {
   })
 }
 
+export function detailOrderApi (orderId) {
+  return request({
+    url: '/order/detail',
+    method: 'get',
+    params: {
+      orderId: orderId,
+    },
+  })
+}
+
+// 商品发货
+export function deliveryApi (data) {
+  return request({
+    url: '/order/delivery',
+    method: 'post',
+    data: data
+  })
+}
+
 
 export function getOrderStatusText (status) {
   // console.log(typeof status)
