@@ -3,7 +3,9 @@ package com.server.business.order.controller;
 import com.server.aop.CheckLogin;
 import com.server.aop.LoginType;
 import com.server.business.order.domain.dto.OrderCreateDto;
+import com.server.business.order.domain.dto.OrderDeliveryDto;
 import com.server.business.order.domain.dto.OrderPayDto;
+import com.server.business.order.domain.dto.OrderReceiveDto;
 import com.server.business.order.domain.vo.OrderDetailVo;
 import com.server.business.order.domain.vo.OrderListVo;
 import com.server.business.order.service.IOrderService;
@@ -68,12 +70,33 @@ public class OrderController {
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam(value = "userId", required = false) Long userId,
             @RequestParam(value = "status", required = false) Integer status   // 订单状态（10待支付 20待发货 30待收货 40已完成 （保留50已评价） 5已取消）
-            ) {
-        if (requestContext.isUser()){
+    ) {
+        if (requestContext.isUser()) {
             userId = requestContext.getUser().getId();
         }
         OrderListVo vo = orderService.list(pageNum, pageSize, userId, status);
         return R.ok(vo);
+    }
+
+
+    /**
+     * 商家发货
+     */
+    @PostMapping("/delivery")
+    @CheckLogin(allowRole = {LoginType.ADMIN})
+    public R delivery(@RequestBody OrderDeliveryDto dto) {
+        orderService.delivery(dto);
+        return R.ok();
+    }
+
+    /**
+     * 买家确认收货
+     */
+    @PostMapping("/receive")
+    @CheckLogin(allowRole = {LoginType.USER})
+    public R receive(@RequestBody OrderReceiveDto dto) {
+        orderService.receive(dto);
+        return R.ok();
     }
 
 }

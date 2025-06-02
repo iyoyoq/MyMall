@@ -10,7 +10,9 @@ import com.server.business.auth.service.IAddressService;
 import com.server.business.order.domain.Order;
 import com.server.business.order.domain.OrderDetail;
 import com.server.business.order.domain.dto.OrderCreateDto;
+import com.server.business.order.domain.dto.OrderDeliveryDto;
 import com.server.business.order.domain.dto.OrderPayDto;
+import com.server.business.order.domain.dto.OrderReceiveDto;
 import com.server.business.order.domain.vo.OrderDetailVo;
 import com.server.business.order.domain.vo.OrderListVo;
 import com.server.business.order.mapper.OrderDetailMapper;
@@ -209,8 +211,9 @@ public class OrderServiceImpl implements IOrderService {
                 new LambdaQueryWrapper<Order>()
                         .eq(userId != null, Order::getUserId, userId)
                         .eq(status != null, Order::getStatus, status)
+                        .orderByDesc(Order::getCreateTime)
         );
-        if (orderPage.getTotal() == 0){
+        if (orderPage.getTotal() == 0) {
             vo.setPage(RPage.empty());
             return vo;
         }
@@ -218,6 +221,41 @@ public class OrderServiceImpl implements IOrderService {
         vo.setPage(new RPage<>(orderDetailVoList, orderPage.getTotal()));
 
         return vo;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delivery(OrderDeliveryDto dto) {
+        Order order = new Order()
+                .setDeliveryTime(LocalDateTime.now())
+                .setLogisticsCode(dto.getLogisticsCode())
+                .setStatus(30)
+                ;
+
+        int i = orderMapper.update(order,
+                new LambdaQueryWrapper<Order>()
+                        .eq(Order::getId, dto.getOrderId())
+                        .eq(Order::getStatus, 20)
+        );
+
+        if (i != 1) throw new BusinessException("发货执行失败 0602112543");
+    }
+
+    @Override
+    public void receive(OrderReceiveDto dto) {
+        Order order = new Order()
+                .setReceiveTime(LocalDateTime.now())
+                .setStatus(40)
+                ;
+
+        int i = orderMapper.update(order,
+                new LambdaQueryWrapper<Order>()
+                        .eq(Order::getId, dto.getOrderId())
+                        .eq(Order::getStatus, 30)
+                        .eq(Order::getUserId, requestContext.getUser().getId())
+        );
+
+        if (i != 1) throw new BusinessException("收货执行失败 0602163606");
     }
 
     /**

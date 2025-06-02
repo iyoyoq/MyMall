@@ -56,6 +56,12 @@ public class Order {
     private LocalDateTime payTime;
 
 
+    // 发货时间
+    private LocalDateTime deliveryTime;
+
+    // 收货时间
+     private LocalDateTime receiveTime;
+
     // 更新时间
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
