@@ -87,9 +87,9 @@
     </div>
 
 
-    <div class="order-module">
+    <div class="order-module" v-if="order.status == 30 || order.status == 40">
       <h3>物流信息</h3>
-      <div v-if="order.status == 30 || order.status == 40">
+      <div>
         <div class="order-row">
           <span>物流单号</span>
           <span>{{ order.logisticsCode }}</span>
