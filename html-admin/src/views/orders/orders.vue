@@ -201,7 +201,10 @@ export default {
         logisticsCode: this.inputLogisticsCode,
       })
       // console.log('resp', resp)
-      await this.viewOrderDetails(this.selectedOrder)
+      await Promise.all([
+        this.viewOrderDetails(this.selectedOrder),
+        this.fetchOrderList(),
+      ])
       Message.success('成功更新订单状态：已发货')
     },
     resetModalData () {
