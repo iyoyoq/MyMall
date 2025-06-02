@@ -20,10 +20,10 @@
             </template>
           </a-input-password>
         </a-form-item>
-        <div class="login-option">
-          <a-checkbox v-model="loginForm.rememberMe">记住密码</a-checkbox>
-          <a-link>忘记密码？</a-link>
-        </div>
+        <!--<div class="login-option">-->
+        <!--  <a-checkbox v-model="loginForm.rememberMe">记住密码</a-checkbox>-->
+        <!--  <a-link>忘记密码？</a-link>-->
+        <!--</div>-->
         <a-form-item>
           <a-button type="primary" html-type="submit" long :loading="loading">
             登录

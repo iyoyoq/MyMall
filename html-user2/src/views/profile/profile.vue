@@ -34,7 +34,16 @@
               <div class="value-container">{{ userInfo.intro }}</div>
             </div>
           </div>
+
+          <div>
+            <div style="margin: 10px 0 0 60px">
+              <a-button @click="clickLogOut">退出登录</a-button>
+            </div>
+          </div>
+
         </div>
+
+
       </div>
     </a-card>
 
@@ -42,7 +51,7 @@
     <a-modal v-model:visible="modalVisible" title="编辑个人资料" @ok="updateProfile" ok-text="保存" cancel-text="取消">
       <a-form :model="formState" :label-col="{ span: 4 }" :wrapper-col="{ span: 18 }">
         <a-form-item label="头像">
-          <image-uploader style="margin: 0 0 0 4px" v-model="formState.avatar" />
+          <image-uploader style="margin: 0 0 0 4px" v-model="formState.avatar"/>
         </a-form-item>
         <a-form-item label="昵称">
           <a-input v-model="formState.nickName"/>
@@ -61,6 +70,10 @@
 <script>
 import { selfDetailApi, updateSelfDetailApi } from '@/api/auth.js'
 import ImageUploader from '@/views/component/ImageUploader.vue'
+import { Message, Modal } from '@arco-design/web-vue'
+import { cartRemoveApi } from '@/api/cart.js'
+import { localStorageTokenName } from '@/utils/request.js'
+import router from '@/router/index.js'
 
 export default {
   name: 'Profile',
@@ -76,6 +89,22 @@ export default {
     this.fetchData()
   },
   methods: {
+    clickLogOut(){
+      Modal.open({
+        title: '提示',
+        content: '确定退出登录？',
+        okText: '确定',
+        cancelText: '取消',
+        width: 400,
+        onOk: async () => {
+          localStorage.removeItem(localStorageTokenName)
+          router.push('/login')
+          Message.success('退出登录成功')
+        },
+        onCancel: () => {
+        },
+      })
+    },
     async fetchData () {
       const resp = await selfDetailApi()
       const result = resp.data.result
@@ -91,13 +120,13 @@ export default {
       // 打开编辑对话框前，确保表单数据与当前用户信息同步
       this.formState = {
         ...this.userInfo,
-        phone: this.userInfo.phone ? String(this.userInfo.phone) : ''
+        phone: this.userInfo.phone ? String(this.userInfo.phone) : '',
       }
       this.modalVisible = true
     },
     async updateProfile () {
       console.log('提交的表单数据:', this.formState)
-      const resp = await updateSelfDetailApi( this.formState)
+      const resp = await updateSelfDetailApi(this.formState)
       this.userInfo = resp.data.result
       this.fetchData()
       this.modalVisible = false
@@ -111,12 +140,14 @@ export default {
   display: flex;
   margin-bottom: 16px;
 }
+
 .label-container {
   width: 100px; /* 统一设置标签宽度 */
   text-align: right;
   padding-right: 12px;
   flex-shrink: 0; /* 防止标签宽度被压缩 */
 }
+
 .value-container {
   flex-grow: 1; /* 内容区域自动填充剩余空间 */
   word-break: break-all; /* 防止长内容溢出 */
