@@ -56,9 +56,18 @@ export function orderListsApi (data) {
   })
 }
 
+// 确认收货
+export function receiveOrderApi (data) {
+  return request({
+    url: `/order/receive`,
+    method: 'post',
+    data: data
+  })
+}
+
 // utils
 export function getOrderStatusText (status) {
-  console.log(typeof status)
+  // console.log(typeof status)
   if(status == null) return ''
   const textMap = {
     '10': '待支付',

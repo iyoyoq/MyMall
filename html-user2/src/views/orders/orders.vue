@@ -7,6 +7,7 @@
           v-model="activeStatus"
           size="small"
           style="margin-left: 10px;"
+          @change="changeStatusRadio()"
       >
         <a-radio value="all">全部</a-radio>
         <a-radio value="10">待支付</a-radio>
@@ -52,9 +53,10 @@
             </div>
             <div style="display: flex; gap: 8px;">
               <a-button
-                  v-if="item.order.status == 20"
+                  v-if="item.order.status == 30"
                   type="primary"
                   size="small"
+                  @click="clickOrderReceiveBtn(item.order.id)"
               >确认收货
               </a-button>
               <a-button
@@ -84,9 +86,10 @@
 </template>
 
 <script>
-import { getOrderStatusText, orderListsApi } from '@/api/order.js'
+import { getOrderStatusText, orderListsApi, receiveOrderApi } from '@/api/order.js'
 import router from '@/router/index.js'
-import { priceShowDecimalUtil } from '../../utils/price.js'
+import { priceShowDecimalUtil } from '@/utils/price.js'
+import { Message, Modal } from '@arco-design/web-vue'
 
 export default {
   name: 'Orders',
@@ -109,6 +112,29 @@ export default {
   methods: {
     getOrderStatusText,
     priceShowDecimalUtil,
+    changeStatusRadio(){
+      // console.log('activeStatus', this.activeStatus)
+      this.queryParams.status = this.activeStatus.toString() === 'all' ? '' : this.activeStatus
+      this.fetchOrders()
+    },
+    clickOrderReceiveBtn(orderId){
+      Modal.open({
+        title: '提示',
+        content: '确定收货？',
+        okText: '确定',
+        cancelText: '取消',
+        width: 400,
+        onOk: async () => {
+          await receiveOrderApi({
+             orderId: orderId
+          })
+          await this.fetchOrders()
+          Message.success('确认收货成功')
+        },
+        onCancel: () => {
+        },
+      })
+    },
     clickOrderDetailBtn(orderId){
       router.push({
         path: '/order',
@@ -122,8 +148,8 @@ export default {
       const result = resp.data.result.page
       this.total = result.total
       this.orderList = result.records
-      console.log('orderList', this.orderList)
-      console.log('total', this.total)
+      // console.log('orderList', this.orderList)
+      // console.log('total', this.total)
     },
     handlePageChange (page, pageSize) {
       this.queryParams.pageNum = page

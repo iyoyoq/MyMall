@@ -86,6 +86,21 @@
       </div>
     </div>
 
+
+    <div class="order-module">
+      <h3>物流信息</h3>
+      <div v-if="order.status == 30 || order.status == 40">
+        <div class="order-row">
+          <span>物流单号</span>
+          <span>{{ order.logisticsCode }}</span>
+        </div>
+        <div class="order-row">
+          <span>发货时间</span>
+          <span>{{ order.deliveryTime }}</span>
+        </div>
+      </div>
+    </div>
+
     <!-- 提交订单 -->
     <div style="text-align: center;">
       <div v-if="order.status == 10">
@@ -110,7 +125,7 @@ import { addressApi } from '@/api/address.js'
 import { hasValue } from '@/utils/check.js'
 import { getCountdown } from '@/utils/datetime.js'
 import { priceShowDecimalUtil } from '@/utils/price.js'
-import { Modal } from '@arco-design/web-vue'
+import { Message, Modal } from '@arco-design/web-vue'
 
 export default {
   name: 'createOrder',
@@ -190,11 +205,11 @@ export default {
     async goPayBtn () {
       // 提交订单逻辑
       if (!this.selectedAddress) {
-        this.$message.error('请选择收货地址')
+        Message.error('请选择收货地址')
         return
       }
       if (this.payMethod.toString() !== '10') {
-        this.$message.error('暂不支持其他支付方式 0529081943')
+        Message.error('暂不支持其他支付方式 0529081943')
         return
       }
       // 目前仅支持积分支付
