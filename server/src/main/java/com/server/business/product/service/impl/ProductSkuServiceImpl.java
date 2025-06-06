@@ -146,5 +146,16 @@ public class ProductSkuServiceImpl implements IProductSkuService {
         }
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addStock(Map<Long, Integer> skuIdAndQuantity) {
+        for (Long skuId : skuIdAndQuantity.keySet()) {
+            int rows = skuMapper.addStock(skuId, skuIdAndQuantity.get(skuId));
+            if (rows != 1) {
+                throw new BusinessException("增加库存失败 0603093733");
+            }
+        }
+    }
+
 
 }

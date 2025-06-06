@@ -35,4 +35,9 @@ public interface IProductSkuService {
      * 扣减库存
      */
     void deductStock(Map<Long, Integer> skuIdAndQuantity);
+
+    /**
+     * 增加库存
+     */
+    void addStock(Map<Long, Integer> skuIdAndQuantity);
 }

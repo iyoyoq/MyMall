@@ -1,6 +1,5 @@
 export function priceShowDecimalUtil (price) {
   if (isNaN(price)) return ''
-
   const formatted = (price / 100).toFixed(2)
   const [integer, decimal] = formatted.split('.')
 

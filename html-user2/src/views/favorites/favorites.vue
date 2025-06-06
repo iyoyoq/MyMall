@@ -55,7 +55,7 @@
               <div style="flex:1;text-align:left;">
                 <h4 style="color:#000;margin:0;">{{ item.product.name }}</h4>
                 <p style="color:var(--mymall-price-color);font-size:16px;margin-top:8px;text-align:left;">
-                  ¥{{ item.product.startingPrice }}
+                  ¥{{ priceShowDecimalUtil(item.product.startingPrice) }}
                 </p>
               </div>
             </div>
@@ -74,7 +74,7 @@
               <div style="flex:1;text-align:left;">
                 <h4 style="color:#000;margin:0;">{{ item.product.name }}</h4>
                 <p style="color:var(--mymall-price-color);font-size:16px;margin-top:8px;text-align:left;">
-                  ¥{{ item.product.startingPrice }}
+                  ¥{{ priceShowDecimalUtil(item.product.startingPrice) }}
                 </p>
               </div>
             </div>
@@ -109,6 +109,7 @@
 import { favoriteBatchCancelApi, listFavoriteApi } from '@/api/product.js'
 import { Message } from '@arco-design/web-vue'
 import router from '@/router/index.js'
+import { priceShowDecimalUtil } from '@/utils/price.js'
 
 export default {
   name: 'Favorites',
@@ -135,6 +136,7 @@ export default {
     },
   },
   methods: {
+    priceShowDecimalUtil,
     handlePageChange (page) {
       // console.log(page)
       this.queryParams.pageNum = page

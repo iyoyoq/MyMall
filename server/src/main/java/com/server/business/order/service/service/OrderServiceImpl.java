@@ -36,10 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -257,14 +254,31 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void scanAndCancelOrder() {
         LocalDateTime now = LocalDateTime.now();
-        int affectRowsNum = orderMapper.update(
-                new Order().setStatus(5), //  订单状态改为取消
-                new LambdaQueryWrapper<Order>()
-                        .eq(Order::getStatus, 10)
-                        .lt(Order::getPayDdl, now)
+        LambdaQueryWrapper<Order> queryWrapper = new LambdaQueryWrapper<Order>()
+                .eq(Order::getStatus, 10)
+                .lt(Order::getPayDdl, now);
+        List<Order> orderList = orderMapper.selectList(queryWrapper);
+        if (CollectionUtils.isEmpty(orderList)) return;
+
+        // 1.订单状态改为已取消
+        int affectRowsNum = orderMapper.update(new Order().setStatus(5), queryWrapper);
+
+        // 2. 恢复库存
+        List<Long> orderIdList = orderList.stream().map(Order::getId).collect(Collectors.toList());
+        List<OrderDetail> orderDetailList = orderDetailMapper.selectList(new LambdaQueryWrapper<OrderDetail>()
+                .in(OrderDetail::getOrderCode, orderIdList)
         );
+        Map<Long, Integer> skuIdAndStock = new HashMap<>();
+        orderDetailList.forEach(
+                detail -> skuIdAndStock.put(
+                        detail.getSkuId(),
+                        skuIdAndStock.getOrDefault(detail.getSkuId(), 0) + detail.getQuantity()
+                )
+        );
+        productSkuService.addStock(skuIdAndStock);
     }
 
     /**
