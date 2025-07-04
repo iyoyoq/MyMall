@@ -10,7 +10,7 @@ MyMall-在线商城系统
 
 node 版本 v20.18.3
 
-vue 3 + js + [varlet组件库](https://varletjs.org/#/zh-CN/quickstart)  + scss等
+vue 3 + js + Arco 组件库等
 
 ##### 后台
 
@@ -32,3 +32,4 @@ html-user 前台-用户端
 
 server 后台
 
+cloud前缀为微服务版本
