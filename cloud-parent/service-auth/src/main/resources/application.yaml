@@ -1,0 +1,13 @@
+server:
+  port: 46200
+  servlet:
+    context-path: /api
+spring:
+  application:
+    name: service-auth
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:45002/cloud_server_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: local1234
+  cloud:

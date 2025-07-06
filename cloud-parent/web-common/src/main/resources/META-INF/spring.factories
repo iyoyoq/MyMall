@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.beforedark.common.config.jackson.MyDateConverterConfig,\
+  cn.beforedark.common.config.spring.SpringContextHolder,\
+  cn.beforedark.common.config.jwt.JwtProperties
