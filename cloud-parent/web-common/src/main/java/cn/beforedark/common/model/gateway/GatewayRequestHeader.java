@@ -1,4 +1,4 @@
-package cn.beforedark.common.config.gateway;
+package cn.beforedark.common.model.gateway;
 
 /**
  * @Description:

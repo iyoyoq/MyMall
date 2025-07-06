@@ -1,15 +1,8 @@
 server:
   port: 46100
-  servlet:
-    context-path: /api
 spring:
   application:
     name: service-gateway
-  redis:
-    database: 1
-    host: localhost
-    port: 45003
-    password: local1234
   cloud:
     nacos:
       server-addr: 127.0.0.1:8848
@@ -39,8 +32,8 @@ spring:
 mymall:
   filter-path:
     exclude-path:
-      - /auth/**
-      - /error/**
+#      - /auth/**
+#      - /error/**
   jwt:
     public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqQGdw3UPeOQIraOXeCGyYSPMegJUSeUCjQ2od1IdGBCVoLjDuiG2mRwTTU5olRnBk8EHp2IcZiYUOv/cWyug3zLrFTBPeuz7jLLsJzBE3qtnMZZd+o9i8YEVh9I8FycdiPiIFsaWrcM0b9KRCgrR/tXJexqjKvK/0yYzjWaRZLe7C4UQRlQjiWhzBC8mEYZbBflhI2oo1ckSJDRRElMtscqA+SU/GnXADVjQA2cKMIWZGxHv9yBCIODHNFk3A5kBoaBeX1hq0+V0bvneIHj/Z7vvm+RrjR4uxSxEUlHSOYDEqUN7nHI4H1Mtx/xlR+Iicir5XJWLBIp8eDWXipqRlwIDAQAB
     private-key: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCpAZ3DdQ945Aito5d4IbJhI8x6AlRJ5QKNDah3Uh0YEJWguMO6IbaZHBNNTmiVGcGTwQenYhxmJhQ6/9xbK6DfMusVME967PuMsuwnMETeq2cxll36j2LxgRWH0jwXJx2I+IgWxpatwzRv0pEKCtH+1cl7GqMq8r/TJjONZpFkt7sLhRBGVCOJaHMELyYRhlsF+WEjaijVyRIkNFESUy2xyoD5JT8adcANWNADZwowhZkbEe/3IEIg4Mc0WTcDmQGhoF5fWGrT5XRu+d4geP9nu++b5GuNHi7FLERSUdI5gMSpQ3uccjgfUy3H/GVH4iJyKvlclYsEinx4NZeKmpGXAgMBAAECggEAHGxnKg4v8fb39qwCt3ODWo74vrRRlLPtP+fCI38t4XQ4lfU9BbrRyOJN5LyBHkJcqgrWzLHVcOCKmnmZh8PIpIEdxEyBsXzVuY4F5Xlau9A75L0TRSaET3WUN2mGLaaocvbJfHsdsE+aLAxP1E6JjsBJyGhsdLaqyEoudWOApF10BHd59hUJhRYZ+KAvBhIFEoEksgy+jTs0SFV5bOnqL8ndW8dws+Qt+3VJKk/Y5HUhYtH7bxkONMToOqcOoDLhHKxD6Q/agLFzqQfWAvtN8YQk7DQtg52O+Cy7rzS92S02tnUrv5DzdqkWau6ESS4L7TomGneQCfQqezmHEr6gAQKBgQDcbhiDnXFKuzejE4SDYKWTr7Ck/EaYOnFO/MTFtEL+Cafw9er8dqbNjaYenInoBVA7DyW0gFWn27OPVbYiBkXqwo64DME5SR8VlFU0F7H/XVn8d0pMwsiTnF/FRI9ACCm5aW4gwHg/VFgpwVmyqM57kr4YnNDQg2VY2qY0IOdZlwKBgQDERzhHx+Sq9DKZbzMfCdtdFn/wbkVSaEwRTEc6q5ucdJ4xTdu32u1UhakzwctcUf7tubdo6n5MGDstYbI+BkFEf4fPujtSC9I1LMh0dJwOd96Ge307vDAa9N8saoQRYbgKGH2l0Qs6cHpo94RKHDZTgd482aZ55nQNSTO7BB2IAQKBgAP44+4zPyBmoUkKCABKFJHFv7wpY6hInVQcD/u0FOT5DZK1C8gC51ya6dxxW7bXqat2yWooSeLdfa3ekIqqbEYfvWyppi2/GJVN9/8ZUjbU2tNG3wrlE7I9RiiK5L31p7LUqIxki4YwoeoWtuQWUKo/abeN0+F+DKx+PDKCSUj/AoGAYDMr8XqWp/diKXOoEalqG7jgYf4Z+ebmiX/iVW4wqcE6m522d+lUcx3DrXtpaclCck+ZBlIQLsmdj4OXsfCs4p7C+NwlIPRsReW6JeHVbv3vUeiKm9GDnmKwU3utWTuU0VXpl3Da2Pyx8mqGKzCiq9E2FIr0nkCGVtCvCxVcSAECgYAaGTt9AZ6quXVnWK0jgQA5EDKKLbZFqK+G3rdiJVpdYgBftYiW5mMGRN3MzwVmTGOimIAmKmL7vwEsjK66nH/963dODpzEWCxknsGANJppvLXmH2YIdvpotTrYS+lc2H7VO78hdjH+NzYkDtOlC+O06RFGF30ac8NpHorCIxGq2g==

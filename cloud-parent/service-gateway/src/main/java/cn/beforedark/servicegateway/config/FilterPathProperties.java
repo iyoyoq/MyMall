@@ -15,6 +15,10 @@ import java.util.List;
 @ConfigurationProperties(prefix = "mymall.filter-path")
 @Component
 public class FilterPathProperties {
-    private List<String> includePath;
+    // private List<String> includePath;
+
+    /**
+     * 不进行拦截校验 jwt 的路径
+     */
     private List<String> excludePath;
 }
