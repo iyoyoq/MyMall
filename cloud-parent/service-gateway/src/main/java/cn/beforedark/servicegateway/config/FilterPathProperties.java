@@ -20,5 +20,5 @@ public class FilterPathProperties {
     /**
      * 不进行拦截校验 jwt 的路径
      */
-    private List<String> excludePath;
+    private List<String>  jwtCheckExcludePath;
 }

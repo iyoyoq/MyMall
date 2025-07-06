@@ -89,7 +89,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
     }
 
     private boolean isExclude(String path) {
-        return filterPathProperties.getExcludePath().stream()
+        return filterPathProperties.getJwtCheckExcludePath().stream()
                 .anyMatch(pattern -> antPathMatcher.match(pattern, path));
     }
 }
