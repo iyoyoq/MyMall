@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RequestMapping
 @RestController
-public class TestController {
+public class LoginController {
 
-    @GetMapping("/test")
+    @GetMapping("/send")
     public String test() {
         return "hello world";
     }

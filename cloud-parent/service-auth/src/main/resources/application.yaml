@@ -1,7 +1,7 @@
 server:
   port: 46200
   servlet:
-    context-path: /api
+    context-path: /auth
 spring:
   application:
     name: service-auth
