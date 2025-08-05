@@ -1,4 +1,4 @@
-import '@/styles/mymall.css'
+import '@/styles/mymall_user.css'
 import { createApp } from 'vue'
 import router from './router'
 import App from './App.vue'

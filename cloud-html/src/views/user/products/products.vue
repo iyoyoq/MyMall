@@ -74,7 +74,7 @@ import { IconSearch } from '@arco-design/web-vue/es/icon'
 import { productCategoryListApi, productListApi } from '@/api/product.js'
 import router from '@/router/index.js'
 import { hasValue } from '@/utils/check.js'
-import { priceShowDecimalUtil } from '../../utils/price.js'
+import { priceShowDecimalUtil } from '../../../utils/price.js'
 
 export default {
   name: 'Products',

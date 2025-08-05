@@ -78,3 +78,13 @@ export function getOrderStatusText (status) {
   }
   return textMap[status.toString()] || '未知状态'
 }
+
+// 商品发货
+export function deliveryAdminApi (data) {
+  return request({
+    url: '/order/delivery',
+    method: 'post',
+    data: data
+  })
+}
+

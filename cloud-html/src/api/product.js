@@ -73,3 +73,69 @@ export function favoriteCancelApi (productId) {
   })
 }
 
+
+
+// 商品
+
+export function productSaveApi (data) {
+  return request({
+    url: `/product/product/save`,
+    method: 'post',
+    data: data,
+  })
+}
+
+export function productUpdateApi (data) {
+  return request({
+    url: `/product/product/update`,
+    method: 'post',
+    data: data,
+  })
+}
+
+export function productDeleteApi (productId) {
+  return request({
+    url: `/product/product/delete`,
+    method: 'post',
+    params: {
+      productId
+    }
+  })
+}
+
+
+export function productCategoryCreateAdminApi (dto) {
+  return request({
+    url: `/product/category/save`,
+    method: 'post',
+    data: dto,
+  })
+}
+
+export function productCategoryUpdateAdminApi (dto) {
+  return request({
+    url: `/product/category/update`,
+    method: 'post',
+    data: dto,
+  })
+}
+
+export function productSkuCreateAdminApi (dto) {
+  return request({
+    url: `/product/sku/save`,
+    method: 'post',
+    data: dto,
+  })
+}
+
+export function productSkuQueryAdminApi (productId) {
+  return request({
+    url: `/product/sku/detail`,
+    method: 'get',
+    params: {
+      productId,
+    },
+  })
+}
+
+
