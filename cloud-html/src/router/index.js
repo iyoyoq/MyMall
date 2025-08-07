@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { localStorageTokenName } from '@/utils/request.js'
 
 /* 示例跳转
 router.push({
@@ -164,9 +165,10 @@ const router = createRouter({
 })
 
 // 路由守卫
+
 /*
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem(localStorageTokenName)
   if (to.path === '/login') {
     next()
   } else {
