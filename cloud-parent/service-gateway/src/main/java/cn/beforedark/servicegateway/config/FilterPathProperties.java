@@ -18,7 +18,7 @@ public class FilterPathProperties {
     // private List<String> includePath;
 
     /**
-     * 不进行拦截校验 jwt 的路径
+     * 免检路径
      */
-    private List<String>  jwtCheckExcludePath;
+    private List<String>  loginCheckExcludePath;
 }

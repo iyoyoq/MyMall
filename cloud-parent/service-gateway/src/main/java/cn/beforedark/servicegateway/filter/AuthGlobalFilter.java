@@ -1,10 +1,8 @@
 package cn.beforedark.servicegateway.filter;
 
-import cn.beforedark.common.config.jwt.JwtProperties;
-import cn.beforedark.common.model.gateway.GatewayRequestHeader;
+import cn.beforedark.common.config.redis.RedisKey;
 import cn.beforedark.common.model.response.R;
 import cn.beforedark.common.util.JsonUtil;
-import cn.beforedark.common.util.JwtRsaUtil;
 import cn.beforedark.servicegateway.config.FilterPathProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +10,17 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 @Component
 @Slf4j
@@ -29,52 +28,46 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
 
     @Autowired
     private FilterPathProperties filterPathProperties;
-    @Autowired
-    private JwtProperties jwtProperties;
 
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
 
-        // 排除路径检查
+        // 免检路径放行
         if (isExclude(request.getPath().toString())) {
             return chain.filter(exchange);
         }
 
         // 获取token
-        String token = getTokenFromHeader(request);
-        if (token == null) {
-            return unauthorizedResponse(exchange, "缺少或无效的授权头信息");
+        String token;
+        String headerValue = request.getHeaders().getFirst("Authorization");
+        if (headerValue != null && headerValue.startsWith("Bearer ")) {
+            token = headerValue.substring(7);
+        } else {
+            log.info("未找到Authorization Header");
+            return unauthorized(exchange);
         }
 
-        // 使用 JwtRsaUtil 验证 token 并获取 claims
-        try {
-            Map<String, Object> claims = JwtRsaUtil.parseToken(token, jwtProperties.getPublicKey());
-            // 将 claims 转换为 JSON 字符串
-            String userInfoJson = JsonUtil.getJson(claims);
+        // 鉴权
+        String tokenValue = redisTemplate.opsForValue().get(RedisKey.TOKEN + token);
+        // log.info("redis key is {}", RedisKey.TOKEN + token);
 
-            ServerHttpRequest mutatedRequest = request.mutate()
-                    .header(GatewayRequestHeader.USER_CONTEXT_HEADER_NAME, userInfoJson)
-                    .build();
-            log.info("用户信息: {}", userInfoJson);
-            return chain.filter(exchange.mutate().request(mutatedRequest).build());
-        } catch (Exception e) {
-            return unauthorizedResponse(exchange, "认证失败: " + e.getMessage());
+        if (StringUtils.hasText(tokenValue)) {
+            log.info("token is {}有效, tokenValue is {}", token, tokenValue);
+            return chain.filter(exchange); // 放行
+        } else {
+            // 如果无效，拦截
+            log.info("token is {}无效, tokenValue is {}", token, tokenValue);
+            return unauthorized(exchange);
         }
+
     }
-
-    private String getTokenFromHeader(ServerHttpRequest request) {
-        String authorizationHeader = request.getHeaders().getFirst("Authorization");
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            return authorizationHeader.substring(7);
-        }
-        return null;
-    }
-
-    private Mono<Void> unauthorizedResponse(ServerWebExchange exchange, String message) {
+    private Mono<Void> unauthorized(ServerWebExchange exchange) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
         response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
@@ -83,13 +76,14 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         return response.writeWith(Mono.just(buffer));
     }
 
+
     @Override
     public int getOrder() {
         return 0;
     }
 
     private boolean isExclude(String path) {
-        return filterPathProperties.getJwtCheckExcludePath().stream()
+        return filterPathProperties.getLoginCheckExcludePath().stream()
                 .anyMatch(pattern -> antPathMatcher.match(pattern, path));
     }
 }
