@@ -35,7 +35,7 @@ spring:
     database: 0
 mymall:
   filter-path:
-#    token 免检路径
+#    Bearer token 免检路径
     login-check-exclude-path:
-#      - /auth/**
-      - /error/**
+      - /auth/login/**
+#      - /error/**

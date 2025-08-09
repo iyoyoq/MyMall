@@ -22,6 +22,10 @@ public class R<T> {
         return new R<>(1, "", "");
     }
 
+    public static <T> R<T> ok(T result) {
+        return new R<>(1, "", result);
+    }
+
     /**
      * 未处理的系统异常 RuntimeException or Exception
      */
