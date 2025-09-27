@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="$route.path.startsWith('/admin')">
+    <div v-if="$route.path.startsWith('/admin-end')">
       <admin-home></admin-home>
     </div>
     <div v-else>

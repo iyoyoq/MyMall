@@ -8,21 +8,21 @@
           :default-open-keys="defaultParentMenu"
           @menu-item-click="clickMenu"
       >
-        <a-menu-item key="/admin/dashboard">后台总览</a-menu-item>
-        <a-sub-menu key="/admin/product">
+        <a-menu-item key="/admin-end/dashboard">后台总览</a-menu-item>
+        <a-sub-menu key="/admin-end/product">
           <template #title>商品管理</template>
-          <a-menu-item key="/admin/product/list">商品管理</a-menu-item>
+          <a-menu-item key="/admin-end/product/list">商品管理</a-menu-item>
           <!--<a-menu-item key="/product/comment">商品评论</a-menu-item>-->
-          <a-menu-item key="/admin/product/category">商品分类</a-menu-item>
+          <a-menu-item key="/admin-end/product/category">商品分类</a-menu-item>
         </a-sub-menu>
-        <a-sub-menu key="/admin/user">
+        <a-sub-menu key="/admin-end/user">
           <template #title>用户管理</template>
-          <a-menu-item key="/admin/user/points">积分管理</a-menu-item>
+          <a-menu-item key="/admin-end/user/points">积分管理</a-menu-item>
           <!--<a-menu-item key="/product/category">用户管理</a-menu-item>-->
         </a-sub-menu>
-        <a-sub-menu key="/admin/orders">
+        <a-sub-menu key="/admin-end/orders">
           <template #title>订单管理</template>
-          <a-menu-item key="/admin/orders/orders">订单总览</a-menu-item>
+          <a-menu-item key="/admin-end/orders/orders">订单总览</a-menu-item>
           <!--<a-menu-item key="/product/category">用户管理</a-menu-item>-->
         </a-sub-menu>
         <!--<a-sub-menu key="2">-->

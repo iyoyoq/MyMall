@@ -1,8 +1,0 @@
-# 排除 .idea 文件夹
-.idea/
-
-# 排除 logs 文件夹下的所有文件
-logs/*
-/logs/
-
-**/target/*

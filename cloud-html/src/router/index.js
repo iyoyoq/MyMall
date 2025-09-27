@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { localStorageTokenName } from '@/utils/request.js'
 
 /* 示例跳转
 router.push({
@@ -20,8 +19,8 @@ export const routes = [
     children: [
       // 下面为 admin端
       {
-        path: 'admin',
-        redirect: '/admin/dashboard',
+        path: 'admin-end',
+        redirect: '/admin-end/dashboard',
         meta: { title: '商家后台' },
         children: [
           {
